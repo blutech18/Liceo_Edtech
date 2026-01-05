@@ -1,0 +1,90 @@
+import { Search, Menu, X } from "lucide-react";
+import { useState } from "react";
+
+const navItems = [
+  { label: "Home", href: "#", active: true },
+  { label: "HOTLINE", href: "#" },
+  { label: "Google Classroom", href: "#" },
+  { label: "Resources", href: "#" },
+  { label: "Trainings", href: "#" },
+  { label: "EdTech Team", href: "#" },
+  { label: "Feedback", href: "#" },
+  { label: "About Us", href: "#" },
+  { label: "Forms", href: "#" },
+];
+
+const Header = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  return (
+    <header className="sticky top-0 z-50 bg-background border-b border-border shadow-sm">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between h-14">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">L</span>
+            </div>
+            <span className="font-semibold text-foreground hidden sm:block">
+              Liceo EdTech Center
+            </span>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className={`nav-link ${item.active ? "nav-link-active" : ""}`}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* Search and Mobile Menu */}
+          <div className="flex items-center gap-2">
+            <button className="p-2 hover:bg-muted rounded-full transition-colors">
+              <Search className="w-5 h-5 text-muted-foreground" />
+            </button>
+            <button
+              className="lg:hidden p-2 hover:bg-muted rounded-full transition-colors"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? (
+                <X className="w-5 h-5 text-foreground" />
+              ) : (
+                <Menu className="w-5 h-5 text-foreground" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {mobileMenuOpen && (
+          <nav className="lg:hidden py-4 border-t border-border">
+            <div className="flex flex-col gap-1">
+              {navItems.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className={`px-4 py-2 text-sm font-medium ${
+                    item.active
+                      ? "text-primary bg-primary/5"
+                      : "text-muted-foreground hover:text-primary hover:bg-muted"
+                  } transition-colors rounded`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </nav>
+        )}
+      </div>
+    </header>
+  );
+};
+
+export default Header;
