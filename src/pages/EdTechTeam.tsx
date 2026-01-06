@@ -85,11 +85,11 @@ const TeamMemberCard = ({ name, role, campus, email, image, size = "md", delay =
   };
 
   return (
-    <div 
+    <div
       className="flex flex-col items-center text-center group animate-fade-up"
       style={{ animationDelay: `${delay}s` }}
     >
-      <div className={`${sizeClasses[size]} rounded-2xl overflow-hidden shadow-elevated mb-5 profile-ring transition-all duration-500 group-hover:shadow-primary group-hover:ring-primary/40`}>
+      <div className={`${sizeClasses[size]} rounded-2xl overflow-hidden shadow-elevated mb-5 ring-4 ring-primary transition-all duration-500 group-hover:shadow-primary group-hover:ring-primary-dark`}>
         <img
           src={image}
           alt={name}
@@ -114,8 +114,8 @@ const EdTechTeam = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <PageHero 
-          title="Educational Technology Team" 
+        <PageHero
+          title="Educational Technology Team"
           subtitle="Meet the people behind Liceo EdTech"
         />
 
@@ -159,7 +159,7 @@ const EdTechTeam = () => {
                 <h3 className="section-title text-2xl mb-3 animate-fade-up">E-Learning Technical Staff</h3>
                 <div className="section-divider" />
               </div>
-              
+
               {/* Coordinator */}
               <div className="flex flex-col items-center mb-12">
                 <TeamMemberCard

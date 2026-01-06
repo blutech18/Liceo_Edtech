@@ -20,7 +20,7 @@ const Footer = () => {
     <footer className="relative bg-gradient-to-br from-primary-dark via-primary to-primary overflow-hidden">
       {/* Decorative Pattern */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{ 
+        <div className="absolute inset-0" style={{
           backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
           backgroundSize: '40px 40px'
         }} />
@@ -31,9 +31,11 @@ const Footer = () => {
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-primary-foreground/10 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                <span className="text-primary-foreground font-bold text-xl">L</span>
-              </div>
+              <img
+                src="https://lh3.googleusercontent.com/sitesv/AAzXCkeyaH-HLwRp3GlQ7RtgCVM2em6-g-gNcIkfuDDJTFV15UA2qB3FAt08AQR0ITJIzWWduCexBWhWIs8owfXMq0k9fc8pzJIhNZAP79xglXH1iqOxbvwP-N0t9jPQ3pojvUHOeMK3pSiOL_IzkwoGZtxcNIg4TVMfGNauW3W2JlhTNx3aXSDl7moWdUM=w16383"
+                alt="Liceo EdTech Logo"
+                className="w-12 h-12 object-contain"
+              />
               <div>
                 <span className="font-bold text-primary-foreground text-lg block">
                   Liceo EdTech

@@ -13,25 +13,19 @@ const Feedback = () => {
         {/* Content */}
         <section className="py-16 sm:py-20 bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="card-enhanced overflow-hidden animate-fade-up">
-              <div className="p-6 sm:p-8 border-b border-border/50 bg-gradient-to-r from-primary/5 to-transparent">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <MessageSquare className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground">User Satisfaction Survey</h2>
-                    <p className="text-muted-foreground mt-1">
-                      Help us improve our Educational Technology Center services by completing this survey.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Embedded Google Form */}
-              <div className="aspect-[4/5] sm:aspect-[16/12] bg-section-bg">
+            {/* Title Section */}
+            <div className="mb-8 text-center animate-fade-up">
+              <h2 className="text-2xl font-bold text-foreground">User Satisfaction Survey</h2>
+              <p className="text-muted-foreground mt-2">
+                Help us improve our Educational Technology Center services by completing this survey.
+              </p>
+            </div>
+
+            {/* Embedded Form */}
+            <div className="card-enhanced overflow-hidden animate-fade-up" style={{ animationDelay: '0.1s' }}>
+              <div className="w-full" style={{ height: '2400px' }}>
                 <iframe
-                  src="https://docs.google.com/forms/d/e/1FAIpQLSd8RCqP7RBkqFhGVJBNGDOMVGDNGqEtZGNqYCxVrVqJMGrqnQ/viewform?embedded=true"
+                  src="https://docs.google.com/forms/d/e/1FAIpQLSeOQn-UU4U-TuWT9ngJVB2bpqrTYKBp-JmVHKsrcjRBVDHDcA/viewform?embedded=true"
                   className="w-full h-full border-0"
                   title="User Satisfaction Survey"
                 >
@@ -40,9 +34,9 @@ const Feedback = () => {
               </div>
             </div>
 
-            <div className="mt-8 text-center animate-fade-up" style={{ animationDelay: '0.1s' }}>
+            <div className="mt-8 text-center animate-fade-up" style={{ animationDelay: '0.2s' }}>
               <a
-                href="https://forms.gle/ZGLkmgAMvva55YoB8"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSeOQn-UU4U-TuWT9ngJVB2bpqrTYKBp-JmVHKsrcjRBVDHDcA/viewform"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 btn-primary"
@@ -53,7 +47,7 @@ const Feedback = () => {
             </div>
 
             {/* Rating Info */}
-            <div className="mt-12 card-glass p-8 text-center animate-fade-up" style={{ animationDelay: '0.2s' }}>
+            <div className="mt-12 card-glass p-8 text-center animate-fade-up" style={{ animationDelay: '0.3s' }}>
               <div className="flex justify-center gap-1 mb-4">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Star key={star} className="w-6 h-6 text-accent fill-accent" />

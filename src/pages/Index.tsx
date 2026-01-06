@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import HeroSection from "@/components/HeroSection";
+import PageHero from "@/components/PageHero";
 import ActivitiesSection from "@/components/ActivitiesSection";
 import VideosSection from "@/components/VideosSection";
 import Footer from "@/components/Footer";
@@ -9,7 +9,10 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <HeroSection />
+        <PageHero
+          title="Liceo Educational Technology Center"
+          subtitle="Empowering education through innovative technology solutions"
+        />
         <ActivitiesSection />
         <VideosSection />
       </main>

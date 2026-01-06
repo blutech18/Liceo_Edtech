@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -53,12 +53,12 @@
     --nav-hover: 0 72% 35%;
     --section-bg: 30 20% 97%;
     --section-alt: 30 25% 95%;
-    
+
     /* Gradient tokens */
     --gradient-primary: linear-gradient(135deg, hsl(0 72% 35%) 0%, hsl(0 72% 45%) 100%);
-    --gradient-hero: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%);
+    --gradient-hero: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.5) 100%);
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(30 20% 98%) 100%);
-    
+
     /* Shadow tokens */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
@@ -98,7 +98,7 @@
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 0 72% 45%;
-    
+
     --sidebar-background: 0 0% 10%;
     --sidebar-foreground: 0 0% 95%;
     --sidebar-primary: 0 72% 45%;
@@ -128,7 +128,12 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Inter', sans-serif;
     @apply font-semibold tracking-tight;
   }
@@ -139,11 +144,12 @@
 }
 
 @layer components {
+
   /* Navigation */
   .nav-link {
     @apply text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-300 px-3 py-2 rounded-lg hover:bg-primary/5;
   }
-  
+
   .nav-link-active {
     @apply text-primary font-semibold bg-primary/10;
   }
@@ -213,10 +219,21 @@
     animation: scaleIn 0.4s ease-out forwards;
   }
 
-  .stagger-1 { animation-delay: 0.1s; }
-  .stagger-2 { animation-delay: 0.2s; }
-  .stagger-3 { animation-delay: 0.3s; }
-  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-1 {
+    animation-delay: 0.1s;
+  }
+
+  .stagger-2 {
+    animation-delay: 0.2s;
+  }
+
+  .stagger-3 {
+    animation-delay: 0.3s;
+  }
+
+  .stagger-4 {
+    animation-delay: 0.4s;
+  }
 
   /* Profile Images */
   .profile-ring {
@@ -243,6 +260,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -250,8 +268,13 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes scaleIn {
@@ -259,6 +282,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);

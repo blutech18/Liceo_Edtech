@@ -79,11 +79,11 @@ const resources = [
 ];
 
 const categoryColors: Record<string, string> = {
-  "Interactive Learning": "bg-blue-500/10 text-blue-600 border-blue-200",
-  "Media Production": "bg-purple-500/10 text-purple-600 border-purple-200",
-  "Design": "bg-pink-500/10 text-pink-600 border-pink-200",
-  "Google Workspace": "bg-green-500/10 text-green-600 border-green-200",
-  "Collaboration": "bg-orange-500/10 text-orange-600 border-orange-200",
+  "Interactive Learning": "bg-primary/10 text-primary border-primary/20",
+  "Media Production": "bg-primary/10 text-primary border-primary/20",
+  "Design": "bg-primary/10 text-primary border-primary/20",
+  "Google Workspace": "bg-primary/10 text-primary border-primary/20",
+  "Collaboration": "bg-primary/10 text-primary border-primary/20",
 };
 
 const Resources = () => {
@@ -93,8 +93,8 @@ const Resources = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <PageHero 
-          title="Educational Resources" 
+        <PageHero
+          title="Educational Resources"
           subtitle="Tools and platforms to enhance your teaching"
         />
 
@@ -106,8 +106,8 @@ const Resources = () => {
             </p>
 
             {categories.map((category, catIndex) => (
-              <div 
-                key={category} 
+              <div
+                key={category}
                 className="mb-12 animate-fade-up"
                 style={{ animationDelay: `${catIndex * 0.1}s` }}
               >
@@ -117,7 +117,7 @@ const Resources = () => {
                   </span>
                   <div className="flex-1 h-px bg-border" />
                 </div>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {resources
                     .filter((r) => r.category === category)
