@@ -1,3 +1,5 @@
+import { Play } from "lucide-react";
+
 const videos = [
   {
     id: "mkshQPIH8xs",
@@ -18,16 +20,27 @@ const videos = [
 
 const VideosSection = () => {
   return (
-    <section className="py-8 sm:py-12 bg-section-bg">
-      <div className="max-w-7xl mx-auto px-4">
-        <h2 className="section-title text-center mb-8">
-          LATEST VIDEOS FOR GOOGLE WORKSPACE UPDATES
-        </h2>
+    <section className="py-16 sm:py-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <h2 className="section-title text-3xl sm:text-4xl mb-4 animate-fade-up">
+            Google Workspace Updates
+          </h2>
+          <div className="section-divider mb-4" />
+          <p className="section-subtitle animate-fade-up" style={{ animationDelay: '0.1s' }}>
+            Stay updated with the latest Google Workspace features and tutorials
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {videos.map((video) => (
-            <div key={video.id} className="bg-background rounded-sm shadow-md overflow-hidden">
-              <div className="video-container">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {videos.map((video, index) => (
+            <div 
+              key={video.id} 
+              className="card-enhanced group overflow-hidden animate-fade-up"
+              style={{ animationDelay: `${0.1 + index * 0.1}s` }}
+            >
+              <div className="video-container relative">
                 <iframe
                   src={`https://www.youtube.com/embed/${video.id}`}
                   title={video.title}
@@ -36,11 +49,16 @@ const VideosSection = () => {
                   className="w-full h-full"
                 />
               </div>
-              <div className="p-4">
-                <h3 className="font-medium text-foreground text-sm line-clamp-2">
+              <div className="p-5">
+                <h3 className="font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors duration-300">
                   {video.title}
                 </h3>
-                <p className="text-xs text-muted-foreground mt-1">{video.channel}</p>
+                <p className="text-sm text-muted-foreground mt-2 flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Play className="w-3 h-3 text-primary" />
+                  </span>
+                  {video.channel}
+                </p>
               </div>
             </div>
           ))}
