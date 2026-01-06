@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PageHero from "@/components/PageHero";
 import activityDigitalCitizenship from "@/assets/activity-digital-citizenship.jpg";
 import activityGoogleWorkspace from "@/assets/activity-google-workspace.jpg";
 import activityEmanuscript from "@/assets/activity-emanuscript.jpg";
@@ -53,14 +54,7 @@ const Trainings = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        {/* Hero Banner */}
-        <div className="bg-primary py-6">
-          <div className="max-w-7xl mx-auto px-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-foreground text-center uppercase tracking-wide">
-              Trainings
-            </h1>
-          </div>
-        </div>
+        <PageHero title="Trainings" />
 
         {/* Upcoming Trainings */}
         <section className="py-8 sm:py-12 bg-background">
