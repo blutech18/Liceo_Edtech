@@ -245,6 +245,117 @@
     @apply w-24 h-1 bg-primary rounded-full mx-auto;
   }
 
+  .section-divider-white {
+    @apply w-24 h-1 bg-white/60 rounded-full mx-auto;
+  }
+
+  /* Section Backgrounds - Alternating Maroon and White */
+  .section-maroon {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  .section-maroon .section-title,
+  .section-maroon h2,
+  .section-maroon h3,
+  .section-maroon h4 {
+    @apply text-primary-foreground;
+  }
+
+  .section-maroon .section-subtitle,
+  .section-maroon .text-muted-foreground,
+  .section-maroon p {
+    @apply text-primary-foreground/80;
+  }
+
+  .section-maroon .card-enhanced {
+    @apply bg-white/10 border-white/20;
+  }
+
+  .section-maroon .card-enhanced:hover {
+    @apply bg-white/15 border-white/30;
+  }
+
+  .section-maroon .card-glass {
+    @apply bg-white/10 border-white/20;
+  }
+
+  .section-maroon a:not(.btn-primary) {
+    @apply text-white hover:text-white/80;
+  }
+
+  /* Fix icon colors in maroon sections - use white instead of primary (red) */
+  .section-maroon .text-primary {
+    @apply text-white;
+  }
+
+  .section-maroon .bg-primary\/10 {
+    @apply bg-white/10;
+  }
+
+  .section-maroon .bg-primary\/5 {
+    @apply bg-white/5;
+  }
+
+  .section-maroon .border-primary\/20 {
+    @apply border-white/20;
+  }
+
+  /* Fix hover effects in maroon sections */
+  .section-maroon .hover\:text-primary:hover,
+  .section-maroon .group-hover\:text-primary {
+    @apply text-white;
+  }
+
+  .section-maroon .hover\:text-primary-dark:hover {
+    @apply text-white/90;
+  }
+
+  .section-maroon .group-hover\:bg-primary\/10 {
+    @apply bg-white/20;
+  }
+
+  /* Fix ring colors in maroon sections */
+  .section-maroon .ring-primary {
+    @apply ring-white/40;
+  }
+
+  .section-maroon .group-hover\:ring-primary-dark {
+    @apply ring-white/60;
+  }
+
+  /* Exception: White cards within maroon sections should have dark text */
+  .section-maroon .bg-white {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .section-maroon .bg-white h1,
+  .section-maroon .bg-white h2,
+  .section-maroon .bg-white h3,
+  .section-maroon .bg-white h4,
+  .section-maroon .bg-white h5,
+  .section-maroon .bg-white h6,
+  .section-maroon .bg-white p {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .section-maroon .bg-white .text-primary,
+  .section-maroon .bg-white a.text-primary {
+    color: hsl(var(--primary)) !important;
+  }
+
+  .section-maroon .bg-white .hover\:text-primary-dark:hover {
+    color: hsl(var(--primary-dark)) !important;
+  }
+
+  .section-maroon .bg-white .bg-primary\/10 {
+    background-color: hsl(var(--primary) / 0.1) !important;
+  }
+
+
+  .section-white {
+    @apply bg-white text-foreground;
+  }
+
   /* Hover Effects */
   .hover-lift {
     @apply transition-all duration-300 hover:-translate-y-1;

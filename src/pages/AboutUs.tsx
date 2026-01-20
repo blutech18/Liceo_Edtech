@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
@@ -8,7 +9,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import orgChart from "@/assets/org-chart.jpg";
-import { ExternalLink, Target, Cog, Users, Briefcase, CheckCircle2 } from "lucide-react";
+import { ExternalLink, Target, Cog, Users, Briefcase, CheckCircle2, Loader2 } from "lucide-react";
+import { getSectionContent } from "@/lib/api";
 
 const goals = [
   "Connects people, data, content, resources, expertise, and learning experiences to boost teaching effectiveness",
@@ -44,6 +46,26 @@ const services = [
 ];
 
 const AboutUs = () => {
+  const [orgChartImage, setOrgChartImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchOrgChart() {
+      try {
+        const sectionContent = await getSectionContent();
+        const aboutUsSection = sectionContent.about_us;
+        if (aboutUsSection?.image_url) {
+          setOrgChartImage(aboutUsSection.image_url);
+        }
+      } catch (error) {
+        console.error('Error fetching org chart:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchOrgChart();
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -176,11 +198,19 @@ const AboutUs = () => {
                 <div className="section-divider" />
               </div>
               <div className="card-enhanced overflow-hidden">
-                <img
-                  src={orgChart}
-                  alt="EdTech Organizational Chart"
-                  className="w-full h-auto"
-                />
+                {loading ? (
+                  <div className="flex items-center justify-center py-12 sm:py-16">
+                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                  </div>
+                ) : (
+                  <div className="max-h-[300px] sm:max-h-[400px] md:max-h-[500px] overflow-hidden flex items-center justify-center">
+                    <img
+                      src={orgChartImage || orgChart}
+                      alt="EdTech Organizational Chart"
+                      className="w-full h-auto max-h-full object-contain"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 

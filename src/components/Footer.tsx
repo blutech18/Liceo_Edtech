@@ -32,7 +32,7 @@ const Footer = () => {
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <img
-                src="https://lh3.googleusercontent.com/sitesv/AAzXCkeyaH-HLwRp3GlQ7RtgCVM2em6-g-gNcIkfuDDJTFV15UA2qB3FAt08AQR0ITJIzWWduCexBWhWIs8owfXMq0k9fc8pzJIhNZAP79xglXH1iqOxbvwP-N0t9jPQ3pojvUHOeMK3pSiOL_IzkwoGZtxcNIg4TVMfGNauW3W2JlhTNx3aXSDl7moWdUM=w16383"
+                src="/edtech_logo.png"
                 alt="Liceo EdTech Logo"
                 className="w-12 h-12 object-contain"
               />

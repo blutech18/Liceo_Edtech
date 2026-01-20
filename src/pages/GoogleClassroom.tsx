@@ -11,19 +11,19 @@ const roles = [
     title: "Student",
     image: gcStudent,
     description: "Access your classes, submit assignments, and collaborate with classmates.",
-    color: "from-blue-500 to-blue-600",
+    color: "from-[#800000] to-[#a52a2a]",
   },
   {
     title: "Teacher",
     image: gcTeacher,
     description: "Create classes, manage assignments, and track student progress.",
-    color: "from-green-500 to-green-600",
+    color: "from-[#800000] to-[#a52a2a]",
   },
   {
     title: "Guardian",
     image: gcGuardian,
     description: "Monitor your child's academic activities and receive updates.",
-    color: "from-purple-500 to-purple-600",
+    color: "from-[#800000] to-[#a52a2a]",
   },
 ];
 
@@ -32,8 +32,8 @@ const GoogleClassroom = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <PageHero 
-          title="Guide to Google Classroom" 
+        <PageHero
+          title="Guide to Google Classroom"
           subtitle="Select your role to access personalized resources"
         />
 
@@ -59,7 +59,7 @@ const GoogleClassroom = () => {
                     />
                     {/* Gradient Overlay */}
                     <div className={`absolute inset-0 bg-gradient-to-t ${role.color} opacity-0 group-hover:opacity-60 transition-opacity duration-500`} />
-                    
+
                     {/* Content Overlay */}
                     <div className="absolute inset-0 flex flex-col justify-end p-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                       <p className="text-white text-sm leading-relaxed">
@@ -71,7 +71,7 @@ const GoogleClassroom = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <h2 className="text-center font-bold text-2xl mt-6 text-foreground group-hover:text-primary transition-colors duration-300 uppercase tracking-wide">
                     {role.title}
                   </h2>

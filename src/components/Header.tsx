@@ -8,17 +8,18 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { searchData } from "@/lib/searchData";
+import { getSectionContent, SectionContent } from "@/lib/api";
 
-const navItems = [
-  { label: "Home", href: "/" },
-  { label: "Hotline", href: "/hotline" },
-  { label: "Google Classroom", href: "/google-classroom" },
-  { label: "Resources", href: "/resources" },
-  { label: "Trainings", href: "/trainings" },
-  { label: "EdTech Team", href: "/edtech-team" },
-  { label: "Feedback", href: "/feedback" },
-  { label: "About Us", href: "/about-us" },
-  { label: "Forms", href: "/forms" },
+const defaultNavItems = [
+  { label: "Home", href: "#home", sectionKey: "hero" },
+  { label: "Hotline", href: "#hotline", sectionKey: "hotline" },
+  { label: "Google Classroom", href: "#google-classroom", sectionKey: "google_classroom" },
+  { label: "Resources", href: "#resources", sectionKey: "resources" },
+  { label: "Trainings", href: "#trainings", sectionKey: "trainings" },
+  { label: "EdTech Team", href: "#edtech-team", sectionKey: "team" },
+  { label: "Feedback", href: "#feedback", sectionKey: "feedback" },
+  { label: "About Us", href: "#about-us", sectionKey: "about_us" },
+  { label: "Forms", href: "#forms", sectionKey: "forms" },
 ];
 
 const Header = () => {
@@ -26,8 +27,56 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeSection, setActiveSection] = useState("home");
+  const [navItems, setNavItems] = useState(defaultNavItems);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Fetch dynamic section titles for navigation
+  useEffect(() => {
+    async function fetchSectionTitles() {
+      const sections = await getSectionContent();
+      if (sections && Object.keys(sections).length > 0) {
+        setNavItems(defaultNavItems.map(item => {
+          const section = sections[item.sectionKey];
+          if (section && item.sectionKey !== 'hero') {
+            return { ...item, label: section.title };
+          }
+          return item;
+        }));
+      }
+    }
+    fetchSectionTitles();
+  }, []);
+
+  const scrollToSection = (href: string) => {
+    const sectionId = href.replace('#', '');
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setActiveSection(sectionId);
+    }
+    setMobileMenuOpen(false);
+  };
+
+  // Track active section on scroll
+  useEffect(() => {
+    const handleScrollSpy = () => {
+      const sections = navItems.map(item => item.href.replace('#', ''));
+      const scrollPosition = window.scrollY + 100;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sections[i]);
+        if (section && section.offsetTop <= scrollPosition) {
+          setActiveSection(sections[i]);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScrollSpy, { passive: true });
+    return () => window.removeEventListener('scroll', handleScrollSpy);
+  }, [navItems]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,7 +96,16 @@ const Header = () => {
   });
 
   const handleSearchItemClick = (url: string) => {
-    navigate(url);
+    if (url.startsWith('#')) {
+      const sectionId = url.replace('#', '');
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        setActiveSection(sectionId);
+      }
+    } else {
+      navigate(url);
+    }
     setSearchOpen(false);
     setSearchQuery("");
   };
@@ -80,7 +138,7 @@ const Header = () => {
           <Link to="/" className="flex items-center gap-3 group">
             <div className="relative">
               <img
-                src="https://lh3.googleusercontent.com/sitesv/AAzXCkeyaH-HLwRp3GlQ7RtgCVM2em6-g-gNcIkfuDDJTFV15UA2qB3FAt08AQR0ITJIzWWduCexBWhWIs8owfXMq0k9fc8pzJIhNZAP79xglXH1iqOxbvwP-N0t9jPQ3pojvUHOjO_MK3pSiOL_IzkwoGZtxcNIg4TVMfGNauW3W2JlhTNx3aXSDl7moWdUM=w16383"
+                src="/edtech_logo.png"
                 alt="Liceo EdTech Logo"
                 className="w-10 h-10 sm:w-12 sm:h-12 object-contain transition-transform duration-300 group-hover:scale-105"
               />
@@ -98,13 +156,13 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
-              <Link
+              <button
                 key={item.label}
-                to={item.href}
-                className={`nav-link ${location.pathname === item.href ? "nav-link-active" : ""}`}
+                onClick={() => scrollToSection(item.href)}
+                className={`nav-link ${activeSection === item.href.replace('#', '') ? "nav-link-active" : ""}`}
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
           </nav>
 
@@ -137,18 +195,17 @@ const Header = () => {
           <nav className="py-4 border-t border-border/50">
             <div className="flex flex-col gap-1">
               {navItems.map((item, index) => (
-                <Link
+                <button
                   key={item.label}
-                  to={item.href}
-                  className={`px-4 py-3 text-sm font-medium rounded-xl transition-all duration-300 ${location.pathname === item.href
+                  onClick={() => scrollToSection(item.href)}
+                  className={`px-4 py-3 text-sm font-medium rounded-xl transition-all duration-300 text-left ${activeSection === item.href.replace('#', '')
                     ? "text-primary bg-primary/10 font-semibold"
                     : "text-muted-foreground hover:text-primary hover:bg-primary/5"
                     }`}
-                  onClick={() => setMobileMenuOpen(false)}
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {item.label}
-                </Link>
+                </button>
               ))}
             </div>
           </nav>

@@ -37,8 +37,8 @@ const Hotline = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <PageHero 
-          title="EdTech Hotline" 
+        <PageHero
+          title="EdTech Hotline"
           subtitle="Get technical support from our specialists"
         />
 
@@ -51,8 +51,8 @@ const Hotline = () => {
 
             <div className="space-y-6">
               {hotlineContacts.map((campus, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="card-enhanced overflow-hidden animate-fade-up"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
@@ -95,7 +95,7 @@ const Hotline = () => {
             <div className="mt-12 relative overflow-hidden rounded-2xl animate-fade-up" style={{ animationDelay: '0.4s' }}>
               <div className="absolute inset-0 bg-gradient-to-r from-primary-dark via-primary to-primary" />
               <div className="absolute inset-0 opacity-10">
-                <div className="absolute inset-0" style={{ 
+                <div className="absolute inset-0" style={{
                   backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
                   backgroundSize: '24px 24px'
                 }} />
@@ -106,8 +106,8 @@ const Hotline = () => {
                 </div>
                 <h3 className="font-bold text-xl text-primary-foreground mb-2">E-Learning Technology Coordinator</h3>
                 <p className="font-semibold text-primary-foreground/90 text-lg">Mr. Roy Emeterio L. Pabilona</p>
-                <a 
-                  href="mailto:rpabilona@liceo.edu.ph" 
+                <a
+                  href="mailto:rpabilona@liceo.edu.ph"
                   className="inline-flex items-center gap-2 mt-4 text-primary-foreground/80 hover:text-primary-foreground transition-colors font-medium"
                 >
                   <Mail className="w-4 h-4" />
