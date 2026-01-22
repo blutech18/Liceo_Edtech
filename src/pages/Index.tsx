@@ -37,20 +37,25 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
+        {/* Home Section */}
         <ParallaxHero
           title={heroContent.title}
           subtitle={heroContent.subtitle}
         />
         <ActivitiesSection />
         <VideosSection />
-        <HotlineSection />
-        <GoogleClassroomSection />
+
+        {/* Resources Section Group */}
         <ResourcesSection />
         <TrainingsSection />
-        <EdTechTeamSection />
-        <FeedbackSection />
-        <AboutUsSection />
+        <GoogleClassroomSection />
         <FormsSection />
+
+        {/* About Us Section Group */}
+        <AboutUsSection />
+        <EdTechTeamSection />
+        <HotlineSection />
+        <FeedbackSection />
       </main>
       <Footer />
     </div>

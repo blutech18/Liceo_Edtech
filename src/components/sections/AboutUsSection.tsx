@@ -5,9 +5,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import orgChart from "@/assets/org-chart.jpg";
-import { ExternalLink, Target, Cog, Users, Briefcase, CheckCircle2, Loader2 } from "lucide-react";
-import { getSectionContent, getAboutUsContent, getHelpDeskConfig, SectionContent, AboutUsContent, HelpDeskConfig } from "@/lib/api";
+import { Target, Cog, Users, Briefcase, CheckCircle2, Loader2 } from "lucide-react";
+import { getSectionContent, getAboutUsContent, SectionContent, AboutUsContent } from "@/lib/api";
 
 const defaultContent: SectionContent = {
   id: '', section_key: 'about_us',
@@ -15,37 +14,22 @@ const defaultContent: SectionContent = {
   subtitle: 'Empowering education through technology'
 };
 
-const defaultHelpDesk: HelpDeskConfig = {
-  id: '',
-  title: 'EdTech Help Desk Monitoring Form',
-  url: 'https://forms.gle/ZGLkmgAMvva55YoB8'
-};
-
 const AboutUsSection = () => {
   const [loading, setLoading] = useState(true);
   const [sectionContent, setSectionContent] = useState<SectionContent>(defaultContent);
   const [aboutContent, setAboutContent] = useState<AboutUsContent[]>([]);
-  const [helpDeskConfig, setHelpDeskConfig] = useState<HelpDeskConfig>(defaultHelpDesk);
-  const [orgChartImage, setOrgChartImage] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const [contentData, aboutData, helpDeskData] = await Promise.all([
+      const [contentData, aboutData] = await Promise.all([
         getSectionContent(),
-        getAboutUsContent(),
-        getHelpDeskConfig()
+        getAboutUsContent()
       ]);
       if (contentData.about_us) {
         setSectionContent(contentData.about_us);
-        if (contentData.about_us.image_url) {
-          setOrgChartImage(contentData.about_us.image_url);
-        }
       }
       setAboutContent(aboutData);
-      if (helpDeskData) {
-        setHelpDeskConfig(helpDeskData);
-      }
       setLoading(false);
     }
     fetchData();
@@ -183,37 +167,6 @@ const AboutUsSection = () => {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-
-            {/* Organizational Chart */}
-            <div className="mb-12 animate-fade-up" style={{ animationDelay: '0.3s' }}>
-              <div className="text-center mb-8">
-                <h3 className="section-title text-2xl mb-3">Organizational Chart</h3>
-                <div className="section-divider" />
-              </div>
-              <div className="card-enhanced overflow-hidden">
-                <div className="max-h-[300px] sm:max-h-[400px] md:max-h-[500px] overflow-hidden flex items-center justify-center">
-                  <img
-                    src={orgChartImage || orgChart}
-                    alt="EdTech Organizational Chart"
-                    className="w-full h-auto max-h-full object-contain"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Help Desk Link */}
-            <div className="card-glass p-8 text-center animate-fade-up" style={{ animationDelay: '0.35s' }}>
-              <p className="text-foreground font-semibold text-lg mb-3">{helpDeskConfig.title}</p>
-              <a
-                href={helpDeskConfig.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 btn-primary"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Access Form
-              </a>
-            </div>
           </>
         )}
       </div>

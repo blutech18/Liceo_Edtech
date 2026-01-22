@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ExternalLink, Loader2 } from "lucide-react";
-import { getFeedbackConfig, getSectionContent, FeedbackConfig, SectionContent } from "@/lib/api";
+import { getFeedbackConfig, getSectionContent, getHelpDeskConfig, FeedbackConfig, SectionContent, HelpDeskConfig } from "@/lib/api";
+import orgChart from "@/assets/org-chart.jpg";
 
 const defaultContent: SectionContent = {
   id: '', section_key: 'feedback',
@@ -14,23 +15,42 @@ const defaultFeedbackConfig: FeedbackConfig = {
   button_text: 'Open form in new window'
 };
 
+const defaultHelpDesk: HelpDeskConfig = {
+  id: '',
+  title: 'EdTech Help Desk Monitoring Form',
+  url: 'https://forms.gle/ZGLkmgAMvva55YoB8'
+};
+
 const FeedbackSection = () => {
   const [loading, setLoading] = useState(true);
   const [sectionContent, setSectionContent] = useState<SectionContent>(defaultContent);
   const [feedbackConfig, setFeedbackConfig] = useState<FeedbackConfig>(defaultFeedbackConfig);
+  const [helpDeskConfig, setHelpDeskConfig] = useState<HelpDeskConfig>(defaultHelpDesk);
+  const [orgChartImage, setOrgChartImage] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const [contentData, configData] = await Promise.all([
+      const [contentData, configData, helpDeskData] = await Promise.all([
         getSectionContent(),
-        getFeedbackConfig()
+        getFeedbackConfig(),
+        getHelpDeskConfig()
       ]);
       if (contentData.feedback) {
         setSectionContent(contentData.feedback);
+        if (contentData.feedback.image_url) {
+          setOrgChartImage(contentData.feedback.image_url);
+        }
+      }
+      // Also check about_us for org chart image
+      if (contentData.about_us?.image_url) {
+        setOrgChartImage(contentData.about_us.image_url);
       }
       if (configData) {
         setFeedbackConfig(configData);
+      }
+      if (helpDeskData) {
+        setHelpDeskConfig(helpDeskData);
       }
       setLoading(false);
     }
@@ -84,6 +104,37 @@ const FeedbackSection = () => {
               >
                 <ExternalLink className="w-4 h-4" />
                 {feedbackConfig.button_text}
+              </a>
+            </div>
+
+            {/* Organizational Chart */}
+            <div className="mt-16 animate-fade-up" style={{ animationDelay: '0.3s' }}>
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold text-foreground mb-3">Organizational Chart</h3>
+                <div className="w-16 h-1 bg-primary mx-auto rounded-full" />
+              </div>
+              <div className="card-enhanced overflow-hidden">
+                <div className="max-h-[300px] sm:max-h-[400px] md:max-h-[500px] overflow-hidden flex items-center justify-center">
+                  <img
+                    src={orgChartImage || orgChart}
+                    alt="EdTech Organizational Chart"
+                    className="w-full h-auto max-h-full object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Help Desk Link */}
+            <div className="mt-12 card-enhanced p-8 text-center animate-fade-up" style={{ animationDelay: '0.35s' }}>
+              <p className="text-foreground font-semibold text-lg mb-3">{helpDeskConfig.title}</p>
+              <a
+                href={helpDeskConfig.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 btn-primary"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Access Form
               </a>
             </div>
           </>
