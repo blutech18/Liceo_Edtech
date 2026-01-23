@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Target, Cog, Users, Briefcase, CheckCircle2, Loader2 } from "lucide-react";
+import { Target, CheckCircle2, Loader2 } from "lucide-react";
 import { getSectionContent, getAboutUsContent, SectionContent, AboutUsContent } from "@/lib/api";
 
 const defaultContent: SectionContent = {
@@ -38,20 +32,17 @@ const AboutUsSection = () => {
   // Group content by section type
   const mission = aboutContent.filter(c => c.section_type === 'mission');
   const goals = aboutContent.filter(c => c.section_type === 'goals');
-  const functions = aboutContent.filter(c => c.section_type === 'functions');
-  const keyRoles = aboutContent.filter(c => c.section_type === 'key_roles');
-  const services = aboutContent.filter(c => c.section_type === 'services');
 
   return (
-    <section id="about-us" className="py-16 sm:py-20 section-maroon scroll-mt-16">
+    <section id="about-us" className="py-16 sm:py-20 scroll-mt-16" style={{ backgroundColor: "#1A1A1A" }}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12 animate-fade-up">
           <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <h2 className="section-title text-3xl sm:text-4xl font-bold">
+            <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: "#FFFFFF" }}>
               {sectionContent.title}
             </h2>
-            <span className="hidden sm:block text-2xl text-white/30">|</span>
-            <p className="section-subtitle text-base sm:text-lg">
+            <span className="hidden sm:block text-2xl" style={{ color: "rgba(255,255,255,0.3)" }}>|</span>
+            <p className="text-base sm:text-lg" style={{ color: "#CCCCCC" }}>
               {sectionContent.subtitle}
             </p>
           </div>
@@ -59,114 +50,57 @@ const AboutUsSection = () => {
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-white" />
+            <Loader2 className="w-8 h-8 animate-spin" style={{ color: "#A01010" }} />
           </div>
         ) : (
           <>
             {/* Mission Statement */}
             <div className="mb-12 animate-fade-up">
-              <div className="card-glass p-8 sm:p-10">
+              <div 
+                className="p-8 sm:p-10 rounded-xl backdrop-blur-sm"
+                style={{ 
+                  backgroundColor: "rgba(15, 15, 15, 0.8)",
+                  border: "1px solid rgba(128, 0, 0, 0.3)"
+                }}
+              >
                 {mission.map((item, index) => (
-                  <p key={item.id} className={`text-muted-foreground leading-relaxed text-lg ${index > 0 ? 'mt-4' : ''}`}>
+                  <p key={item.id} className={`leading-relaxed text-lg ${index > 0 ? 'mt-4' : ''}`} style={{ color: "#CCCCCC" }}>
                     {item.content}
                   </p>
                 ))}
               </div>
             </div>
 
-            {/* Accordion Sections */}
-            <Accordion type="single" collapsible className="mb-12 space-y-4">
-              <AccordionItem value="goals" className="card-enhanced border-0 px-6 animate-fade-up" style={{ animationDelay: '0.1s' }}>
-                <AccordionTrigger className="text-lg font-bold hover:no-underline py-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <Target className="w-5 h-5 text-primary" />
-                    </div>
-                    Goals
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="pb-6">
-                  <p className="text-muted-foreground mb-4">
-                    Liceo EdTech promotes high-quality programs and services supported by technology that:
-                  </p>
-                  <ul className="space-y-3">
-                    {goals.map((goal) => (
-                      <li key={goal.id} className="flex items-start gap-3 text-muted-foreground">
-                        <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span>{goal.content}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="functions" className="card-enhanced border-0 px-6 animate-fade-up" style={{ animationDelay: '0.15s' }}>
-                <AccordionTrigger className="text-lg font-bold hover:no-underline py-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <Cog className="w-5 h-5 text-primary" />
-                    </div>
-                    Functions
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="pb-6">
-                  <ol className="space-y-3">
-                    {functions.map((func, index) => (
-                      <li key={func.id} className="flex items-start gap-4 text-muted-foreground">
-                        <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm flex-shrink-0">
-                          {index + 1}
-                        </span>
-                        <span className="pt-0.5">{func.content}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="roles" className="card-enhanced border-0 px-6 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-                <AccordionTrigger className="text-lg font-bold hover:no-underline py-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <Users className="w-5 h-5 text-primary" />
-                    </div>
-                    Key Roles
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="pb-6">
-                  <ol className="space-y-3">
-                    {keyRoles.map((role, index) => (
-                      <li key={role.id} className="flex items-start gap-4 text-muted-foreground">
-                        <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm flex-shrink-0">
-                          {index + 1}
-                        </span>
-                        <span className="pt-0.5">{role.content}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="services" className="card-enhanced border-0 px-6 animate-fade-up" style={{ animationDelay: '0.25s' }}>
-                <AccordionTrigger className="text-lg font-bold hover:no-underline py-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <Briefcase className="w-5 h-5 text-primary" />
-                    </div>
-                    Services Offered
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="pb-6">
-                  <ul className="space-y-3">
-                    {services.map((service) => (
-                      <li key={service.id} className="flex items-start gap-3 text-muted-foreground">
-                        <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span>{service.content}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+            {/* Goals Section - Always Visible */}
+            <div 
+              className="rounded-xl p-6 animate-fade-up" 
+              style={{ 
+                backgroundColor: "#0F0F0F",
+                border: "1px solid #800000",
+                animationDelay: '0.1s'
+              }}
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div 
+                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: "rgba(160, 16, 16, 0.15)" }}
+                >
+                  <Target className="w-5 h-5" style={{ color: "#A01010" }} />
+                </div>
+                <h3 className="text-lg font-bold" style={{ color: "#FFFFFF" }}>Goals</h3>
+              </div>
+              <p className="mb-4" style={{ color: "#CCCCCC" }}>
+                Liceo EdTech promotes high-quality programs and services supported by technology that:
+              </p>
+              <ul className="space-y-3">
+                {goals.map((goal) => (
+                  <li key={goal.id} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: "#A01010" }} />
+                    <span style={{ color: "#CCCCCC" }}>{goal.content}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </>
         )}
       </div>

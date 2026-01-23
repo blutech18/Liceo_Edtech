@@ -1,83 +1,128 @@
-import { useEffect, useState } from "react";
-import heroImage from "@/assets/hero-staff.jpg";
+import { BGPattern } from "@/components/ui/bg-pattern";
+import { motion } from "motion/react";
+import { ArrowRight } from "lucide-react";
 
 interface ParallaxHeroProps {
-  title: string;
+  title?: string;
   subtitle?: string;
 }
 
-const ParallaxHero = ({ title, subtitle }: ParallaxHeroProps) => {
-  const [scrollY, setScrollY] = useState(0);
+const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
+  const handleExploreClick = () => {
+    const trainingsSection = document.getElementById("trainings");
+    if (trainingsSection) {
+      trainingsSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const handleLearnMoreClick = () => {
+    const aboutSection = document.getElementById("about-us");
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <section id="home" className="relative h-screen min-h-[600px] max-h-[900px] overflow-hidden">
-      {/* Parallax Background Image */}
-      <div 
-        className="absolute inset-0 w-full h-[120%]"
-        style={{
-          transform: `translateY(${scrollY * 0.5}px)`,
-        }}
-      >
-        <img
-          src={heroImage}
-          alt="Liceo EdTech Center Staff"
-          className="w-full h-full object-cover object-center"
-        />
-      </div>
-
-      {/* Gradient Overlays - Maroon Tint */}
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-primary/30" />
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/40 via-primary/20 to-transparent" />
-
-      {/* Content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6">
-        <div 
-          className="text-center max-w-4xl mx-auto"
-          style={{
-            transform: `translateY(${scrollY * 0.2}px)`,
-            opacity: Math.max(0, 1 - scrollY / 500),
-          }}
-        >
-          {/* Decorative Line Above */}
-          <div className="flex justify-center mb-6 animate-fade-up">
-            <div className="w-16 h-1 bg-primary rounded-full" />
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight animate-fade-up" style={{ animationDelay: '0.1s' }}>
-            {title}
-          </h1>
-
-          {subtitle && (
-            <p className="text-white/80 text-lg sm:text-xl md:text-2xl mt-6 max-w-2xl mx-auto animate-fade-up" style={{ animationDelay: '0.2s' }}>
-              {subtitle}
-            </p>
-          )}
-
-          {/* Decorative Line Below */}
-          <div className="flex justify-center mt-8 animate-fade-up" style={{ animationDelay: '0.3s' }}>
-            <div className="w-24 h-1 bg-white/40 rounded-full" />
-          </div>
-
-          {/* Scroll Indicator */}
-          <div className="mt-12 animate-bounce" style={{ animationDelay: '1s' }}>
-            <div className="w-8 h-12 rounded-full border-2 border-white/50 flex items-start justify-center p-2 mx-auto">
-              <div className="w-1.5 h-3 bg-white/70 rounded-full animate-pulse" />
+    <section
+      id="home"
+      className="relative min-h-screen w-full overflow-hidden"
+      style={{ backgroundColor: "#0F0F0F" }}
+    >
+      <BGPattern
+        variant="grid"
+        mask="fade-edges"
+        size={40}
+        fill="rgba(160, 16, 16, 0.25)"
+      />
+      <div className="relative z-10 flex h-screen w-full items-center justify-center">
+        <div className="flex flex-col items-center justify-center gap-6 px-4 text-center max-w-4xl mx-auto">
+          {/* Trust Badge */}
+          <motion.div
+            className="mb-2"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm"
+              style={{
+                backgroundColor: "rgba(160, 16, 16, 0.2)",
+                border: "1px solid rgba(160, 16, 16, 0.4)",
+                color: "#CCCCCC",
+              }}
+            >
+              🎓 Liceo Educational Technology Center
             </div>
-            <p className="text-white/50 text-sm mt-2">Scroll to explore</p>
-          </div>
+          </motion.div>
+
+          {/* Main Title */}
+          <motion.h1
+            className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              background:
+                "linear-gradient(135deg, #FF6B6B 0%, #A01010 50%, #800000 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              willChange: "transform, opacity",
+            }}
+          >
+            Liceo Educational
+            <br />
+            Technology Center
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.p
+            className="text-lg md:text-xl lg:text-2xl max-w-2xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              color: "rgba(255, 255, 255, 0.7)",
+              willChange: "transform, opacity",
+            }}
+          >
+            {subtitle ||
+              "Ensuring access to and proficiency in technology for the entire academic community."}
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            className="flex flex-col sm:flex-row items-center gap-4 mt-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <button
+              onClick={handleExploreClick}
+              className="px-7 py-3.5 rounded-lg font-semibold text-base transition-all duration-200 hover:scale-[1.02]"
+              style={{
+                background: "linear-gradient(135deg, #A01010 0%, #800000 100%)",
+                color: "#FFFFFF",
+                boxShadow: "0 4px 20px rgba(160, 16, 16, 0.3)",
+                willChange: "transform",
+              }}
+            >
+              Explore the Trainings
+            </button>
+            <button
+              onClick={handleLearnMoreClick}
+              className="text-base font-semibold transition-colors flex items-center gap-2"
+              style={{ color: "rgba(255, 255, 255, 0.7)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#FFFFFF")}
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.color = "rgba(255, 255, 255, 0.7)")
+              }
+            >
+              Learn More <ArrowRight className="w-4 h-4" />
+            </button>
+          </motion.div>
         </div>
       </div>
-
-      {/* Bottom Gradient Fade - Transition to next section */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary to-transparent" />
     </section>
   );
 };
