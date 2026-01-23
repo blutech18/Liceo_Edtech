@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import ParallaxHero from "@/components/ParallaxHero";
+import AboutGoalsSection from "@/components/sections/AboutGoalsSection";
+import CoreFunctionsSection from "@/components/sections/CoreFunctionsSection";
+import ServicesRolesSection from "@/components/sections/ServicesRolesSection";
 import ActivitiesSection from "@/components/ActivitiesSection";
 import VideosSection from "@/components/VideosSection";
 import HotlineSection from "@/components/sections/HotlineSection";
 import GoogleClassroomSection from "@/components/sections/GoogleClassroomSection";
 import ResourcesSection from "@/components/sections/ResourcesSection";
-import TrainingsSection from "@/components/sections/TrainingsSection";
+import OrgChartSection from "@/components/sections/OrgChartSection";
 import EdTechTeamSection from "@/components/sections/EdTechTeamSection";
 import FeedbackSection from "@/components/sections/FeedbackSection";
 import AboutUsSection from "@/components/sections/AboutUsSection";
@@ -34,25 +37,39 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#0F0F0F" }}>
       <Header />
       <main className="flex-1">
-        {/* Home Section */}
+        {/* Home Section with Beams Background */}
         <ParallaxHero
           title={heroContent.title}
           subtitle={heroContent.subtitle}
         />
+
+        {/* About & Goals Section */}
+        <AboutGoalsSection />
+
+        {/* Core Functions Section */}
+        <CoreFunctionsSection />
+
+        {/* Services & Roles Section */}
+        <ServicesRolesSection />
+
+        {/* Trainings Section - card carousel + conducted trainings */}
         <ActivitiesSection />
+
+        {/* Google Classroom Section */}
+        <GoogleClassroomSection />
+
         <VideosSection />
 
         {/* Resources Section Group */}
         <ResourcesSection />
-        <TrainingsSection />
-        <GoogleClassroomSection />
         <FormsSection />
 
         {/* About Us Section Group */}
         <AboutUsSection />
+        <OrgChartSection />
         <EdTechTeamSection />
         <HotlineSection />
         <FeedbackSection />
@@ -63,3 +80,4 @@ const Index = () => {
 };
 
 export default Index;
+
