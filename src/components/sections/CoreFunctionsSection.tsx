@@ -6,6 +6,7 @@ import {
   Monitor,
   Globe,
 } from "lucide-react";
+import { GlowingEffect } from "@/components/ui/glowing-effect";
 
 const functions = [
   {
@@ -63,13 +64,13 @@ const CoreFunctionsSection = () => {
             What We Do
           </p>
           <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 title-glow"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 title-glow"
             style={{ color: "#FFFFFF" }}
           >
             Core Functions
           </h2>
           <p
-            className="text-lg max-w-2xl mx-auto"
+            className="text-base sm:text-lg max-w-2xl mx-auto"
             style={{ color: "#CCCCCC" }}
           >
             Driving educational excellence through strategic technology
@@ -77,47 +78,57 @@ const CoreFunctionsSection = () => {
           </p>
         </div>
 
-        {/* 3-Column Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* 2-Column Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
           {functions.map((func, index) => (
             <div
               key={index}
-              className="group p-6 sm:p-8 rounded-xl transition-all duration-300 hover:-translate-y-2 animate-fade-up"
-              style={{
-                backgroundColor: "#1A1A1A",
-                border: "1px solid #800000",
-                animationDelay: `${0.1 * index}s`,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow =
-                  "0 0 15px rgba(160, 16, 16, 0.4)";
-                e.currentTarget.style.borderColor = "#A01010";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "none";
-                e.currentTarget.style.borderColor = "#800000";
-              }}
+              className="relative group rounded-xl animate-fade-up"
+              style={{ animationDelay: `${0.1 * index}s` }}
             >
-              {/* Icon */}
+              {/* Glowing Effect */}
+              <GlowingEffect
+                spread={40}
+                glow={true}
+                disabled={false}
+                proximity={64}
+                inactiveZone={0.01}
+                borderWidth={2}
+                variant="maroon"
+              />
+
+              {/* Card Content */}
               <div
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110"
-                style={{ backgroundColor: "rgba(160, 16, 16, 0.15)" }}
+                className="relative p-6 sm:p-8 rounded-xl transition-all duration-300 group-hover:-translate-y-1 h-full"
+                style={{
+                  backgroundColor: "#1A1A1A",
+                  border: "1px solid rgba(128, 0, 0, 0.5)",
+                }}
               >
-                <func.icon className="w-7 h-7" style={{ color: "#A01010" }} />
+                {/* Icon */}
+                <div
+                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: "rgba(160, 16, 16, 0.15)" }}
+                >
+                  <func.icon className="w-7 h-7" style={{ color: "#A01010" }} />
+                </div>
+
+                {/* Title */}
+                <h3
+                  className="text-lg sm:text-xl font-semibold mb-3"
+                  style={{ color: "#FFFFFF" }}
+                >
+                  {func.title}
+                </h3>
+
+                {/* Description */}
+                <p
+                  className="text-sm sm:text-base leading-relaxed"
+                  style={{ color: "#CCCCCC" }}
+                >
+                  {func.description}
+                </p>
               </div>
-
-              {/* Title */}
-              <h3
-                className="text-xl font-semibold mb-3"
-                style={{ color: "#FFFFFF" }}
-              >
-                {func.title}
-              </h3>
-
-              {/* Description */}
-              <p className="leading-relaxed" style={{ color: "#CCCCCC" }}>
-                {func.description}
-              </p>
             </div>
           ))}
         </div>

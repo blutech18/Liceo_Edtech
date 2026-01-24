@@ -9,7 +9,6 @@ import VideosSection from "@/components/VideosSection";
 import HotlineSection from "@/components/sections/HotlineSection";
 import GoogleClassroomSection from "@/components/sections/GoogleClassroomSection";
 import ResourcesSection from "@/components/sections/ResourcesSection";
-import OrgChartSection from "@/components/sections/OrgChartSection";
 import EdTechTeamSection from "@/components/sections/EdTechTeamSection";
 import FeedbackSection from "@/components/sections/FeedbackSection";
 import AboutUsSection from "@/components/sections/AboutUsSection";
@@ -18,13 +17,15 @@ import Footer from "@/components/Footer";
 import { getSectionContent, SectionContent } from "@/lib/api";
 
 const defaultHeroContent: SectionContent = {
-  id: '', section_key: 'hero',
-  title: 'LICEO EDUCATIONAL TECHNOLOGY CENTER',
-  subtitle: 'Empowering education through innovative technology solutions'
+  id: "",
+  section_key: "hero",
+  title: "LICEO EDUCATIONAL TECHNOLOGY CENTER",
+  subtitle: "Empowering education through innovative technology solutions",
 };
 
 const Index = () => {
-  const [heroContent, setHeroContent] = useState<SectionContent>(defaultHeroContent);
+  const [heroContent, setHeroContent] =
+    useState<SectionContent>(defaultHeroContent);
 
   useEffect(() => {
     async function fetchHeroContent() {
@@ -37,7 +38,10 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#0F0F0F" }}>
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ backgroundColor: "#0F0F0F" }}
+    >
       <Header />
       <main className="flex-1">
         {/* Home Section with Beams Background */}
@@ -69,7 +73,6 @@ const Index = () => {
 
         {/* About Us Section Group */}
         <AboutUsSection />
-        <OrgChartSection />
         <EdTechTeamSection />
         <HotlineSection />
         <FeedbackSection />
@@ -80,4 +83,3 @@ const Index = () => {
 };
 
 export default Index;
-

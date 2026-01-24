@@ -21,7 +21,7 @@ const AboutGoalsSection = () => {
 
             {/* Main Heading */}
             <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 title-glow"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 title-glow"
               style={{ color: "#FFFFFF" }}
             >
               Bridging Education & Innovation
@@ -29,7 +29,7 @@ const AboutGoalsSection = () => {
 
             {/* Description */}
             <p
-              className="text-base sm:text-lg mb-8 leading-relaxed"
+              className="text-sm sm:text-base md:text-lg mb-8 leading-relaxed"
               style={{ color: "#CCCCCC" }}
             >
               Liceo EdTech promotes high-quality programs and services supported
@@ -40,7 +40,7 @@ const AboutGoalsSection = () => {
             {/* Goals */}
             <div className="space-y-4">
               <h3
-                className="text-xl font-semibold mb-4 flex items-center gap-3"
+                className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-3"
                 style={{ color: "#FFFFFF" }}
               >
                 <Target className="w-6 h-6" style={{ color: "#A01010" }} />
@@ -63,16 +63,21 @@ const AboutGoalsSection = () => {
                       className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
                       style={{ backgroundColor: "#A01010" }}
                     />
-                    <p style={{ color: "#CCCCCC" }}>{goal}</p>
+                    <p
+                      className="text-sm sm:text-base"
+                      style={{ color: "#CCCCCC" }}
+                    >
+                      {goal}
+                    </p>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Right Column - Image/Visual */}
+          {/* Right Column - Image/Visual - Hidden on mobile */}
           <div
-            className="relative animate-fade-up"
+            className="relative animate-fade-up hidden lg:block"
             style={{ animationDelay: "0.2s" }}
           >
             <div
@@ -83,8 +88,8 @@ const AboutGoalsSection = () => {
               }}
             >
               {/* Placeholder visual with icons */}
-              <div className="aspect-[4/3] flex items-center justify-center p-8">
-                <div className="grid grid-cols-2 gap-6 w-full max-w-md">
+              <div className="aspect-[4/3] flex items-center justify-center p-6">
+                <div className="grid grid-cols-2 gap-4 w-full max-w-sm">
                   {[
                     { icon: Lightbulb, label: "Innovation" },
                     { icon: Users, label: "Community" },
@@ -93,18 +98,18 @@ const AboutGoalsSection = () => {
                   ].map((item, index) => (
                     <div
                       key={index}
-                      className="flex flex-col items-center justify-center p-6 rounded-xl transition-all duration-300 hover:scale-105"
+                      className="flex flex-col items-center justify-center p-4 rounded-xl transition-all duration-300 hover:scale-105"
                       style={{
                         backgroundColor: "#0F0F0F",
                         border: "1px solid #800000",
                       }}
                     >
                       <item.icon
-                        className="w-10 h-10 mb-3"
+                        className="w-8 h-8 mb-2"
                         style={{ color: "#A01010" }}
                       />
                       <span
-                        className="text-sm font-medium"
+                        className="text-xs font-medium"
                         style={{ color: "#FFFFFF" }}
                       >
                         {item.label}

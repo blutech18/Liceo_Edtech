@@ -47,7 +47,7 @@ const ServicesRolesSection = () => {
         </div>
 
         {/* 2-Column Layout */}
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 xl:gap-12">
           {/* Column 1: Services Offered */}
           <div
             className="p-8 sm:p-10 rounded-2xl animate-fade-up"

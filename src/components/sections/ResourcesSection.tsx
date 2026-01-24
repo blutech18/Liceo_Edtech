@@ -1,33 +1,42 @@
 import { useState, useEffect } from "react";
 import { ArrowUpRight, Loader2 } from "lucide-react";
-import { getResources, Resource, getSectionContent, SectionContent } from "@/lib/api";
+import {
+  getResources,
+  Resource,
+  getSectionContent,
+  SectionContent,
+} from "@/lib/api";
 
 const categoryColors: Record<string, string> = {
   "Interactive Learning": "bg-primary/10 text-primary border-primary/20",
   "Media Production": "bg-primary/10 text-primary border-primary/20",
-  "Design": "bg-primary/10 text-primary border-primary/20",
+  Design: "bg-primary/10 text-primary border-primary/20",
   "Google Workspace": "bg-primary/10 text-primary border-primary/20",
-  "Collaboration": "bg-primary/10 text-primary border-primary/20",
+  Collaboration: "bg-primary/10 text-primary border-primary/20",
 };
 
 const defaultContent: SectionContent = {
-  id: '', section_key: 'resources',
-  title: 'Educational Resources',
-  subtitle: 'Tools and platforms to enhance your teaching'
+  id: "",
+  section_key: "resources",
+  title: "Educational Resources",
+  subtitle: "Tools and platforms to enhance your teaching",
 };
 
 const ResourcesSection = () => {
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sectionContent, setSectionContent] = useState<SectionContent>(defaultContent);
-  const [categoryOrder, setCategoryOrder] = useState<Record<string, number>>({});
+  const [sectionContent, setSectionContent] =
+    useState<SectionContent>(defaultContent);
+  const [categoryOrder, setCategoryOrder] = useState<Record<string, number>>(
+    {},
+  );
 
   useEffect(() => {
     async function fetchResources() {
       setLoading(true);
       const [data, contentData] = await Promise.all([
         getResources(),
-        getSectionContent()
+        getSectionContent(),
       ]);
       setResources(data);
       if (contentData.resources) {
@@ -35,7 +44,7 @@ const ResourcesSection = () => {
       }
 
       // Load category order from localStorage (same as admin panel)
-      const savedOrder = localStorage.getItem('resourceCategoryOrder');
+      const savedOrder = localStorage.getItem("resourceCategoryOrder");
       if (savedOrder) {
         setCategoryOrder(JSON.parse(savedOrder));
       }
@@ -45,19 +54,24 @@ const ResourcesSection = () => {
     fetchResources();
   }, []);
 
-  const categories = [...new Set(resources.map((r) => r.category))].sort((a, b) => {
-    const orderA = categoryOrder[a] ?? 999;
-    const orderB = categoryOrder[b] ?? 999;
-    if (orderA !== orderB) return orderA - orderB;
-    return a.localeCompare(b);
-  });
+  const categories = [...new Set(resources.map((r) => r.category))].sort(
+    (a, b) => {
+      const orderA = categoryOrder[a] ?? 999;
+      const orderB = categoryOrder[b] ?? 999;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.localeCompare(b);
+    },
+  );
 
   return (
-    <section id="resources" className="py-16 sm:py-20 section-maroon scroll-mt-16">
+    <section
+      id="resources"
+      className="py-16 sm:py-20 section-maroon scroll-mt-16"
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12 animate-fade-up">
           <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <h2 className="section-title text-3xl sm:text-4xl font-bold">
+            <h2 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold">
               {sectionContent.title}
             </h2>
             <span className="hidden sm:block text-2xl text-white/30">|</span>
@@ -72,7 +86,9 @@ const ResourcesSection = () => {
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : resources.length === 0 ? (
-          <p className="text-center text-muted-foreground">No resources available at the moment.</p>
+          <p className="text-center text-muted-foreground">
+            No resources available at the moment.
+          </p>
         ) : (
           categories.map((category, catIndex) => (
             <div
@@ -82,7 +98,9 @@ const ResourcesSection = () => {
             >
               <div className="flex items-center justify-center gap-3 mb-6">
                 <div className="flex-1 h-px bg-border" />
-                <span className={`px-4 py-1.5 rounded-full text-sm font-medium border ${categoryColors[category] || 'bg-primary/10 text-primary border-primary/20'}`}>
+                <span
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium border ${categoryColors[category] || "bg-primary/10 text-primary border-primary/20"}`}
+                >
                   {category}
                 </span>
                 <div className="flex-1 h-px bg-border" />

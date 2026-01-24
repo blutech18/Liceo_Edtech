@@ -1,25 +1,59 @@
 import { BGPattern } from "@/components/ui/bg-pattern";
 import { motion } from "motion/react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
+import { useState, useEffect } from "react";
 
 interface ParallaxHeroProps {
   title?: string;
   subtitle?: string;
 }
 
+// Typewriter hook
+const useTypewriter = (text: string, speed: number = 50, delay: number = 1000) => {
+  const [displayText, setDisplayText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    setDisplayText("");
+    setIsTyping(false);
+    
+    const startTimeout = setTimeout(() => {
+      setIsTyping(true);
+      let index = 0;
+      
+      const typeInterval = setInterval(() => {
+        if (index < text.length) {
+          setDisplayText(text.slice(0, index + 1));
+          index++;
+        } else {
+          clearInterval(typeInterval);
+          setIsTyping(false);
+        }
+      }, speed);
+      
+      return () => clearInterval(typeInterval);
+    }, delay);
+    
+    return () => clearTimeout(startTimeout);
+  }, [text, speed, delay]);
+
+  return { displayText, isTyping };
+};
+
 const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
-  const handleExploreClick = () => {
+  const tagline = subtitle || "Empowering education through innovative technology solutions";
+  const { displayText, isTyping } = useTypewriter(tagline, 40, 800);
+
+  const handleTrainingsClick = () => {
     const trainingsSection = document.getElementById("trainings");
     if (trainingsSection) {
       trainingsSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  const handleLearnMoreClick = () => {
-    const aboutSection = document.getElementById("about-us");
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: "smooth" });
-    }
+  const handleAccessFormClick = () => {
+    // Open EdTech Help Desk Monitoring Form in new tab
+    window.open("https://forms.gle/ZGLkmgAMvva55YoB8", "_blank");
   };
 
   return (
@@ -57,7 +91,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
 
           {/* Main Title */}
           <motion.h1
-            className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight"
+            className="text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -70,25 +104,26 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
               willChange: "transform, opacity",
             }}
           >
-            Liceo Educational
-            <br />
-            Technology Center
+            Edtech
           </motion.h1>
 
-          {/* Subtitle */}
-          <motion.p
-            className="text-lg md:text-xl lg:text-2xl max-w-2xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              color: "rgba(255, 255, 255, 0.7)",
-              willChange: "transform, opacity",
-            }}
+          {/* Subtitle with Typewriter Effect */}
+          <motion.div
+            className="text-lg md:text-xl lg:text-2xl max-w-2xl h-16 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.5 }}
           >
-            {subtitle ||
-              "Ensuring access to and proficiency in technology for the entire academic community."}
-          </motion.p>
+            <p style={{ color: "rgba(255, 255, 255, 0.7)" }}>
+              {displayText}
+              {isTyping && (
+                <span 
+                  className="inline-block w-0.5 h-6 ml-1 animate-pulse"
+                  style={{ backgroundColor: "#A01010" }}
+                />
+              )}
+            </p>
+          </motion.div>
 
           {/* CTA Buttons */}
           <motion.div
@@ -98,7 +133,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
             transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <button
-              onClick={handleExploreClick}
+              onClick={handleTrainingsClick}
               className="px-7 py-3.5 rounded-lg font-semibold text-base transition-all duration-200 hover:scale-[1.02]"
               style={{
                 background: "linear-gradient(135deg, #A01010 0%, #800000 100%)",
@@ -107,18 +142,18 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                 willChange: "transform",
               }}
             >
-              Explore the Trainings
+              Trainings
             </button>
             <button
-              onClick={handleLearnMoreClick}
-              className="text-base font-semibold transition-colors flex items-center gap-2"
-              style={{ color: "rgba(255, 255, 255, 0.7)" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#FFFFFF")}
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.color = "rgba(255, 255, 255, 0.7)")
-              }
+              onClick={handleAccessFormClick}
+              className="px-6 py-3 rounded-lg font-semibold text-base transition-all duration-200 hover:scale-[1.02] flex items-center gap-2"
+              style={{ 
+                backgroundColor: "rgba(160, 16, 16, 0.15)",
+                border: "1px solid rgba(160, 16, 16, 0.4)",
+                color: "#FFFFFF" 
+              }}
             >
-              Learn More <ArrowRight className="w-4 h-4" />
+              Access Form <ExternalLink className="w-4 h-4" />
             </button>
           </motion.div>
         </div>

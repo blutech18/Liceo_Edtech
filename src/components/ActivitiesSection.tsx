@@ -228,7 +228,7 @@ const ActivitiesSection = () => {
         {/* Section Header */}
         <div className="text-center mb-12 animate-fade-up">
           <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <h2 className="section-title text-3xl sm:text-4xl font-bold">
+            <h2 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold">
               {sectionContent.title}
             </h2>
             <span className="hidden sm:block text-2xl text-white/30">|</span>
@@ -238,7 +238,7 @@ const ActivitiesSection = () => {
           </div>
         </div>
 
-        {/* Activities Carousel */}
+        {/* Activities Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -248,107 +248,60 @@ const ActivitiesSection = () => {
             No activities to display at the moment.
           </p>
         ) : (
-          <div className="relative px-16">
-            {/* Left Arrow - Outside */}
-            {activities.length > 4 && scrollPosition > 10 && (
-              <button
-                onClick={() => scroll("left")}
-                onMouseDown={() => startContinuousScroll("left")}
-                onMouseUp={stopContinuousScroll}
-                onMouseLeave={stopContinuousScroll}
-                onTouchStart={() => startContinuousScroll("left")}
-                onTouchEnd={stopContinuousScroll}
-                className="absolute -left-2 top-[40%] -translate-y-1/2 z-10 p-4 bg-white hover:bg-white rounded-full shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
-                aria-label="Scroll left"
-              >
-                <ChevronLeft className="w-7 h-7 text-[#8B1538]" />
-              </button>
-            )}
-
-            {/* Carousel Container */}
-            <div
-              ref={carouselRef}
-              className="overflow-x-auto scrollbar-hide scroll-smooth"
-              onScroll={(e) => setScrollPosition(e.currentTarget.scrollLeft)}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              style={{
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
-                WebkitOverflowScrolling: "touch",
-              }}
-            >
-              <div className="grid grid-flow-col auto-cols-[calc(25%-1.5rem)] sm:auto-cols-[calc(25%-1.5rem)] gap-8 pb-4">
-                {activities.map((activity, index) => (
+          <div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+              {activities.map((activity, index) => (
+                <div
+                  key={activity.id}
+                  className="group cursor-pointer animate-fade-up"
+                  style={{ animationDelay: `${0.1 + index * 0.1}s` }}
+                  onClick={() => openModal(activity)}
+                >
                   <div
-                    key={activity.id}
-                    className="group cursor-pointer animate-fade-up"
-                    style={{ animationDelay: `${0.1 + index * 0.1}s` }}
-                    onClick={() => openModal(activity)}
+                    className="relative overflow-hidden rounded-2xl card-enhanced"
+                    style={{ aspectRatio: "3/4" }}
                   >
-                    <div
-                      className="relative overflow-hidden rounded-2xl card-enhanced"
-                      style={{ aspectRatio: "5/7" }}
-                    >
-                      {activity.image ? (
-                        <img
-                          src={activity.image}
-                          alt={activity.title}
-                          loading="lazy"
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          style={{
-                            willChange: "transform",
-                            backfaceVisibility: "hidden",
-                            transform: "translateZ(0)",
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center">
-                          <span className="text-white/50 text-6xl font-bold">
-                            {activity.title.charAt(0)}
-                          </span>
-                        </div>
-                      )}
+                    {activity.image ? (
+                      <img
+                        src={activity.image}
+                        alt={activity.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        style={{
+                          willChange: "transform",
+                          backfaceVisibility: "hidden",
+                          transform: "translateZ(0)",
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center">
+                        <span className="text-white/50 text-6xl font-bold">
+                          {activity.title.charAt(0)}
+                        </span>
+                      </div>
+                    )}
 
-                      {/* Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent opacity-0 group-hover:opacity-90 transition-opacity duration-500" />
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent opacity-0 group-hover:opacity-90 transition-opacity duration-500" />
 
-                      {/* Content Overlay */}
-                      <div className="absolute inset-0 flex flex-col justify-end p-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                        <p className="text-white text-sm leading-relaxed line-clamp-2">
-                          {activity.description || activity.title}
-                        </p>
-                        <div className="flex items-center gap-2 mt-3 text-white font-medium text-sm">
-                          View Details
-                          <ArrowRight className="w-4 h-4" />
-                        </div>
+                    {/* Content Overlay */}
+                    <div className="absolute inset-0 flex flex-col justify-end p-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                      <p className="text-white text-sm leading-relaxed line-clamp-2">
+                        {activity.description || activity.title}
+                      </p>
+                      <div className="flex items-center gap-2 mt-3 text-white font-medium text-sm">
+                        View Details
+                        <ArrowRight className="w-4 h-4" />
                       </div>
                     </div>
-
-                    <h3 className="text-center font-bold text-lg mt-6 text-foreground group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
-                      {activity.title}
-                    </h3>
                   </div>
-                ))}
-              </div>
-            </div>
 
-            {/* Right Arrow - Outside */}
-            {activities.length > 4 && (
-              <button
-                onClick={() => scroll("right")}
-                onMouseDown={() => startContinuousScroll("right")}
-                onMouseUp={stopContinuousScroll}
-                onMouseLeave={stopContinuousScroll}
-                onTouchStart={() => startContinuousScroll("right")}
-                onTouchEnd={stopContinuousScroll}
-                className="absolute -right-2 top-[40%] -translate-y-1/2 z-10 p-4 bg-white hover:bg-white rounded-full shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
-                aria-label="Scroll right"
-              >
-                <ChevronRight className="w-7 h-7 text-[#8B1538]" />
-              </button>
-            )}
+                  <h3 className="text-center font-bold text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 text-foreground group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
+                    {activity.title}
+                  </h3>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
