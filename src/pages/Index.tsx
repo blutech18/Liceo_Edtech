@@ -15,6 +15,8 @@ import AboutUsSection from "@/components/sections/AboutUsSection";
 import FormsSection from "@/components/sections/FormsSection";
 import Footer from "@/components/Footer";
 import { getSectionContent, SectionContent } from "@/lib/api";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { ZoomParallax } from "@/components/ui/zoom-parallax";
 
 const defaultHeroContent: SectionContent = {
   id: "",
@@ -37,6 +39,37 @@ const Index = () => {
     fetchHeroContent();
   }, []);
 
+  const parallaxImages = [
+    {
+      src: "/main-zoom.jpg",
+      alt: "Liceo EdTech Team - Main Group Photo",
+    },
+    {
+      src: "/338371906_734362534805234_3366201482441741317_n - Copy.jpg",
+      alt: "EdTech Training Session - Computer Lab",
+    },
+    {
+      src: "/338532354_175174585373633_754774540942843373_n - Copy.jpg",
+      alt: "EdTech Training - Classroom Learning",
+    },
+    {
+      src: "/375765614_1392128901706735_5999934061009236073_n.jpg",
+      alt: "EdTech Team Collaboration",
+    },
+    {
+      src: "/377111245_817982596460494_8998216380982485328_n.jpg",
+      alt: "EdTech Team Group Photo",
+    },
+    {
+      src: "/377116796_182710944842007_6387069679737127570_n.jpg",
+      alt: "EdTech Team - Computer Lab Group Photo",
+    },
+    {
+      src: "/487422417_1727927568102374_8999461794905366399_n.jpg",
+      alt: "EdTech Training - Students Learning Session",
+    },
+  ];
+
   return (
     <div
       className="min-h-screen flex flex-col"
@@ -45,37 +78,66 @@ const Index = () => {
       <Header />
       <main className="flex-1">
         {/* Home Section with Beams Background */}
-        <ParallaxHero
-          title={heroContent.title}
-          subtitle={heroContent.subtitle}
-        />
+        <ScrollReveal>
+          <ParallaxHero
+            title={heroContent.title}
+            subtitle={heroContent.subtitle}
+          />
+        </ScrollReveal>
+
+        {/* Zoom Parallax Section */}
+        <ZoomParallax images={parallaxImages} />
 
         {/* About & Goals Section */}
-        <AboutGoalsSection />
+        <ScrollReveal delay={0.05}>
+          <AboutGoalsSection />
+        </ScrollReveal>
 
         {/* Core Functions Section */}
-        <CoreFunctionsSection />
+        <ScrollReveal delay={0.08}>
+          <CoreFunctionsSection />
+        </ScrollReveal>
 
         {/* Services & Roles Section */}
-        <ServicesRolesSection />
+        <ScrollReveal delay={0.1}>
+          <ServicesRolesSection />
+        </ScrollReveal>
 
         {/* Trainings Section - card carousel + conducted trainings */}
-        <ActivitiesSection />
+        <ScrollReveal delay={0.12}>
+          <ActivitiesSection />
+        </ScrollReveal>
 
         {/* Google Classroom Section */}
-        <GoogleClassroomSection />
+        <ScrollReveal delay={0.14}>
+          <GoogleClassroomSection />
+        </ScrollReveal>
 
-        <VideosSection />
+        <ScrollReveal delay={0.16}>
+          <VideosSection />
+        </ScrollReveal>
 
         {/* Resources Section Group */}
-        <ResourcesSection />
-        <FormsSection />
+        <ScrollReveal delay={0.18}>
+          <ResourcesSection />
+        </ScrollReveal>
+        <ScrollReveal delay={0.2}>
+          <FormsSection />
+        </ScrollReveal>
 
         {/* About Us Section Group */}
-        <AboutUsSection />
-        <EdTechTeamSection />
-        <HotlineSection />
-        <FeedbackSection />
+        <ScrollReveal delay={0.22}>
+          <AboutUsSection />
+        </ScrollReveal>
+        <ScrollReveal delay={0.24}>
+          <EdTechTeamSection />
+        </ScrollReveal>
+        <ScrollReveal delay={0.26}>
+          <HotlineSection />
+        </ScrollReveal>
+        <ScrollReveal delay={0.28}>
+          <FeedbackSection />
+        </ScrollReveal>
       </main>
       <Footer />
     </div>

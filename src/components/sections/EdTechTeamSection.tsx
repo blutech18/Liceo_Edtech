@@ -6,7 +6,7 @@ import {
   getSectionContent,
   SectionContent,
 } from "@/lib/api";
-import { TeamCarousel, TeamMember } from "@/components/ui/team-carousel";
+import { TeamMemberCard } from "@/components/ui/team-member-card";
 
 const defaultContent: SectionContent = {
   id: "",
@@ -81,36 +81,108 @@ const EdTechTeamSection = () => {
             <Loader2 className="w-8 h-8 animate-spin text-white" />
           </div>
         ) : teamMembers.length > 0 ? (
-          <TeamCarousel
-            members={teamMembers.map((member) => ({
-              id: member.id,
-              name: member.name,
-              role: member.position,
-              image: member.image || "/placeholder-avatar.png",
-              bio: `${member.department} • ${member.email}`,
-            }))}
-            title="EDTECH TEAM"
-            titleSize="xl"
-            titleColor="rgba(160, 16, 16, 1)"
-            background="transparent"
-            cardWidth={300}
-            cardHeight={400}
-            cardRadius={20}
-            showArrows={true}
-            showDots={true}
-            keyboardNavigation={true}
-            touchNavigation={true}
-            animationDuration={800}
-            autoPlay={5000}
-            pauseOnHover={true}
-            visibleCards={2}
-            sideCardScale={0.85}
-            sideCardOpacity={0.7}
-            grayscaleEffect={true}
-            infoPosition="bottom"
-            infoTextColor="rgb(255, 255, 255)"
-            className="py-8"
-          />
+          <div className="space-y-16">
+            {/* Director */}
+            {director && (
+              <div className="flex justify-center">
+                <div className="w-full max-w-[320px] animate-fade-up">
+                  <TeamMemberCard
+                    imageUrl={director.image || "/placeholder-avatar.png"}
+                    name={director.name}
+                    position={director.position}
+                    email={director.email}
+                    themeColor="0 68% 42%"
+                    size="lg"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* E-Learning Specialists */}
+            {specialists.length > 0 && (
+              <div>
+                <div className="text-center mb-10">
+                  <h3 className="text-white text-2xl font-bold mb-3 animate-fade-up">
+                    E-Learning Specialists
+                  </h3>
+                  <div className="w-20 h-1 bg-primary mx-auto" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {specialists.map((specialist, index) => (
+                    <div
+                      key={specialist.id}
+                      className="animate-fade-up"
+                      style={{ animationDelay: `${0.1 + index * 0.1}s` }}
+                    >
+                      <TeamMemberCard
+                        imageUrl={specialist.image || "/placeholder-avatar.png"}
+                        name={specialist.name}
+                        position={specialist.position}
+                        email={specialist.email}
+                        themeColor="0 68% 42%"
+                        size="md"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* E-Learning Technical Staff */}
+            {(coordinator || technicalStaff.length > 0) && (
+              <div>
+                <div className="text-center mb-10">
+                  <h3 className="text-white text-2xl font-bold mb-3 animate-fade-up">
+                    E-Learning Technical Staff
+                  </h3>
+                  <div className="w-20 h-1 bg-primary mx-auto" />
+                </div>
+
+                {/* Coordinator */}
+                {coordinator && (
+                  <div className="flex justify-center mb-12">
+                    <div
+                      className="w-full max-w-[320px] animate-fade-up"
+                      style={{ animationDelay: "0.1s" }}
+                    >
+                      <TeamMemberCard
+                        imageUrl={
+                          coordinator.image || "/placeholder-avatar.png"
+                        }
+                        name={coordinator.name}
+                        position={coordinator.position}
+                        email={coordinator.email}
+                        themeColor="0 68% 42%"
+                        size="md"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Technical Staff */}
+                {technicalStaff.length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {technicalStaff.map((staff, index) => (
+                      <div
+                        key={staff.id}
+                        className="animate-fade-up"
+                        style={{ animationDelay: `${0.2 + index * 0.1}s` }}
+                      >
+                        <TeamMemberCard
+                          imageUrl={staff.image || "/placeholder-avatar.png"}
+                          name={staff.name}
+                          position={staff.position}
+                          email={staff.email}
+                          themeColor="0 68% 42%"
+                          size="sm"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         ) : (
           <div className="text-center py-12">
             <p className="text-white/70">

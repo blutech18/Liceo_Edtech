@@ -1,11 +1,17 @@
 import { useState, useEffect } from "react";
-import { ArrowUpRight, Loader2 } from "lucide-react";
+import { ArrowUpRight, Loader2, ChevronDown } from "lucide-react";
 import {
   getResources,
   Resource,
   getSectionContent,
   SectionContent,
 } from "@/lib/api";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const categoryColors: Record<string, string> = {
   "Interactive Learning": "bg-primary/10 text-primary border-primary/20",
@@ -30,6 +36,7 @@ const ResourcesSection = () => {
   const [categoryOrder, setCategoryOrder] = useState<Record<string, number>>(
     {},
   );
+  const [openCategory, setOpenCategory] = useState<string>("");
 
   useEffect(() => {
     async function fetchResources() {
@@ -90,64 +97,77 @@ const ResourcesSection = () => {
             No resources available at the moment.
           </p>
         ) : (
-          categories.map((category, catIndex) => (
-            <div
-              key={category}
-              className="mb-12 animate-fade-up"
-              style={{ animationDelay: `${catIndex * 0.1}s` }}
-            >
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <div className="flex-1 h-px bg-border" />
-                <span
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium border ${categoryColors[category] || "bg-primary/10 text-primary border-primary/20"}`}
-                >
-                  {category}
-                </span>
-                <div className="flex-1 h-px bg-border" />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {resources
-                  .filter((r) => r.category === category)
-                  .map((resource) => (
-                    <a
-                      key={resource.id}
-                      href={resource.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="card-enhanced overflow-hidden group hover-lift"
+          <Accordion
+            type="single"
+            collapsible
+            className="space-y-4"
+            value={openCategory}
+            onValueChange={setOpenCategory}
+          >
+            {categories.map((category, catIndex) => (
+              <AccordionItem
+                key={category}
+                value={category}
+                className="card-enhanced border-0 overflow-hidden animate-fade-up"
+                style={{ animationDelay: `${catIndex * 0.1}s` }}
+              >
+                <AccordionTrigger className="px-6 py-4 hover:no-underline group">
+                  <div className="flex items-center gap-3 w-full">
+                    <span
+                      className={`px-4 py-1.5 rounded-full text-sm font-medium border ${categoryColors[category] || "bg-primary/10 text-primary border-primary/20"}`}
                     >
-                      {/* Image Placeholder */}
-                      {resource.image && (
-                        <div className="aspect-video w-full overflow-hidden">
-                          <img
-                            src={resource.image}
-                            alt={resource.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
-                        </div>
-                      )}
+                      {category}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      ({resources.filter((r) => r.category === category).length}{" "}
+                      resources)
+                    </span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+                    {resources
+                      .filter((r) => r.category === category)
+                      .map((resource) => (
+                        <a
+                          key={resource.id}
+                          href={resource.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="card-enhanced overflow-hidden group hover-lift"
+                        >
+                          {resource.image && (
+                            <div className="aspect-video w-full overflow-hidden">
+                              <img
+                                src={resource.image}
+                                alt={resource.title}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                              />
+                            </div>
+                          )}
 
-                      <div className="p-5">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
-                              {resource.title}
-                            </h3>
-                            <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-                              {resource.description}
-                            </p>
+                          <div className="p-5">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex-1">
+                                <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
+                                  {resource.title}
+                                </h3>
+                                <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
+                                  {resource.description}
+                                </p>
+                              </div>
+                              <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors flex-shrink-0">
+                                <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                              </div>
+                            </div>
                           </div>
-                          <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors flex-shrink-0">
-                            <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  ))}
-              </div>
-            </div>
-          ))
+                        </a>
+                      ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         )}
       </div>
     </section>
