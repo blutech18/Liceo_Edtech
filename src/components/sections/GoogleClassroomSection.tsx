@@ -46,9 +46,8 @@ const GoogleClassroomSection = () => {
   const [selectedRole, setSelectedRole] = useState<GoogleClassroomRole | null>(
     null,
   );
-  const [expandedSections, setExpandedSections] = useState<Set<number>>(
-    new Set([0]),
-  );
+  const [activeTab, setActiveTab] = useState<number>(0);
+
 
   useEffect(() => {
     async function fetchData() {
@@ -72,19 +71,9 @@ const GoogleClassroomSection = () => {
     fetchData();
   }, []);
 
-  const toggleSection = (index: number) => {
-    if (expandedSections.has(index)) {
-      // Close the section if it's already open
-      setExpandedSections(new Set());
-    } else {
-      // Open only this section, close all others
-      setExpandedSections(new Set([index]));
-    }
-  };
-
   const openModal = (role: GoogleClassroomRole) => {
     setSelectedRole(role);
-    setExpandedSections(new Set([0]));
+    setActiveTab(0);
     setIsModalOpen(true);
   };
 
@@ -155,76 +144,48 @@ const GoogleClassroomSection = () => {
           </p>
         )}
 
-        {/* Redesigned Professional Modal */}
+        {/* Redesigned Modal with Tabs */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent className="w-[1200px] max-w-[95vw] h-[700px] max-h-[90vh] p-0 gap-0 flex flex-col overflow-hidden rounded-xl">
+          <DialogContent className="w-full max-w-[95vw] sm:max-w-[640px] md:w-[900px] lg:w-[1200px] h-[85vh] sm:h-[700px] max-h-[90vh] p-0 gap-0 flex flex-col overflow-hidden rounded-xl">
             {/* Modal Header */}
-            <div className="relative bg-gradient-to-r from-primary via-primary-light to-primary px-6 py-6 border-b border-border/10 flex-shrink-0">
-              <div className="flex items-center gap-4 pr-12">
-                <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
-                  <BookOpen className="w-6 h-6 text-white" />
+            <div className="relative bg-gradient-to-r from-primary via-primary-light to-primary px-4 sm:px-6 py-4 sm:py-5 border-b border-border/10 flex-shrink-0">
+              <div className="flex items-center gap-3 sm:gap-4 pr-10">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                  <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h2 className="text-2xl font-bold text-white tracking-tight">
+                  <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
                     {selectedRole?.role_name} Guide
                   </h2>
-                  <div className="flex items-center gap-2 mt-1">
-                    <p className="text-white/80 text-sm line-clamp-1">
-                      {selectedRole?.description}
-                    </p>
-                    <span className="text-white/60 text-sm mx-2">•</span>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <Badge
-                        variant="secondary"
-                        className="bg-white/20 text-white border-white/30 hover:bg-white/25 text-xs font-medium"
-                      >
-                        {selectedRole?.sections?.length || 0} Sections
-                      </Badge>
-                      <Badge
-                        variant="secondary"
-                        className="bg-white/20 text-white border-white/30 hover:bg-white/25 text-xs font-medium"
-                      >
-                        {selectedRole?.sections?.reduce(
-                          (acc, section) => acc + (section.links?.length || 0),
-                          0,
-                        ) || 0}{" "}
-                        Resources
-                      </Badge>
-                    </div>
-                  </div>
+                  <p className="text-white/70 text-xs sm:text-sm mt-0.5">
+                    {selectedRole?.sections?.length || 0} sections • {selectedRole?.sections?.reduce(
+                      (acc, section) => acc + (section.links?.length || 0),
+                      0,
+                    ) || 0} resources
+                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Modal Body - Two Column Layout */}
-            <div className="flex flex-1 overflow-hidden min-h-0">
-              {/* Left Sidebar - Section Navigation */}
-              <div className="w-80 border-r border-border bg-muted/30 flex flex-col">
-                <ScrollArea className="flex-1">
-                  <div className="p-3 space-y-2">
+            {/* Tabbed Interface */}
+            <div className="flex flex-col flex-1 overflow-hidden min-h-0">
+              {/* Tab Navigation */}
+              <div className="border-b border-border bg-muted/20 flex-shrink-0">
+                <ScrollArea className="w-full">
+                  <div className="flex px-2 sm:px-4 gap-1 sm:gap-2 min-w-max">
                     {selectedRole?.sections?.map((section, index) => (
                       <button
                         key={index}
-                        onClick={() => toggleSection(index)}
-                        className={`w-full px-4 py-4 rounded-lg transition-all duration-200 group ${
-                          expandedSections.has(index)
-                            ? "bg-primary text-primary-foreground shadow-md scale-[1.02]"
-                            : "bg-muted/60 hover:bg-muted hover:shadow-sm text-foreground border border-border/40"
+                        onClick={() => setActiveTab(index)}
+                        className={`px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 border-b-2 ${
+                          activeTab === index
+                            ? "border-primary text-primary bg-primary/5"
+                            : "border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50"
                         }`}
                       >
-                        <div className="flex flex-col items-center text-center gap-1.5">
-                          <div className="font-semibold text-sm leading-tight">
-                            {section.title}
-                          </div>
-                          <div
-                            className={`text-xs font-medium ${
-                              expandedSections.has(index)
-                                ? "text-primary-foreground/90"
-                                : "text-muted-foreground"
-                            }`}
-                          >
-                            {section.links?.length || 0} resources
-                          </div>
+                        <div className="flex items-center gap-2">
+                          <span>{section.title}</span>
+                          <span className="text-xs opacity-60">({section.links?.length || 0})</span>
                         </div>
                       </button>
                     ))}
@@ -232,56 +193,52 @@ const GoogleClassroomSection = () => {
                 </ScrollArea>
               </div>
 
-              {/* Right Content Area - Links Only */}
-              <div className="flex-1 flex flex-col bg-background">
-                <ScrollArea className="flex-1">
-                  <div className="p-6">
-                    {selectedRole?.sections?.map(
-                      (section, index) =>
-                        expandedSections.has(index) && (
-                          <div
-                            key={index}
-                            className="grid grid-cols-1 gap-2 animate-fade-in"
-                          >
-                            {section.links?.map((link, linkIndex) => (
+              {/* Tab Content */}
+              <ScrollArea className="flex-1">
+                <div className="p-4 sm:p-6">
+                  {selectedRole?.sections?.map((section, index) => (
+                    activeTab === index && (
+                      <div key={index} className="space-y-3">
+                        {section.links && section.links.length > 0 ? (
+                          <div className="grid gap-3">
+                            {section.links.map((link, linkIndex) => (
                               <a
                                 key={linkIndex}
                                 href={link.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group flex items-start gap-3 p-4 rounded-xl border border-border/50 bg-card hover:border-primary/50 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+                                className="group flex items-start gap-3 p-4 rounded-lg border border-border bg-card hover:bg-accent hover:border-primary/30 transition-all duration-200 hover:shadow-md"
                               >
-                                <div className="w-10 h-10 rounded-lg bg-primary/5 group-hover:bg-primary/10 flex items-center justify-center flex-shrink-0 transition-colors">
-                                  <ExternalLink className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
+                                <div className="mt-0.5 flex-shrink-0">
+                                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <ExternalLink className="w-4 h-4 text-primary" />
+                                  </div>
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <div className="font-medium text-sm text-foreground group-hover:text-primary transition-colors leading-tight">
+                                  <h4 className="font-semibold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors line-clamp-2">
                                     {link.title}
-                                  </div>
-                                  <div className="text-xs text-muted-foreground mt-1 truncate">
-                                    {link.url}
-                                  </div>
+                                  </h4>
+                                  {link.description && (
+                                    <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2">
+                                      {link.description}
+                                    </p>
+                                  )}
                                 </div>
-                                <ChevronDown className="w-4 h-4 text-muted-foreground -rotate-90 group-hover:translate-x-1 transition-transform flex-shrink-0 mt-1" />
                               </a>
                             ))}
                           </div>
-                        ),
-                    )}
-
-                    {/* Empty State */}
-                    {(!selectedRole?.sections ||
-                      selectedRole.sections.length === 0) && (
-                      <div className="text-center py-12">
-                        <BookOpen className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
-                        <p className="text-muted-foreground">
-                          No sections available for this role.
-                        </p>
+                        ) : (
+                          <div className="text-center py-12">
+                            <p className="text-muted-foreground text-sm">
+                              No resources available in this section.
+                            </p>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </ScrollArea>
-              </div>
+                    )
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
           </DialogContent>
         </Dialog>

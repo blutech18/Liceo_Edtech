@@ -107,7 +107,7 @@ const CoreFunctionsSection = () => {
               >
                 {/* Icon */}
                 <div
-                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110"
+                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-[1.05] md:group-hover:scale-110"
                   style={{ backgroundColor: "rgba(160, 16, 16, 0.15)" }}
                 >
                   <func.icon className="w-7 h-7" style={{ color: "#A01010" }} />

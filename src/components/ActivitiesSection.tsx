@@ -310,163 +310,200 @@ const ActivitiesSection = () => {
         {/* Conducted Trainings Section - Collapsible */}
         {!loading && conductedTrainings.length > 0 && (
           <div className="mt-16">
-            <button
-              onClick={() => setShowConducted(!showConducted)}
-              className="w-full flex items-center justify-center gap-3 mb-6 group"
+            {/* Unified Container with Maroon Gradient */}
+            <div
+              className="rounded-xl border-2 overflow-hidden transition-all duration-500"
+              style={{
+                background: "linear-gradient(135deg, #4a0f0f 0%, #2d0808 100%)",
+                borderColor: "rgba(160, 16, 16, 0.6)",
+                boxShadow: "0 4px 20px rgba(128, 0, 0, 0.3)",
+              }}
             >
-              <div className="flex-1 h-px bg-border" />
-              <span className="px-4 py-1.5 rounded-full text-sm font-medium border bg-primary/10 text-primary border-primary/20 flex items-center gap-2 hover:bg-primary/20 transition-colors">
-                Trainings Conducted ({conductedTrainings.length})
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-300 ${
-                    showConducted ? "rotate-180" : ""
-                  }`}
-                />
-              </span>
-              <div className="flex-1 h-px bg-border" />
-            </button>
+              {/* Clickable Header */}
+              <button
+                onClick={() => setShowConducted(!showConducted)}
+                className="w-full flex items-center justify-between px-5 sm:px-6 py-4 group cursor-pointer transition-all duration-300 hover:bg-white/5"
+              >
+                {/* Left side - Icon and Text */}
+                <div className="flex items-center gap-3 sm:gap-4">
+                  {/* Icon container */}
+                  <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-[#A01010] to-[#800000] shadow-md">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  
+                  {/* Text content */}
+                  <div className="text-left">
+                    <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                      Trainings Conducted
+                    </h3>
+                    <p className="text-xs sm:text-sm text-rose-200/80 font-medium">
+                      {conductedTrainings.length} completed • Click to {showConducted ? 'hide' : 'view'}
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Right side - Count badge and Chevron */}
+                <div className="flex items-center gap-2 sm:gap-3">
+                  {/* Count badge */}
+                  <div className="flex items-center justify-center min-w-[2.5rem] h-8 sm:h-10 px-3 rounded-lg bg-[#A01010]/30 border border-[#A01010]/50">
+                    <span className="text-sm sm:text-lg font-bold text-white">{conductedTrainings.length}</span>
+                  </div>
+                  
+                  {/* Chevron */}
+                  <div className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-white/10 transition-all duration-300 group-hover:bg-white/20 ${showConducted ? 'rotate-180' : 'rotate-0'}`}>
+                    <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                  </div>
+                </div>
+              </button>
 
-            {showConducted && (
-              <div className="animate-fade-up">
-                {/* Card Grid - 4 columns x 2 rows = 8 items */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-                  {conductedTrainings
-                    .slice(conductedPage * 8, (conductedPage + 1) * 8)
-                    .map((training, index) => (
-                      <div
-                        key={training.id}
-                        className="group cursor-pointer animate-fade-up"
-                        style={{ animationDelay: `${index * 0.05}s` }}
-                      >
+              {/* Expandable Content - Inside the same container */}
+              <div className={`transition-all duration-500 ease-in-out overflow-hidden ${showConducted ? 'max-h-[3000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                {/* Divider line */}
+                <div className="mx-5 sm:mx-6 h-px bg-white/10" />
+                
+                {/* Cards Grid */}
+                <div className="p-5 sm:p-6 animate-fade-up">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+                    {conductedTrainings
+                      .slice(conductedPage * 8, (conductedPage + 1) * 8)
+                      .map((training, index) => (
                         <div
-                          className="relative overflow-hidden rounded-2xl card-enhanced"
-                          style={{ aspectRatio: "3/4" }}
+                          key={training.id}
+                          className="group cursor-pointer"
+                          style={{ animationDelay: `${index * 0.05}s` }}
                         >
-                          {training.image ? (
-                            <img
-                              src={training.image}
-                              alt={training.title}
-                              loading="lazy"
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                              style={{
-                                willChange: "transform",
-                                backfaceVisibility: "hidden",
-                                transform: "translateZ(0)",
-                              }}
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center">
-                              <span className="text-white/50 text-6xl font-bold">
-                                {training.title.charAt(0)}
-                              </span>
-                            </div>
-                          )}
-
-                          {/* Gradient Overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent opacity-0 group-hover:opacity-90 transition-opacity duration-500" />
-
-                          {/* Content Overlay */}
-                          <div className="absolute inset-0 flex flex-col justify-end p-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                            <div className="flex items-center gap-2 text-white text-xs mb-2">
-                              <Clock className="w-3 h-3" />
-                              {formatDateShort(training.date)}
-                            </div>
-                            {training.participants !== undefined &&
-                              training.participants > 0 && (
-                                <div className="flex items-center gap-2 text-white text-xs mb-2">
-                                  <svg
-                                    className="w-3 h-3"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                                    />
-                                  </svg>
-                                  {training.participants} participants
-                                </div>
-                              )}
-                            {(training.poster_link ||
-                              training.training_details_link ||
-                              training.program_link) && (
-                              <div className="flex gap-2 mt-2">
-                                {training.poster_link && (
-                                  <a
-                                    href={training.poster_link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="text-white text-xs underline hover:text-white/80"
-                                  >
-                                    Poster
-                                  </a>
-                                )}
-                                {training.training_details_link && (
-                                  <a
-                                    href={training.training_details_link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="text-white text-xs underline hover:text-white/80"
-                                  >
-                                    Details
-                                  </a>
-                                )}
+                          <div
+                            className="relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-300"
+                            style={{ aspectRatio: "3/4" }}
+                          >
+                            {training.image ? (
+                              <img
+                                src={training.image}
+                                alt={training.title}
+                                loading="lazy"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                style={{
+                                  willChange: "transform",
+                                  backfaceVisibility: "hidden",
+                                  transform: "translateZ(0)",
+                                }}
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center">
+                                <span className="text-white/50 text-6xl font-bold">
+                                  {training.title.charAt(0)}
+                                </span>
                               </div>
                             )}
+
+                            {/* Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#800000] via-[#800000]/80 to-transparent opacity-0 group-hover:opacity-90 transition-opacity duration-500" />
+
+                            {/* Content Overlay */}
+                            <div className="absolute inset-0 flex flex-col justify-end p-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                              <div className="flex items-center gap-2 text-white text-xs mb-2">
+                                <Clock className="w-3 h-3" />
+                                {formatDateShort(training.date)}
+                              </div>
+                              {training.participants !== undefined &&
+                                training.participants > 0 && (
+                                  <div className="flex items-center gap-2 text-white text-xs mb-2">
+                                    <svg
+                                      className="w-3 h-3"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                                      />
+                                    </svg>
+                                    {training.participants} participants
+                                  </div>
+                                )}
+                              {(training.poster_link ||
+                                training.training_details_link ||
+                                training.program_link) && (
+                                <div className="flex gap-2 mt-2">
+                                  {training.poster_link && (
+                                    <a
+                                      href={training.poster_link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="text-white text-xs underline hover:text-white/80"
+                                    >
+                                      Poster
+                                    </a>
+                                  )}
+                                  {training.training_details_link && (
+                                    <a
+                                      href={training.training_details_link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="text-white text-xs underline hover:text-white/80"
+                                    >
+                                      Details
+                                    </a>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
+
+                          <h3 className="text-center font-bold text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 text-white/90 group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
+                            {training.title}
+                          </h3>
                         </div>
-
-                        <h3 className="text-center font-bold text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 text-foreground group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
-                          {training.title}
-                        </h3>
-                      </div>
-                    ))}
-                </div>
-
-                {/* Pagination Controls */}
-                {conductedTrainings.length > 8 && (
-                  <div className="flex items-center justify-center gap-4 mt-8">
-                    <button
-                      onClick={() =>
-                        setConductedPage(Math.max(0, conductedPage - 1))
-                      }
-                      disabled={conductedPage === 0}
-                      className="p-2 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      aria-label="Previous page"
-                    >
-                      <ChevronLeft className="w-5 h-5" />
-                    </button>
-                    <span className="text-sm text-muted-foreground">
-                      Page {conductedPage + 1} of{" "}
-                      {Math.ceil(conductedTrainings.length / 8)}
-                    </span>
-                    <button
-                      onClick={() =>
-                        setConductedPage(
-                          Math.min(
-                            Math.ceil(conductedTrainings.length / 8) - 1,
-                            conductedPage + 1,
-                          ),
-                        )
-                      }
-                      disabled={
-                        conductedPage >=
-                        Math.ceil(conductedTrainings.length / 8) - 1
-                      }
-                      className="p-2 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      aria-label="Next page"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
+                      ))}
                   </div>
-                )}
+
+                  {/* Pagination Controls */}
+                  {conductedTrainings.length > 8 && (
+                    <div className="flex items-center justify-center gap-4 mt-8">
+                      <button
+                        onClick={() =>
+                          setConductedPage(Math.max(0, conductedPage - 1))
+                        }
+                        disabled={conductedPage === 0}
+                        className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Previous page"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      <span className="text-sm text-white/70">
+                        Page {conductedPage + 1} of{" "}
+                        {Math.ceil(conductedTrainings.length / 8)}
+                      </span>
+                      <button
+                        onClick={() =>
+                          setConductedPage(
+                            Math.min(
+                              Math.ceil(conductedTrainings.length / 8) - 1,
+                              conductedPage + 1,
+                            ),
+                          )
+                        }
+                        disabled={
+                          conductedPage >=
+                          Math.ceil(conductedTrainings.length / 8) - 1
+                        }
+                        className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Next page"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
+            </div>
           </div>
         )}
       </div>

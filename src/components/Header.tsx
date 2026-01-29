@@ -167,22 +167,25 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
-        <div
-          className={cn(
-            "md:hidden overflow-hidden transition-all duration-300 ease-in-out",
-            mobileMenuOpen
-              ? "max-h-[300px] opacity-100 pb-4"
-              : "max-h-0 opacity-0",
-          )}
-        >
-          <nav className="px-4">
+      </div>
+
+      {/* Mobile Navigation Dropdown - Separate from main navbar */}
+      <div
+        className={cn(
+          "absolute top-20 left-0 right-0 px-4 md:hidden overflow-hidden transition-all duration-300 ease-in-out z-40",
+          mobileMenuOpen
+            ? "max-h-[300px] opacity-100 translate-y-0"
+            : "max-h-0 opacity-0 -translate-y-2 pointer-events-none",
+        )}
+      >
+        <div className="bg-[#0F0F0F]/95 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden max-w-4xl mx-auto">
+          <nav className="p-2">
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <button
                   key={link.label}
                   onClick={() => scrollToSection(link.href)}
-                  className="px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 text-left"
+                  className="px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 text-left hover:bg-white/5 active:scale-[0.98]"
                   style={{
                     color:
                       activeSection === link.href.replace("#", "")
@@ -196,7 +199,12 @@ const Header = () => {
                       activeSection === link.href.replace("#", "") ? 600 : 500,
                   }}
                 >
-                  {link.label}
+                  <div className="flex items-center justify-between w-full">
+                    {link.label}
+                    {activeSection === link.href.replace("#", "") && (
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#A01010]" />
+                    )}
+                  </div>
                 </button>
               ))}
             </div>

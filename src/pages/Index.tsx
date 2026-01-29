@@ -16,7 +16,7 @@ import FormsSection from "@/components/sections/FormsSection";
 import Footer from "@/components/Footer";
 import { getSectionContent, SectionContent } from "@/lib/api";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { ZoomParallax } from "@/components/ui/zoom-parallax";
+import { InfiniteSlider } from "@/components/ui/infinite-slider";
 
 const defaultHeroContent: SectionContent = {
   id: "",
@@ -85,8 +85,10 @@ const Index = () => {
           />
         </ScrollReveal>
 
-        {/* Zoom Parallax Section */}
-        <ZoomParallax images={parallaxImages} />
+        {/* Infinite Photo Slider - overlapping hero */}
+        <div className="section-dark py-8 md:py-12 -mt-20 md:-mt-32 relative z-10">
+          <InfiniteSlider images={parallaxImages} speed={40} />
+        </div>
 
         {/* About & Goals Section */}
         <ScrollReveal delay={0.05}>

@@ -107,11 +107,11 @@ const EdTechTeamSection = () => {
                   </h3>
                   <div className="w-20 h-1 bg-primary mx-auto" />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                   {specialists.map((specialist, index) => (
                     <div
                       key={specialist.id}
-                      className="animate-fade-up"
+                      className="animate-fade-up max-w-sm sm:max-w-none mx-auto"
                       style={{ animationDelay: `${0.1 + index * 0.1}s` }}
                     >
                       <TeamMemberCard
@@ -161,11 +161,11 @@ const EdTechTeamSection = () => {
 
                 {/* Technical Staff */}
                 {technicalStaff.length > 0 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                     {technicalStaff.map((staff, index) => (
                       <div
                         key={staff.id}
-                        className="animate-fade-up"
+                        className="animate-fade-up max-w-sm sm:max-w-none mx-auto"
                         style={{ animationDelay: `${0.2 + index * 0.1}s` }}
                       >
                         <TeamMemberCard

@@ -1,28 +1,27 @@
 import { motion } from "motion/react";
 import { ExternalLink } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import FaultyTerminal from "@/components/FaultyTerminal";
 
 interface ParallaxHeroProps {
   title?: string;
   subtitle?: string;
 }
 
-// Typewriter hook
+// Typewriter hook with reset capability
 const useTypewriter = (
   text: string,
   speed: number = 50,
   delay: number = 1000,
+  shouldReset: boolean = false,
 ) => {
   const [displayText, setDisplayText] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
     setDisplayText("");
-    setIsTyping(false);
+    setIsComplete(false);
 
     const startTimeout = setTimeout(() => {
-      setIsTyping(true);
       let index = 0;
 
       const typeInterval = setInterval(() => {
@@ -31,7 +30,7 @@ const useTypewriter = (
           index++;
         } else {
           clearInterval(typeInterval);
-          setIsTyping(false);
+          setIsComplete(true);
         }
       }, speed);
 
@@ -39,24 +38,46 @@ const useTypewriter = (
     }, delay);
 
     return () => clearTimeout(startTimeout);
-  }, [text, speed, delay]);
+  }, [text, speed, delay, shouldReset]);
 
-  return { displayText, isTyping };
+  return { displayText, isComplete };
 };
 
 const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
   const tagline =
     "Empowering education through innovative technology solutions";
-  const { displayText, isTyping } = useTypewriter(tagline, 50, 1000);
   const [isInView, setIsInView] = useState(true);
+  const [resetTrigger, setResetTrigger] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const { displayText, isComplete } = useTypewriter(
+    tagline,
+    50,
+    500,
+    resetTrigger,
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
+        const wasInView = isInView;
         setIsInView(entry.isIntersecting);
+
+        // Control video playback based on visibility
+        if (videoRef.current) {
+          if (entry.isIntersecting) {
+            videoRef.current.play().catch(() => {
+              // Autoplay was prevented, try muted
+            });
+            if (!wasInView) {
+              setResetTrigger((prev) => prev + 1);
+            }
+          } else {
+            videoRef.current.pause();
+          }
+        }
       },
-      { threshold: 0.1 },
+      { threshold: 0.3 },
     );
 
     const currentSection = sectionRef.current;
@@ -69,7 +90,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
         observer.unobserve(currentSection);
       }
     };
-  }, []);
+  }, [isInView]);
 
   const handleTrainingsClick = () => {
     const trainingsSection = document.getElementById("trainings");
@@ -88,30 +109,30 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
       ref={sectionRef}
       id="home"
       className="relative min-h-screen w-full overflow-hidden"
-      style={{ backgroundColor: "#0F0F0F", cursor: "crosshair" }}
+      style={{ backgroundColor: "#0F0F0F" }}
     >
-      {/* FaultyTerminal Background */}
+      {/* Video Background */}
       <div className="absolute inset-0" style={{ zIndex: 0 }}>
-        <FaultyTerminal
-          scale={1}
-          gridMul={[2, 1]}
-          digitSize={1.5}
-          timeScale={0.2}
-          pause={!isInView}
-          scanlineIntensity={0.2}
-          glitchAmount={0.3}
-          flickerAmount={0.5}
-          noiseAmp={0.8}
-          chromaticAberration={0}
-          dither={false}
-          curvature={0.05}
-          tint="#A01010"
-          mouseReact={true}
-          mouseStrength={0.5}
-          pageLoadAnimation={true}
-          brightness={0.35}
-          dpr={1}
-        />
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="w-full h-full object-cover"
+          style={{
+            opacity: 0.4,
+            transform: "translateZ(0)",
+            backfaceVisibility: "hidden",
+            willChange: "auto",
+          }}
+        >
+          <source
+            src="/faulty-terminal-maroon.webm"
+            type="video/webm"
+          />
+        </video>
       </div>
 
       {/* Subtle overlay for text readability */}
@@ -119,12 +140,13 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(15, 15, 15, 0.4), rgba(15, 15, 15, 0.6))",
+            "linear-gradient(to bottom, rgba(15, 15, 15, 0.3), rgba(15, 15, 15, 0.5))",
           zIndex: 1,
         }}
       />
-      <div className="relative z-20 flex h-screen w-full items-center justify-center">
-        <div className="flex flex-col items-center justify-center gap-6 px-4 text-center max-w-4xl mx-auto">
+      
+      <div className="relative z-20 flex min-h-screen w-full items-center justify-center px-4 py-16 sm:py-20">
+        <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 text-center max-w-4xl mx-auto">
           {/* Trust Badge */}
           <motion.div
             className="mb-2"
@@ -133,7 +155,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <div
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm"
+              className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm"
               style={{
                 backgroundColor: "rgba(160, 16, 16, 0.2)",
                 border: "1px solid rgba(160, 16, 16, 0.4)",
@@ -146,7 +168,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
 
           {/* Main Title */}
           <motion.h1
-            className="text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight font-serif"
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight font-serif"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -156,7 +178,6 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-              willChange: "transform, opacity",
               fontFamily: "'Playfair Display', 'Georgia', serif",
             }}
           >
@@ -164,25 +185,30 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
           </motion.h1>
 
           {/* Subtitle with Typewriter Effect */}
-          <motion.div
-            className="text-base md:text-lg lg:text-xl max-w-3xl h-16 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.8 }}
-          >
+          <div className="text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl min-h-[3rem] sm:min-h-[4rem] flex items-center justify-center px-2">
             <p
-              className="font-light"
-              style={{ color: "rgba(255, 255, 255, 0.8)" }}
+              className="font-light leading-relaxed"
+              style={{
+                color: "rgba(255, 255, 255, 0.8)",
+              }}
             >
               {displayText}
-              {isTyping && (
-                <span
-                  className="inline-block w-0.5 h-5 ml-1 animate-pulse"
-                  style={{ backgroundColor: "#A01010" }}
-                />
-              )}
+              <span
+                className="inline-block w-0.5 h-5 ml-1 align-middle"
+                style={{
+                  backgroundColor: "#A01010",
+                  animation: "typewriter-blink 1s step-end infinite",
+                  opacity: isComplete ? 0 : 1,
+                }}
+              />
             </p>
-          </motion.div>
+          </div>
+          <style>{`
+            @keyframes typewriter-blink {
+              0%, 50% { opacity: 1; }
+              51%, 100% { opacity: 0; }
+            }
+          `}</style>
 
           {/* CTA Buttons */}
           <motion.div
@@ -193,19 +219,18 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
           >
             <button
               onClick={handleTrainingsClick}
-              className="px-7 py-3.5 rounded-lg font-semibold text-base transition-all duration-200 hover:scale-[1.02]"
+              className="w-full sm:w-auto px-6 sm:px-7 py-3 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 hover:scale-[1.02]"
               style={{
                 background: "linear-gradient(135deg, #A01010 0%, #800000 100%)",
                 color: "#FFFFFF",
                 boxShadow: "0 4px 20px rgba(160, 16, 16, 0.3)",
-                willChange: "transform",
               }}
             >
               Trainings
             </button>
             <button
               onClick={handleAccessFormClick}
-              className="px-6 py-3 rounded-lg font-semibold text-base transition-all duration-200 hover:scale-[1.02] flex items-center gap-2"
+              className="w-full sm:w-auto px-5 sm:px-6 py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-2"
               style={{
                 backgroundColor: "rgba(160, 16, 16, 0.15)",
                 border: "1px solid rgba(160, 16, 16, 0.4)",

@@ -98,7 +98,7 @@ const AboutGoalsSection = () => {
                   ].map((item, index) => (
                     <div
                       key={index}
-                      className="flex flex-col items-center justify-center p-4 rounded-xl transition-all duration-300 hover:scale-105"
+                      className="flex flex-col items-center justify-center p-4 rounded-xl transition-all duration-300 md:hover:scale-105"
                       style={{
                         backgroundColor: "#0F0F0F",
                         border: "1px solid #800000",

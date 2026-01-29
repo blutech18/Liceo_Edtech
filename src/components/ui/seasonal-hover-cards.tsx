@@ -29,7 +29,7 @@ const SeasonCard = ({
     <div
       onClick={onClick}
       className={cn(
-        "group relative flex flex-col justify-end p-6 w-full md:w-1/3 h-[350px] lg:h-[450px] rounded-lg overflow-hidden shadow-lg transition-all duration-500 hover:w-2/3 cursor-pointer",
+        "group relative flex flex-col justify-end p-6 w-full md:w-1/3 h-[280px] sm:h-[320px] md:h-[350px] lg:h-[450px] rounded-lg overflow-hidden shadow-lg transition-all duration-500 md:hover:w-2/3 cursor-pointer",
         "bg-gradient-to-br from-[#0F0F0F] to-[#1A1A1A]",
         className,
       )}
@@ -37,7 +37,7 @@ const SeasonCard = ({
     >
       <img
         src={imageSrc}
-        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.02] md:group-hover:scale-105"
         alt={imageAlt || title}
         loading="lazy"
         style={{
