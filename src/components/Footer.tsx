@@ -99,7 +99,7 @@ const Footer = () => {
               <li>
                 <a
                   href="mailto:edtech@liceo.edu.ph"
-                  className="text-primary-foreground/70 hover:text-primary-foreground text-sm transition-colors duration-300 flex items-start gap-3"
+                  className="text-primary-foreground hover:text-white text-sm transition-colors duration-300 flex items-start gap-3 underline decoration-1 underline-offset-2 hover:decoration-2"
                 >
                   <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
                   edtech@liceo.edu.ph

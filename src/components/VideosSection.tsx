@@ -3,22 +3,25 @@ import { Play, Loader2 } from "lucide-react";
 import { getVideos, Video, getSectionContent, SectionContent } from "@/lib/api";
 
 const defaultContent: SectionContent = {
-  id: '', section_key: 'videos',
-  title: 'Google Workspace Updates',
-  subtitle: 'Stay updated with the latest Google Workspace features and tutorials'
+  id: "",
+  section_key: "videos",
+  title: "Google Workspace Updates",
+  subtitle:
+    "Stay updated with the latest Google Workspace features and tutorials",
 };
 
 const VideosSection = () => {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sectionContent, setSectionContent] = useState<SectionContent>(defaultContent);
+  const [sectionContent, setSectionContent] =
+    useState<SectionContent>(defaultContent);
 
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
       const [videosData, contentData] = await Promise.all([
         getVideos(),
-        getSectionContent()
+        getSectionContent(),
       ]);
       setVideos(videosData);
       if (contentData.videos) {
@@ -35,10 +38,12 @@ const VideosSection = () => {
         {/* Section Header */}
         <div className="text-center mb-12 animate-fade-up">
           <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <h2 className="section-title text-3xl sm:text-4xl font-bold">
+            <h2 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold">
               {sectionContent.title}
             </h2>
-            <span className="hidden sm:block text-2xl text-muted-foreground/30">|</span>
+            <span className="hidden sm:block text-2xl text-muted-foreground/30">
+              |
+            </span>
             <p className="section-subtitle text-base sm:text-lg">
               {sectionContent.subtitle}
             </p>
@@ -50,12 +55,14 @@ const VideosSection = () => {
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : videos.length === 0 ? (
-          <p className="text-center text-muted-foreground">No videos available at the moment.</p>
+          <p className="text-center text-muted-foreground">
+            No videos available at the moment.
+          </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {videos.map((video, index) => (
-              <div 
-                key={video.id} 
+              <div
+                key={video.id}
                 className="card-enhanced group overflow-hidden animate-fade-up"
                 style={{ animationDelay: `${0.1 + index * 0.1}s` }}
               >
