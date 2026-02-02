@@ -89,7 +89,7 @@ const AboutGoalsSection = () => {
             >
               {/* Placeholder visual with icons */}
               <div className="aspect-[4/3] flex items-center justify-center p-6">
-                <div className="grid grid-cols-2 gap-4 w-full max-w-sm">
+              <div className="grid grid-cols-2 gap-4 md:gap-6 w-full max-w-md">
                   {[
                     { icon: Lightbulb, label: "Innovation" },
                     { icon: Users, label: "Community" },
@@ -98,18 +98,18 @@ const AboutGoalsSection = () => {
                   ].map((item, index) => (
                     <div
                       key={index}
-                      className="flex flex-col items-center justify-center p-4 rounded-xl transition-all duration-300 md:hover:scale-105"
+                      className="flex flex-col items-center justify-center p-4 md:p-8 rounded-xl transition-all duration-300 md:hover:scale-105"
                       style={{
                         backgroundColor: "#0F0F0F",
                         border: "1px solid #800000",
                       }}
                     >
                       <item.icon
-                        className="w-8 h-8 mb-2"
+                        className="w-8 h-8 md:w-12 md:h-12 mb-2 md:mb-3"
                         style={{ color: "#A01010" }}
                       />
                       <span
-                        className="text-xs font-medium"
+                        className="text-xs md:text-sm font-medium"
                         style={{ color: "#FFFFFF" }}
                       >
                         {item.label}

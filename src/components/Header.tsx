@@ -53,12 +53,43 @@ const Header = () => {
             el: document.getElementById(link.href.replace("#", "")),
           }));
 
+          // Use viewport-based thresholds for more responsive scroll spy
+          const viewportHeight = window.innerHeight;
+          const activeThreshold = viewportHeight * 0.4; // Section is active when top is in upper 40%
+          
+          let foundActive = false;
           for (let i = sections.length - 1; i >= 0; i--) {
             const section = sections[i];
-            if (section.el && section.el.offsetTop <= currentScrollY + 150) {
-              setActiveSection(section.id);
-              break;
+            if (section.el) {
+              const rect = section.el.getBoundingClientRect();
+              // Section is active when its top is above the 40% viewport line
+              // Loop in reverse order so earlier sections take priority when multiple are visible
+              if (rect.top <= activeThreshold && rect.bottom > 0) {
+                setActiveSection(section.id);
+                foundActive = true;
+                break;
+              }
             }
+          }
+          
+          // Fallback: if no section found in the upper viewport, use the last scrolled-past section
+          if (!foundActive) {
+            for (let i = sections.length - 1; i >= 0; i--) {
+              const section = sections[i];
+              if (section.el) {
+                const rect = section.el.getBoundingClientRect();
+                if (rect.top < activeThreshold) {
+                  setActiveSection(section.id);
+                  foundActive = true;
+                  break;
+                }
+              }
+            }
+          }
+          
+          // If still no section found, we're at the top
+          if (!foundActive) {
+            setActiveSection("home");
           }
         }
 
