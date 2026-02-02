@@ -1,80 +1,32 @@
 import { useState, useEffect } from "react";
-import { Mail, Loader2, User } from "lucide-react";
-import { getTeamMembers, TeamMember, getSectionContent, SectionContent } from "@/lib/api";
-
-interface TeamMemberCardProps {
-  name: string;
-  role?: string;
-  email: string;
-  image?: string;
-  size?: "lg" | "md" | "sm";
-  delay?: number;
-}
-
-const TeamMemberCard = ({ name, role, email, image, size = "md", delay = 0 }: TeamMemberCardProps) => {
-  const sizeClasses = {
-    lg: "w-44 h-44 sm:w-52 sm:h-52",
-    md: "w-32 h-32 sm:w-40 sm:h-40",
-    sm: "w-28 h-28 sm:w-32 sm:h-32",
-  };
-
-  return (
-    <div
-      className="flex flex-col items-center text-center group animate-fade-up"
-      style={{ animationDelay: `${delay}s` }}
-    >
-      <div className={`${sizeClasses[size]} rounded-2xl overflow-hidden shadow-elevated mb-5 ring-4 ring-white transition-all duration-500 group-hover:shadow-primary group-hover:ring-white/80`}>
-        {image ? (
-          <img
-            src={image}
-            alt={name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-            <User className="w-1/3 h-1/3 text-primary/50" />
-          </div>
-        )}
-      </div>
-      <h4 className="font-bold text-foreground text-lg">{name}</h4>
-      {role && (
-        <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-          {role.split(' - ').map((line, index) => (
-            <span key={index}>
-              {line}
-              {index < role.split(' - ').length - 1 && <br />}
-            </span>
-          ))}
-        </p>
-      )}
-      <a
-        href={`mailto:${email}`}
-        className="inline-flex items-center gap-2 text-primary hover:text-primary-dark mt-3 text-sm font-medium transition-all duration-300 hover:gap-3"
-      >
-        <Mail className="w-4 h-4" />
-        {email}
-      </a>
-    </div>
-  );
-};
+import { Loader2 } from "lucide-react";
+import {
+  getTeamMembers,
+  TeamMember as APITeamMember,
+  getSectionContent,
+  SectionContent,
+} from "@/lib/api";
+import { TeamMemberCard } from "@/components/ui/team-member-card";
 
 const defaultContent: SectionContent = {
-  id: '', section_key: 'team',
-  title: 'Educational Technology Team',
-  subtitle: 'Meet the people behind Liceo EdTech'
+  id: "",
+  section_key: "team",
+  title: "Educational Technology Team",
+  subtitle: "Meet the people behind Liceo EdTech",
 };
 
 const EdTechTeamSection = () => {
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [teamMembers, setTeamMembers] = useState<APITeamMember[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sectionContent, setSectionContent] = useState<SectionContent>(defaultContent);
+  const [sectionContent, setSectionContent] =
+    useState<SectionContent>(defaultContent);
 
   useEffect(() => {
     async function fetchTeamMembers() {
       setLoading(true);
       const [data, contentData] = await Promise.all([
         getTeamMembers(),
-        getSectionContent()
+        getSectionContent(),
       ]);
       setTeamMembers(data);
       if (contentData.team) {
@@ -86,16 +38,31 @@ const EdTechTeamSection = () => {
   }, []);
 
   // Filter team members by department
-  const director = teamMembers.find(m => m.department.toLowerCase() === 'director');
-  const specialists = teamMembers.filter(m => m.department.toLowerCase() === 'e-learning specialist' || m.department.toLowerCase() === 'e-learning specialists');
-  const coordinator = teamMembers.find(m => m.department.toLowerCase() === 'coordinator' || m.position.toLowerCase().includes('coordinator'));
-  const technicalStaff = teamMembers.filter(m => 
-    (m.department.toLowerCase() === 'e-learning technical staff' || m.department.toLowerCase() === 'technical staff') &&
-    !m.position.toLowerCase().includes('coordinator')
+  const director = teamMembers.find(
+    (m) => m.department.toLowerCase() === "director",
+  );
+  const specialists = teamMembers.filter(
+    (m) =>
+      m.department.toLowerCase() === "e-learning specialist" ||
+      m.department.toLowerCase() === "e-learning specialists",
+  );
+  const coordinator = teamMembers.find(
+    (m) =>
+      m.department.toLowerCase() === "coordinator" ||
+      m.position.toLowerCase().includes("coordinator"),
+  );
+  const technicalStaff = teamMembers.filter(
+    (m) =>
+      (m.department.toLowerCase() === "e-learning technical staff" ||
+        m.department.toLowerCase() === "technical staff") &&
+      !m.position.toLowerCase().includes("coordinator"),
   );
 
   return (
-    <section id="edtech-team" className="py-16 sm:py-20 section-maroon scroll-mt-16">
+    <section
+      id="edtech-team"
+      className="py-16 sm:py-20 section-maroon scroll-mt-16"
+    >
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12 animate-fade-up">
           <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
@@ -113,106 +80,113 @@ const EdTechTeamSection = () => {
           <div className="flex items-center justify-center py-20">
             <Loader2 className="w-8 h-8 animate-spin text-white" />
           </div>
-        ) : (
-          <>
+        ) : teamMembers.length > 0 ? (
+          <div className="space-y-16">
             {/* Director */}
             {director && (
-              <div className="mb-16">
-                <div className="flex items-center justify-center gap-3 mb-8">
-                  <div className="flex-1 h-px bg-white/20" />
-                  <span className="px-4 py-1.5 rounded-full text-sm font-medium border bg-white/10 text-white border-white/20">
-                    Director
-                  </span>
-                  <div className="flex-1 h-px bg-white/20" />
-                </div>
-                <div className="flex flex-col items-center">
+              <div className="flex justify-center">
+                <div className="w-full max-w-[320px] animate-fade-up">
                   <TeamMemberCard
+                    imageUrl={director.image || "/placeholder-avatar.png"}
                     name={director.name}
-                    role={director.position}
+                    position={director.position}
                     email={director.email}
-                    image={director.image}
+                    themeColor="0 68% 42%"
                     size="lg"
-                    delay={0}
                   />
                 </div>
               </div>
             )}
 
-            {/* E-Learning Specialists */}
             {specialists.length > 0 && (
-              <div className="mb-16">
-                <div className="flex items-center justify-center gap-3 mb-8">
-                  <div className="flex-1 h-px bg-white/20" />
-                  <span className="px-4 py-1.5 rounded-full text-sm font-medium border bg-white/10 text-white border-white/20">
+              <div>
+                <div className="text-center mb-8">
+                  <h3 className="text-white text-xl sm:text-2xl font-bold animate-fade-up">
                     E-Learning Specialists
-                  </span>
-                  <div className="flex-1 h-px bg-white/20" />
+                  </h3>
+                  <div className="w-16 h-0.5 bg-primary mx-auto mt-3" />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
-                  {specialists.slice(0, 3).map((specialist, index) => (
-                    <TeamMemberCard
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
+                  {specialists.map((specialist, index) => (
+                    <div
                       key={specialist.id}
-                      name={specialist.name}
-                      role={specialist.position}
-                      email={specialist.email}
-                      image={specialist.image}
-                      delay={0.1 + index * 0.1}
-                    />
+                      className="animate-fade-up w-full max-w-[320px] mx-auto sm:max-w-none"
+                      style={{ animationDelay: `${0.1 + index * 0.1}s` }}
+                    >
+                      <TeamMemberCard
+                        imageUrl={specialist.image || "/placeholder-avatar.png"}
+                        name={specialist.name}
+                        position={specialist.position}
+                        email={specialist.email}
+                        themeColor="0 68% 42%"
+                        size="sm"
+                      />
+                    </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* E-Learning Technical Staff */}
             {(coordinator || technicalStaff.length > 0) && (
               <div>
-                <div className="flex items-center justify-center gap-3 mb-8">
-                  <div className="flex-1 h-px bg-white/20" />
-                  <span className="px-4 py-1.5 rounded-full text-sm font-medium border bg-white/10 text-white border-white/20">
+                <div className="text-center mb-8">
+                  <h3 className="text-white text-xl sm:text-2xl font-bold animate-fade-up">
                     E-Learning Technical Staff
-                  </span>
-                  <div className="flex-1 h-px bg-white/20" />
+                  </h3>
+                  <div className="w-16 h-0.5 bg-primary mx-auto mt-3" />
                 </div>
 
                 {/* Coordinator */}
                 {coordinator && (
-                  <div className="flex flex-col items-center mb-12">
-                    <TeamMemberCard
-                      name={coordinator.name}
-                      role={coordinator.position}
-                      email={coordinator.email}
-                      image={coordinator.image}
-                      delay={0.1}
-                    />
+                  <div className="flex justify-center mb-10">
+                    <div
+                      className="w-full max-w-[320px] animate-fade-up"
+                      style={{ animationDelay: "0.1s" }}
+                    >
+                      <TeamMemberCard
+                        imageUrl={
+                          coordinator.image || "/placeholder-avatar.png"
+                        }
+                        name={coordinator.name}
+                        position={coordinator.position}
+                        email={coordinator.email}
+                        themeColor="0 68% 42%"
+                        size="lg"
+                      />
+                    </div>
                   </div>
                 )}
 
-                {/* Technical Staff Members */}
+                {/* Technical Staff */}
                 {technicalStaff.length > 0 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
-                    {technicalStaff.slice(0, 3).map((staff, index) => (
-                      <TeamMemberCard
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
+                    {technicalStaff.map((staff, index) => (
+                      <div
                         key={staff.id}
-                        name={staff.name}
-                        role={staff.position}
-                        email={staff.email}
-                        image={staff.image}
-                        size="sm"
-                        delay={0.2 + index * 0.1}
-                      />
+                        className="animate-fade-up w-full max-w-[320px] mx-auto sm:max-w-none"
+                        style={{ animationDelay: `${0.2 + index * 0.1}s` }}
+                      >
+                        <TeamMemberCard
+                          imageUrl={staff.image || "/placeholder-avatar.png"}
+                          name={staff.name}
+                          position={staff.position}
+                          email={staff.email}
+                          themeColor="0 68% 42%"
+                          size="sm"
+                        />
+                      </div>
                     ))}
                   </div>
                 )}
               </div>
             )}
-
-            {/* Empty State */}
-            {!director && specialists.length === 0 && !coordinator && technicalStaff.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-white/70">No team members available at the moment.</p>
-              </div>
-            )}
-          </>
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-white/70">
+              No team members available at the moment.
+            </p>
+          </div>
         )}
       </div>
     </section>

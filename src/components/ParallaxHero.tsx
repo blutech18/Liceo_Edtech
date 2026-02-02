@@ -1,83 +1,156 @@
-import { useEffect, useState } from "react";
-import heroImage from "@/assets/hero-staff.jpg";
+import { ExternalLink } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 interface ParallaxHeroProps {
-  title: string;
+  title?: string;
   subtitle?: string;
 }
 
-const ParallaxHero = ({ title, subtitle }: ParallaxHeroProps) => {
-  const [scrollY, setScrollY] = useState(0);
+const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
+  const tagline =
+    "Empowering education through innovative technology solutions";
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Control video playback based on visibility
+        if (videoRef.current) {
+          if (entry.isIntersecting) {
+            videoRef.current.play().catch(() => {
+              // Autoplay was prevented
+            });
+          } else {
+            videoRef.current.pause();
+          }
+        }
+      },
+      { threshold: 0.3 },
+    );
+
+    const currentSection = sectionRef.current;
+    if (currentSection) {
+      observer.observe(currentSection);
+    }
+
+    return () => {
+      if (currentSection) {
+        observer.unobserve(currentSection);
+      }
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleTrainingsClick = () => {
+    const trainingsSection = document.getElementById("trainings");
+    if (trainingsSection) {
+      trainingsSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleAccessFormClick = () => {
+    window.open("https://forms.gle/ZGLkmgAMvva55YoB8", "_blank");
+  };
+
   return (
-    <section id="home" className="relative h-screen min-h-[600px] max-h-[900px] overflow-hidden">
-      {/* Parallax Background Image */}
-      <div 
-        className="absolute inset-0 w-full h-[120%]"
-        style={{
-          transform: `translateY(${scrollY * 0.5}px)`,
-        }}
-      >
-        <img
-          src={heroImage}
-          alt="Liceo EdTech Center Staff"
-          className="w-full h-full object-cover object-center"
-        />
-      </div>
-
-      {/* Gradient Overlays - Maroon Tint */}
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-primary/30" />
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/40 via-primary/20 to-transparent" />
-
-      {/* Content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6">
-        <div 
-          className="text-center max-w-4xl mx-auto"
+    <section
+      ref={sectionRef}
+      id="home"
+      className="relative min-h-screen w-full overflow-hidden"
+      style={{ backgroundColor: "#0F0F0F" }}
+    >
+      {/* Video Background */}
+      <div className="absolute inset-0" style={{ zIndex: 0 }}>
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="w-full h-full object-cover"
           style={{
-            transform: `translateY(${scrollY * 0.2}px)`,
-            opacity: Math.max(0, 1 - scrollY / 500),
+            transform: "translateZ(0)",
+            backfaceVisibility: "hidden",
           }}
         >
-          {/* Decorative Line Above */}
-          <div className="flex justify-center mb-6 animate-fade-up">
-            <div className="w-16 h-1 bg-primary rounded-full" />
+          <source
+            src="/faulty-terminal-maroon.webm"
+            type="video/webm"
+          />
+        </video>
+      </div>
+      
+      <div className="relative z-20 flex min-h-screen w-full items-center justify-center px-4 py-16 sm:py-20">
+        <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 text-center max-w-4xl mx-auto">
+          {/* Trust Badge */}
+          <div className="mb-2">
+            <div
+              className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm"
+              style={{
+                backgroundColor: "rgba(160, 16, 16, 0.2)",
+                border: "1px solid rgba(160, 16, 16, 0.4)",
+                color: "#CCCCCC",
+              }}
+            >
+              🎓 Liceo Educational Technology Center
+            </div>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight animate-fade-up" style={{ animationDelay: '0.1s' }}>
-            {title}
+          {/* Main Title */}
+          <h1
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight font-serif"
+            style={{
+              background:
+                "linear-gradient(135deg, #FF6B6B 0%, #A01010 50%, #800000 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              fontFamily: "'Playfair Display', 'Georgia', serif",
+            }}
+          >
+            EdTech
           </h1>
 
-          {subtitle && (
-            <p className="text-white/80 text-lg sm:text-xl md:text-2xl mt-6 max-w-2xl mx-auto animate-fade-up" style={{ animationDelay: '0.2s' }}>
-              {subtitle}
+          {/* Subtitle - Static text for performance */}
+          <div className="text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl flex items-center justify-center px-2">
+            <p
+              className="font-light leading-relaxed"
+              style={{
+                color: "rgba(255, 255, 255, 0.8)",
+              }}
+            >
+              {tagline}
             </p>
-          )}
-
-          {/* Decorative Line Below */}
-          <div className="flex justify-center mt-8 animate-fade-up" style={{ animationDelay: '0.3s' }}>
-            <div className="w-24 h-1 bg-white/40 rounded-full" />
           </div>
 
-          {/* Scroll Indicator */}
-          <div className="mt-12 animate-bounce" style={{ animationDelay: '1s' }}>
-            <div className="w-8 h-12 rounded-full border-2 border-white/50 flex items-start justify-center p-2 mx-auto">
-              <div className="w-1.5 h-3 bg-white/70 rounded-full animate-pulse" />
-            </div>
-            <p className="text-white/50 text-sm mt-2">Scroll to explore</p>
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
+            <button
+              onClick={handleTrainingsClick}
+              className="w-full sm:w-auto px-6 sm:px-7 py-3 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base"
+              style={{
+                background: "linear-gradient(135deg, #A01010 0%, #800000 100%)",
+                color: "#FFFFFF",
+                boxShadow: "0 4px 20px rgba(160, 16, 16, 0.3)",
+              }}
+            >
+              Trainings
+            </button>
+            <button
+              onClick={handleAccessFormClick}
+              className="w-full sm:w-auto px-5 sm:px-6 py-3 rounded-lg font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
+              style={{
+                backgroundColor: "rgba(160, 16, 16, 0.15)",
+                border: "1px solid rgba(160, 16, 16, 0.4)",
+                color: "#FFFFFF",
+              }}
+            >
+              Access Form <ExternalLink className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>
-
-      {/* Bottom Gradient Fade - Transition to next section */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary to-transparent" />
     </section>
   );
 };
