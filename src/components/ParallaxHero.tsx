@@ -1,83 +1,26 @@
-import { motion } from "motion/react";
 import { ExternalLink } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface ParallaxHeroProps {
   title?: string;
   subtitle?: string;
 }
 
-// Typewriter hook with reset capability - fixed cleanup
-const useTypewriter = (
-  text: string,
-  speed: number = 50,
-  delay: number = 1000,
-  shouldReset: boolean | number = false,
-) => {
-  const [displayText, setDisplayText] = useState("");
-  const [isComplete, setIsComplete] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    // Clear any existing timers
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    
-    setDisplayText("");
-    setIsComplete(false);
-    let index = 0;
-
-    timeoutRef.current = setTimeout(() => {
-      intervalRef.current = setInterval(() => {
-        if (index < text.length) {
-          setDisplayText(text.slice(0, index + 1));
-          index++;
-        } else {
-          if (intervalRef.current) clearInterval(intervalRef.current);
-          setIsComplete(true);
-        }
-      }, speed);
-    }, delay);
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, [text, speed, delay, shouldReset]);
-
-  return { displayText, isComplete };
-};
-
 const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
   const tagline =
     "Empowering education through innovative technology solutions";
-  const [isInView, setIsInView] = useState(true);
-  const [resetTrigger, setResetTrigger] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { displayText, isComplete } = useTypewriter(
-    tagline,
-    50,
-    500,
-    resetTrigger,
-  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const wasInView = isInView;
-        setIsInView(entry.isIntersecting);
-
         // Control video playback based on visibility
         if (videoRef.current) {
           if (entry.isIntersecting) {
             videoRef.current.play().catch(() => {
-              // Autoplay was prevented, try muted
+              // Autoplay was prevented
             });
-            if (!wasInView) {
-              setResetTrigger((prev) => prev + 1);
-            }
           } else {
             videoRef.current.pause();
           }
@@ -96,7 +39,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
         observer.unobserve(currentSection);
       }
     };
-  }, [isInView]);
+  }, []);
 
   const handleTrainingsClick = () => {
     const trainingsSection = document.getElementById("trainings");
@@ -106,7 +49,6 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
   };
 
   const handleAccessFormClick = () => {
-    // Open EdTech Help Desk Monitoring Form in new tab
     window.open("https://forms.gle/ZGLkmgAMvva55YoB8", "_blank");
   };
 
@@ -128,10 +70,8 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
           preload="auto"
           className="w-full h-full object-cover"
           style={{
-            opacity: 1,
             transform: "translateZ(0)",
             backfaceVisibility: "hidden",
-            willChange: "auto",
           }}
         >
           <source
@@ -140,18 +80,11 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
           />
         </video>
       </div>
-
-      {/* Overlay removed to show raw video */}
       
       <div className="relative z-20 flex min-h-screen w-full items-center justify-center px-4 py-16 sm:py-20">
         <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 text-center max-w-4xl mx-auto">
           {/* Trust Badge */}
-          <motion.div
-            className="mb-2"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <div className="mb-2">
             <div
               className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm"
               style={{
@@ -162,14 +95,11 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
             >
               🎓 Liceo Educational Technology Center
             </div>
-          </motion.div>
+          </div>
 
           {/* Main Title */}
-          <motion.h1
+          <h1
             className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight font-serif"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             style={{
               background:
                 "linear-gradient(135deg, #FF6B6B 0%, #A01010 50%, #800000 100%)",
@@ -180,44 +110,25 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
             }}
           >
             EdTech
-          </motion.h1>
+          </h1>
 
-          {/* Subtitle with Typewriter Effect */}
-          <div className="text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl min-h-[3rem] sm:min-h-[4rem] flex items-center justify-center px-2">
+          {/* Subtitle - Static text for performance */}
+          <div className="text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl flex items-center justify-center px-2">
             <p
               className="font-light leading-relaxed"
               style={{
                 color: "rgba(255, 255, 255, 0.8)",
               }}
             >
-              {displayText}
-              <span
-                className="inline-block w-0.5 h-5 ml-1 align-middle"
-                style={{
-                  backgroundColor: "#A01010",
-                  animation: "typewriter-blink 1s step-end infinite",
-                  opacity: isComplete ? 0 : 1,
-                }}
-              />
+              {tagline}
             </p>
           </div>
-          <style>{`
-            @keyframes typewriter-blink {
-              0%, 50% { opacity: 1; }
-              51%, 100% { opacity: 0; }
-            }
-          `}</style>
 
           {/* CTA Buttons */}
-          <motion.div
-            className="flex flex-col sm:flex-row items-center gap-4 mt-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
             <button
               onClick={handleTrainingsClick}
-              className="w-full sm:w-auto px-6 sm:px-7 py-3 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 hover:scale-[1.02]"
+              className="w-full sm:w-auto px-6 sm:px-7 py-3 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base"
               style={{
                 background: "linear-gradient(135deg, #A01010 0%, #800000 100%)",
                 color: "#FFFFFF",
@@ -228,7 +139,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
             </button>
             <button
               onClick={handleAccessFormClick}
-              className="w-full sm:w-auto px-5 sm:px-6 py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-5 sm:px-6 py-3 rounded-lg font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
               style={{
                 backgroundColor: "rgba(160, 16, 16, 0.15)",
                 border: "1px solid rgba(160, 16, 16, 0.4)",
@@ -237,7 +148,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
             >
               Access Form <ExternalLink className="w-4 h-4" />
             </button>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

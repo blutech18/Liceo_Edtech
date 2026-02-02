@@ -340,32 +340,37 @@
     animation-delay: -10s;
   }
 
-  /* Animations - GPU Accelerated */
+  /* Animations - GPU Accelerated with reduced-motion support */
   .animate-fade-up {
-    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    will-change: transform, opacity;
-  }
-
-  .animate-fade-up.animated {
-    will-change: auto;
+    opacity: 1;
+    transform: none;
   }
 
   .animate-fade-in {
-    animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    will-change: opacity;
-  }
-
-  .animate-fade-in.animated {
-    will-change: auto;
+    opacity: 1;
   }
 
   .animate-scale-in {
-    animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    will-change: transform, opacity;
+    opacity: 1;
+    transform: none;
   }
 
-  .animate-scale-in.animated {
-    will-change: auto;
+  /* Only enable animations if user hasn't requested reduced motion */
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-fade-up {
+      animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+
+    .animate-scale-in {
+      animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
   }
 
   .stagger-1 {
