@@ -7,37 +7,43 @@ interface ParallaxHeroProps {
   subtitle?: string;
 }
 
-// Typewriter hook with reset capability
+// Typewriter hook with reset capability - fixed cleanup
 const useTypewriter = (
   text: string,
   speed: number = 50,
   delay: number = 1000,
-  shouldReset: boolean = false,
+  shouldReset: boolean | number = false,
 ) => {
   const [displayText, setDisplayText] = useState("");
   const [isComplete, setIsComplete] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    // Clear any existing timers
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    
     setDisplayText("");
     setIsComplete(false);
+    let index = 0;
 
-    const startTimeout = setTimeout(() => {
-      let index = 0;
-
-      const typeInterval = setInterval(() => {
+    timeoutRef.current = setTimeout(() => {
+      intervalRef.current = setInterval(() => {
         if (index < text.length) {
           setDisplayText(text.slice(0, index + 1));
           index++;
         } else {
-          clearInterval(typeInterval);
+          if (intervalRef.current) clearInterval(intervalRef.current);
           setIsComplete(true);
         }
       }, speed);
-
-      return () => clearInterval(typeInterval);
     }, delay);
 
-    return () => clearTimeout(startTimeout);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, [text, speed, delay, shouldReset]);
 
   return { displayText, isComplete };
@@ -122,7 +128,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
           preload="auto"
           className="w-full h-full object-cover"
           style={{
-            opacity: 0.4,
+            opacity: 1,
             transform: "translateZ(0)",
             backfaceVisibility: "hidden",
             willChange: "auto",
@@ -135,15 +141,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
         </video>
       </div>
 
-      {/* Subtle overlay for text readability */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(15, 15, 15, 0.3), rgba(15, 15, 15, 0.5))",
-          zIndex: 1,
-        }}
-      />
+      {/* Overlay removed to show raw video */}
       
       <div className="relative z-20 flex min-h-screen w-full items-center justify-center px-4 py-16 sm:py-20">
         <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 text-center max-w-4xl mx-auto">

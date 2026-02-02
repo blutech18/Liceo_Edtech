@@ -5,6 +5,9 @@ import {
   ChevronUp,
   BookOpen,
   X,
+  ChevronLeft,
+  ChevronRight,
+  Menu,
 } from "lucide-react";
 import {
   getSectionContent,
@@ -22,6 +25,13 @@ import {
   SeasonalHoverCards,
   SeasonCardProps,
 } from "@/components/ui/seasonal-hover-cards";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 const defaultContent: SectionContent = {
   id: "",
@@ -47,6 +57,7 @@ const GoogleClassroomSection = () => {
     null,
   );
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [showMobileNav, setShowMobileNav] = useState(false);
 
 
   useEffect(() => {
@@ -169,8 +180,73 @@ const GoogleClassroomSection = () => {
 
             {/* Tabbed Interface */}
             <div className="flex flex-col flex-1 overflow-hidden min-h-0">
-              {/* Tab Navigation */}
-              <div className="border-b border-border bg-muted/20 flex-shrink-0">
+              {/* Mobile Section Navigator - Dropdown Style */}
+              <div className="sm:hidden border-b border-border bg-muted/30 flex-shrink-0 p-3">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-between h-12 text-left font-medium overflow-hidden"
+                    >
+                      <div className="flex items-center gap-3 min-w-0 flex-1 overflow-hidden">
+                        <Badge variant="secondary" className="text-xs px-2 flex-shrink-0">
+                          {activeTab + 1}/{selectedRole?.sections?.length || 0}
+                        </Badge>
+                        <span className="truncate block">
+                          {selectedRole?.sections?.[activeTab]?.title}
+                        </span>
+                      </div>
+                      <ChevronDown className="w-4 h-4 ml-2 flex-shrink-0" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-[calc(100vw-2rem)] max-w-[400px]">
+                    <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground border-b mb-1">
+                      Select a tutorial section
+                    </div>
+                    {selectedRole?.sections?.map((section, index) => (
+                      <DropdownMenuItem
+                        key={index}
+                        onClick={() => setActiveTab(index)}
+                        className={`flex justify-between items-center py-3 ${
+                          activeTab === index ? "bg-primary/10 text-primary" : ""
+                        }`}
+                      >
+                        <span className="font-medium">{section.title}</span>
+                        <Badge variant={activeTab === index ? "default" : "secondary"} className="text-xs">
+                          {section.links?.length || 0} links
+                        </Badge>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                
+                {/* Quick navigation arrows */}
+                <div className="flex items-center justify-between mt-2 gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={activeTab === 0}
+                    onClick={() => setActiveTab(activeTab - 1)}
+                    className="flex-1"
+                  >
+                    <ChevronLeft className="w-4 h-4 mr-1" />
+                    Previous
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={activeTab === (selectedRole?.sections?.length || 1) - 1}
+                    onClick={() => setActiveTab(activeTab + 1)}
+                    className="flex-1"
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Desktop Tab Navigation */}
+              <div className="hidden sm:block border-b border-border bg-muted/20 flex-shrink-0">
                 <ScrollArea className="w-full">
                   <div className="flex px-2 sm:px-4 gap-1 sm:gap-2 min-w-max">
                     {selectedRole?.sections?.map((section, index) => (

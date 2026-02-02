@@ -29,10 +29,14 @@ const TeamMemberCard = React.forwardRef<HTMLDivElement, TeamMemberCardProps>(
   ) => {
     const [showEmail, setShowEmail] = React.useState(false);
 
+    // Check if this is a director position for special styling
+    const isDirector = position.toLowerCase().includes('director');
+
+    // Size classes: All same height on mobile (400px), different on desktop
     const sizeClasses = {
       lg: "h-[400px] sm:h-[450px]",
-      md: "h-[350px] sm:h-[400px]",
-      sm: "h-[300px] sm:h-[350px]",
+      md: "h-[400px] sm:h-[400px]",
+      sm: "h-[400px] sm:h-[350px]",
     };
 
     return (
@@ -55,60 +59,62 @@ const TeamMemberCard = React.forwardRef<HTMLDivElement, TeamMemberCardProps>(
             backgroundColor: "#1a1a1a",
           }}
         >
-          {/* Image Section - 70% height */}
-          <div className="relative h-[70%] overflow-hidden">
+          {/* Image Section - 75% height to show more image */}
+          <div className="relative h-[75%] overflow-hidden">
             <div
-              className="absolute inset-0 bg-cover bg-center 
+              className="absolute inset-0 bg-cover bg-top 
                          transition-transform duration-500 ease-in-out group-hover:scale-110"
               style={{ backgroundImage: `url(${imageUrl})` }}
             />
           </div>
 
-          {/* Content Section - 30% height */}
-          <div className="flex flex-col justify-between h-[30%] p-3 sm:p-4 bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f]">
-            <div>
-              <h3 className="text-base sm:text-lg font-bold tracking-tight text-white mb-1 leading-tight">
+          {/* Content Section - 25% height */}
+          <div className="flex flex-col h-[25%] px-4 pb-3 justify-center bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative z-20">
+            <div className="flex-1 flex flex-col justify-center">
+              <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white mb-2 leading-tight">
                 {name}
               </h3>
-            </div>
+              
+              <div className="flex items-start justify-between gap-3">
+                <p className={`leading-snug font-medium ${
+                  isDirector 
+                    ? 'text-sm sm:text-base text-amber-300 font-bold uppercase tracking-wide' 
+                    : 'text-sm text-white/70'
+                }`}>
+                  {position}
+                </p>
 
-            {/* Position and Email Icon Row */}
-            <div className="flex items-end justify-between gap-2">
-              <p className="text-xs sm:text-sm text-white/80 font-medium flex-1 leading-snug">
-                {position}
-              </p>
-
-              {/* Gmail Icon with Hover Tooltip */}
-              <a
-                href={`mailto:${email}`}
-                className="relative group/email flex-shrink-0 self-end"
-                onMouseEnter={() => setShowEmail(true)}
-                onMouseLeave={() => setShowEmail(false)}
-                onTouchStart={() => setShowEmail(true)}
-                onTouchEnd={() => setTimeout(() => setShowEmail(false), 2000)}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div
-                  className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 border border-white/20
-                             transition-all duration-300 hover:bg-white/20 hover:border-white/40 hover:scale-110"
+                {/* Gmail Icon */}
+                <a
+                  href={`mailto:${email}`}
+                  className="relative group/email flex-shrink-0 mt-0.5"
+                  onMouseEnter={() => setShowEmail(true)}
+                  onMouseLeave={() => setShowEmail(false)}
+                  onTouchStart={() => setShowEmail(true)}
+                  onTouchEnd={() => setTimeout(() => setShowEmail(false), 2000)}
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <Mail className="h-4 w-4 text-white" />
-                </div>
-
-                {/* Email Tooltip */}
-                {showEmail && (
                   <div
-                    className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-black/95 backdrop-blur-md 
-                               border border-white/20 rounded-lg text-xs text-white
-                               animate-in fade-in slide-in-from-bottom-2 duration-200 z-[100]
-                               max-w-[200px] sm:max-w-none break-all sm:whitespace-nowrap"
-                    style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.5)" }}
+                    className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 border border-white/20
+                               transition-all duration-300 hover:bg-white/20 hover:border-white/40 hover:scale-110"
                   >
-                    {email}
-                    <div className="absolute top-full right-4 w-2 h-2 bg-black/95 border-r border-b border-white/20 transform rotate-45 -mt-1" />
+                    <Mail className="h-4 w-4 text-white" />
                   </div>
-                )}
-              </a>
+
+                  {/* Email Tooltip */}
+                  {showEmail && (
+                    <div
+                      className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-black/95 backdrop-blur-md 
+                                 border border-white/20 rounded-lg text-xs text-white
+                                 animate-in fade-in slide-in-from-bottom-2 duration-200 z-[100]
+                                 max-w-[200px] sm:max-w-none break-all sm:whitespace-nowrap shadow-xl"
+                    >
+                      {email}
+                      <div className="absolute top-full right-4 w-2 h-2 bg-black/95 border-r border-b border-white/20 transform rotate-45 -mt-1" />
+                    </div>
+                  )}
+                </a>
+              </div>
             </div>
           </div>
         </div>

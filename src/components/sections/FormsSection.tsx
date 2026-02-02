@@ -63,6 +63,8 @@ const FormsSection = () => {
               <a
                 key={form.id}
                 href={form.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="card-enhanced flex items-center gap-5 p-5 sm:p-6 group hover-lift animate-fade-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >

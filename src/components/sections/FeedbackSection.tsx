@@ -48,10 +48,6 @@ const FeedbackSection = () => {
     fetchData();
   }, []);
 
-  const embedUrl = feedbackConfig.form_url.includes('?') 
-    ? `${feedbackConfig.form_url}&embedded=true`
-    : `${feedbackConfig.form_url}?embedded=true`;
-
   return (
     <section id="feedback" className="py-16 sm:py-20 scroll-mt-16" style={{ backgroundColor: "#1A1A1A" }}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
@@ -73,46 +69,44 @@ const FeedbackSection = () => {
           </div>
         ) : (
           <>
-            {/* Embedded Form */}
+            {/* Feedback Form Link Button */}
             <div 
-              className="rounded-xl overflow-hidden animate-fade-up"
+              className="rounded-xl p-8 sm:p-12 text-center animate-fade-up"
               style={{ 
                 backgroundColor: "#0F0F0F",
                 border: "1px solid #800000",
                 animationDelay: '0.1s'
               }}
             >
-              <div className="w-full" style={{ height: '800px' }}>
-                <iframe
-                  src={embedUrl}
-                  className="w-full h-full border-0"
-                  title="User Satisfaction Survey"
+              <div className="max-w-md mx-auto">
+                <h3 className="text-xl sm:text-2xl font-bold mb-4" style={{ color: "#FFFFFF" }}>
+                  User Satisfaction Survey
+                </h3>
+                <p className="text-sm sm:text-base mb-8" style={{ color: "#CCCCCC" }}>
+                  Help us improve our services by sharing your feedback. Your input is valuable to us!
+                </p>
+                <a
+                  href={feedbackConfig.form_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 px-8 py-4 font-semibold text-lg transition-all duration-300 rounded-xl"
+                  style={{ 
+                    backgroundColor: "#A01010",
+                    color: "#FFFFFF"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = "0 0 20px rgba(160, 16, 16, 0.5)";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
                 >
-                  Loading...
-                </iframe>
+                  <ExternalLink className="w-5 h-5" />
+                  {feedbackConfig.button_text || "Open Feedback Form"}
+                </a>
               </div>
-            </div>
-
-            <div className="mt-8 text-center animate-fade-up" style={{ animationDelay: '0.2s' }}>
-              <a
-                href={feedbackConfig.form_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 font-semibold transition-all duration-300 rounded"
-                style={{ 
-                  backgroundColor: "#A01010",
-                  color: "#FFFFFF"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = "0 0 15px rgba(160, 16, 16, 0.4)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-              >
-                <ExternalLink className="w-4 h-4" />
-                {feedbackConfig.button_text}
-              </a>
             </div>
 
             {/* Help Desk Link */}

@@ -64,7 +64,7 @@ const AboutUsSection = () => {
                 }}
               >
                 {mission.map((item, index) => (
-                  <p key={item.id} className={`leading-relaxed text-lg ${index > 0 ? 'mt-4' : ''}`} style={{ color: "#CCCCCC" }}>
+                  <p key={item.id} className={`leading-relaxed text-lg text-center ${index > 0 ? 'mt-4' : ''}`} style={{ color: "#CCCCCC" }}>
                     {item.content}
                   </p>
                 ))}
@@ -89,7 +89,7 @@ const AboutUsSection = () => {
                 </div>
                 <h3 className="text-lg font-bold" style={{ color: "#FFFFFF" }}>Goals</h3>
               </div>
-              <p className="mb-4" style={{ color: "#CCCCCC" }}>
+              <p className="mb-4 text-center" style={{ color: "#CCCCCC" }}>
                 Liceo EdTech promotes high-quality programs and services supported by technology that:
               </p>
               <ul className="space-y-3">

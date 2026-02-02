@@ -111,7 +111,7 @@ const HotlineSection = () => {
       className="py-16 sm:py-20 scroll-mt-16"
       style={{ backgroundColor: "#0F0F0F" }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="text-center mb-12 animate-fade-up">
           <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <h2
@@ -176,7 +176,7 @@ const HotlineSection = () => {
                       }}
                     >
                       {/* Category Header with Image/Initials - Event Card Style */}
-                      <div className="relative h-48 overflow-hidden group/image">
+                      <div className="relative h-36 sm:h-40 overflow-hidden group/image">
                         {info.image_url ? (
                           <>
                             <img
@@ -242,7 +242,7 @@ const HotlineSection = () => {
                       </div>
 
                       {/* Contact Details */}
-                      <div className="p-5">
+                      <div className="p-4">
                         <div className="space-y-4">
                           {categoryContacts.map((contact) => (
                             <div
