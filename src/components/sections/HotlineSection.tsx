@@ -182,9 +182,8 @@ const HotlineSection = () => {
                             <img
                               src={info.image_url}
                               alt={info.name}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-[1.03] md:group-hover/image:scale-110"
                               style={{
-                                willChange: "transform",
                                 backfaceVisibility: "hidden",
                                 transform: "translateZ(0)",
                               }}

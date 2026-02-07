@@ -268,9 +268,8 @@ const ActivitiesSection = () => {
                         src={activity.image}
                         alt={activity.title}
                         loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:group-hover:scale-110"
                         style={{
-                          willChange: "transform",
                           backfaceVisibility: "hidden",
                           transform: "translateZ(0)",
                         }}
@@ -287,7 +286,7 @@ const ActivitiesSection = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent opacity-0 group-hover:opacity-90 transition-opacity duration-500" />
 
                     {/* Content Overlay */}
-                    <div className="absolute inset-0 flex flex-col justify-end p-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                    <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                       <p className="text-white text-sm leading-relaxed line-clamp-2">
                         {activity.description || activity.title}
                       </p>
@@ -328,41 +327,58 @@ const ActivitiesSection = () => {
                 <div className="flex items-center gap-3 sm:gap-4">
                   {/* Icon container */}
                   <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-[#A01010] to-[#800000] shadow-md">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      className="w-5 h-5 sm:w-6 sm:h-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                   </div>
-                  
+
                   {/* Text content */}
                   <div className="text-left">
                     <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
                       Trainings Conducted
                     </h3>
                     <p className="text-xs sm:text-sm text-rose-200/80 font-medium">
-                      {conductedTrainings.length} completed • Click to {showConducted ? 'hide' : 'view'}
+                      {conductedTrainings.length} completed • Click to{" "}
+                      {showConducted ? "hide" : "view"}
                     </p>
                   </div>
                 </div>
-                
+
                 {/* Right side - Count badge and Chevron */}
                 <div className="flex items-center gap-2 sm:gap-3">
                   {/* Count badge */}
                   <div className="flex items-center justify-center min-w-[2.5rem] h-8 sm:h-10 px-3 rounded-lg bg-[#A01010]/30 border border-[#A01010]/50">
-                    <span className="text-sm sm:text-lg font-bold text-white">{conductedTrainings.length}</span>
+                    <span className="text-sm sm:text-lg font-bold text-white">
+                      {conductedTrainings.length}
+                    </span>
                   </div>
-                  
+
                   {/* Chevron */}
-                  <div className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-white/10 transition-all duration-300 group-hover:bg-white/20 ${showConducted ? 'rotate-180' : 'rotate-0'}`}>
+                  <div
+                    className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-white/10 transition-all duration-300 group-hover:bg-white/20 ${showConducted ? "rotate-180" : "rotate-0"}`}
+                  >
                     <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                 </div>
               </button>
 
               {/* Expandable Content - Inside the same container */}
-              <div className={`transition-all duration-500 ease-in-out overflow-hidden ${showConducted ? 'max-h-[3000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div
+                className={`transition-all duration-500 ease-in-out overflow-hidden ${showConducted ? "max-h-[3000px] opacity-100" : "max-h-0 opacity-0"}`}
+              >
                 {/* Divider line */}
                 <div className="mx-5 sm:mx-6 h-px bg-white/10" />
-                
+
                 {/* Cards Grid */}
                 <div className="p-5 sm:p-6 animate-fade-up">
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
@@ -383,9 +399,8 @@ const ActivitiesSection = () => {
                                 src={training.image}
                                 alt={training.title}
                                 loading="lazy"
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:group-hover:scale-110"
                                 style={{
-                                  willChange: "transform",
                                   backfaceVisibility: "hidden",
                                   transform: "translateZ(0)",
                                 }}
@@ -529,7 +544,7 @@ const ActivitiesSection = () => {
             {/* 2-Column Grid Layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
               {/* Left Column - Image */}
-              <div className="relative h-[500px] md:h-auto overflow-hidden bg-gray-100">
+              <div className="relative h-[280px] sm:h-[400px] md:h-auto overflow-hidden bg-gray-100">
                 {selectedActivity.image ? (
                   <img
                     src={selectedActivity.image}

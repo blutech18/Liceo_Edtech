@@ -607,6 +607,15 @@
   }
 }
 
+/* Backdrop-blur fallback for old GPUs that don't support backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .backdrop-blur-xl,
+  .backdrop-blur-md,
+  .backdrop-blur-sm {
+    background-color: rgba(15, 15, 15, 0.95) !important;
+  }
+}
+
 /* Smooth scrollbar - Dark theme */
 ::-webkit-scrollbar {
   width: 10px;

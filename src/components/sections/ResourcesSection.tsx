@@ -141,6 +141,7 @@ const ResourcesSection = () => {
                               <img
                                 src={resource.image}
                                 alt={resource.title}
+                                loading="lazy"
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03] md:group-hover:scale-110"
                               />
                             </div>

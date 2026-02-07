@@ -86,11 +86,13 @@ const CoreFunctionsSection = () => {
               className="relative group rounded-xl animate-fade-up"
               style={{ animationDelay: `${0.1 * index}s` }}
             >
-              {/* Glowing Effect */}
+              {/* Glowing Effect - disabled on touch devices for performance */}
               <GlowingEffect
                 spread={40}
                 glow={true}
-                disabled={false}
+                disabled={
+                  typeof window !== "undefined" && "ontouchstart" in window
+                }
                 proximity={64}
                 inactiveZone={0.01}
                 borderWidth={2}

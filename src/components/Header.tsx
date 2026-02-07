@@ -13,8 +13,10 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [navHidden, setNavHidden] = useState(false);
   const rafRef = useRef<number>();
   const lastScrollY = useRef(0);
+  const prevScrollY = useRef(0);
 
   const scrollToSection = (href: string) => {
     const sectionId = href.replace("#", "");
@@ -44,6 +46,18 @@ const Header = () => {
       if (Math.abs(currentScrollY - lastScrollY.current) > 3) {
         setScrolled(currentScrollY > 20);
 
+        // Hide navbar on scroll down, show on scroll up
+        if (currentScrollY > 80) {
+          if (currentScrollY > prevScrollY.current + 5) {
+            setNavHidden(true);
+          } else if (currentScrollY < prevScrollY.current - 5) {
+            setNavHidden(false);
+          }
+        } else {
+          setNavHidden(false);
+        }
+        prevScrollY.current = currentScrollY;
+
         // Scroll spy - optimized with early exit
         if (currentScrollY < 100) {
           setActiveSection("home");
@@ -56,7 +70,7 @@ const Header = () => {
           // Use viewport-based thresholds for more responsive scroll spy
           const viewportHeight = window.innerHeight;
           const activeThreshold = viewportHeight * 0.4; // Section is active when top is in upper 40%
-          
+
           let foundActive = false;
           for (let i = sections.length - 1; i >= 0; i--) {
             const section = sections[i];
@@ -71,7 +85,7 @@ const Header = () => {
               }
             }
           }
-          
+
           // Fallback: if no section found in the upper viewport, use the last scrolled-past section
           if (!foundActive) {
             for (let i = sections.length - 1; i >= 0; i--) {
@@ -86,7 +100,7 @@ const Header = () => {
               }
             }
           }
-          
+
           // If still no section found, we're at the top
           if (!foundActive) {
             setActiveSection("home");
@@ -111,7 +125,13 @@ const Header = () => {
   }, [handleScroll]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4">
+    <header
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 transition-all duration-200"
+      style={{
+        opacity: navHidden ? 0 : 1,
+        pointerEvents: navHidden ? "none" : "auto",
+      }}
+    >
       <div
         className={cn(
           "w-full max-w-4xl transition-all duration-300 rounded-full backdrop-blur-xl backdrop-saturate-150",
@@ -197,7 +217,6 @@ const Header = () => {
             )}
           </button>
         </div>
-
       </div>
 
       {/* Mobile Navigation Dropdown - Separate from main navbar */}

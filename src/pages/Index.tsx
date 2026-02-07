@@ -74,72 +74,96 @@ const Index = () => {
           />
         </ScrollReveal>
 
-        {/* Infinite Photo Sliders - overlapping hero */}
-        {sliderPhotos.length > 0 && (
-          <div className="section-dark py-4 md:py-8 -mt-20 md:-mt-32 relative z-10 space-y-4 md:space-y-6">
-            {/* First slider - moves left */}
-            <InfiniteSlider
-              images={parallaxImages}
-              speed={40}
-              direction="left"
-            />
-            {/* Second slider - moves right (opposite direction) */}
-            <InfiniteSlider
-              images={sliderImages2}
-              speed={35}
-              direction="right"
-            />
-          </div>
-        )}
-
         {/* About & Goals Section */}
-        <ScrollReveal delay={0.05}>
+        <ScrollReveal delay={0.05} variant="fade-up">
           <AboutGoalsSection />
         </ScrollReveal>
 
         {/* Core Functions Section */}
-        <ScrollReveal delay={0.08}>
+        <ScrollReveal delay={0.08} variant="fade-up">
           <CoreFunctionsSection />
         </ScrollReveal>
 
         {/* Services & Roles Section */}
-        <ScrollReveal delay={0.1}>
+        <ScrollReveal delay={0.1} variant="scale-in">
           <ServicesRolesSection />
         </ScrollReveal>
 
+        {/* Infinite Photo Sliders - below Services & Roles */}
+        {isLoadingSlider ? (
+          <div className="py-4 md:py-8 space-y-4 md:space-y-6">
+            {[0, 1].map((i) => (
+              <div
+                key={i}
+                className="flex gap-4 sm:gap-5 md:gap-6 overflow-hidden px-4"
+              >
+                {Array.from({ length: 5 }).map((_, j) => (
+                  <div
+                    key={j}
+                    className="flex-shrink-0 rounded-xl sm:rounded-2xl animate-pulse"
+                    style={{
+                      width: "clamp(220px, 32vw, 350px)",
+                      height: "clamp(160px, 24vw, 260px)",
+                      backgroundColor: "#1A1A1A",
+                      border: "1px solid rgba(128, 0, 0, 0.3)",
+                    }}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        ) : sliderPhotos.length > 0 ? (
+          <ScrollReveal variant="fade-in">
+            <div className="section-dark py-4 md:py-8 relative z-10 space-y-4 md:space-y-6">
+              {/* First slider - moves left */}
+              <InfiniteSlider
+                images={parallaxImages}
+                speed={40}
+                direction="left"
+              />
+              {/* Second slider - moves right (opposite direction) */}
+              <InfiniteSlider
+                images={sliderImages2}
+                speed={35}
+                direction="right"
+              />
+            </div>
+          </ScrollReveal>
+        ) : null}
+
         {/* Trainings Section - card carousel + conducted trainings */}
-        <ScrollReveal delay={0.12}>
+        <ScrollReveal delay={0.05} variant="fade-up">
           <ActivitiesSection />
         </ScrollReveal>
 
         {/* Google Classroom Section */}
-        <ScrollReveal delay={0.14}>
+        <ScrollReveal delay={0.05} variant="fade-up">
           <GoogleClassroomSection />
         </ScrollReveal>
 
-        <ScrollReveal delay={0.16}>
+        <ScrollReveal delay={0.05} variant="fade-up">
           <VideosSection />
         </ScrollReveal>
 
         {/* Resources Section Group */}
-        <ScrollReveal delay={0.18}>
+        <ScrollReveal delay={0.05} variant="fade-up">
           <ResourcesSection />
         </ScrollReveal>
-        <ScrollReveal delay={0.2}>
+        <ScrollReveal delay={0.05} variant="scale-in">
           <FormsSection />
         </ScrollReveal>
 
         {/* About Us Section Group */}
-        <ScrollReveal delay={0.22}>
+        <ScrollReveal delay={0.05} variant="fade-up">
           <AboutUsSection />
         </ScrollReveal>
-        <ScrollReveal delay={0.24}>
+        <ScrollReveal delay={0.05} variant="fade-up">
           <EdTechTeamSection />
         </ScrollReveal>
-        <ScrollReveal delay={0.26}>
+        <ScrollReveal delay={0.05} variant="scale-in">
           <HotlineSection />
         </ScrollReveal>
-        <ScrollReveal delay={0.28}>
+        <ScrollReveal delay={0.05} variant="fade-up">
           <FeedbackSection />
         </ScrollReveal>
       </main>

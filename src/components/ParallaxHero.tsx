@@ -67,20 +67,18 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
           loop
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
+          poster="/edtech_logo.png"
           className="w-full h-full object-cover"
           style={{
             transform: "translateZ(0)",
             backfaceVisibility: "hidden",
           }}
         >
-          <source
-            src="/faulty-terminal-maroon.webm"
-            type="video/webm"
-          />
+          <source src="/faulty-terminal-maroon.webm" type="video/webm" />
         </video>
       </div>
-      
+
       <div className="relative z-20 flex min-h-screen w-full items-center justify-center px-4 py-16 sm:py-20">
         <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 text-center max-w-4xl mx-auto">
           {/* Trust Badge */}
