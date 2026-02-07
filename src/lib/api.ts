@@ -443,3 +443,28 @@ export async function getGoogleClassroomRoles(): Promise<
 
   return rolesWithData;
 }
+
+// Slider Images
+export interface SliderImage {
+  id: string;
+  src: string;
+  alt?: string;
+  display_order: number;
+  status: "active" | "inactive";
+  created_at: string;
+  updated_at: string;
+}
+
+export async function getSliderImages(): Promise<SliderImage[]> {
+  const { data, error } = await supabase
+    .from("slider_images")
+    .select("*")
+    .eq("status", "active")
+    .order("display_order", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching slider images:", error);
+    return [];
+  }
+  return data || [];
+}
