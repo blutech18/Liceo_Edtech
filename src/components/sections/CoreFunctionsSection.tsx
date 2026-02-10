@@ -52,7 +52,7 @@ const CoreFunctionsSection = () => {
     <section
       id="core-functions"
       className="py-20 sm:py-28"
-      style={{ backgroundColor: "#1A1A1A" }}
+      style={{ backgroundColor: "hsl(var(--bg-surface))" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
@@ -65,13 +65,13 @@ const CoreFunctionsSection = () => {
           </p>
           <h2
             className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 title-glow"
-            style={{ color: "#FFFFFF" }}
+            style={{ color: "hsl(var(--text-main))" }}
           >
             Core Functions
           </h2>
           <p
             className="text-base sm:text-lg max-w-2xl mx-auto"
-            style={{ color: "#CCCCCC" }}
+            style={{ color: "hsl(var(--text-muted))" }}
           >
             Driving educational excellence through strategic technology
             integration and comprehensive support services.
@@ -103,7 +103,7 @@ const CoreFunctionsSection = () => {
               <div
                 className="relative p-6 sm:p-8 rounded-xl transition-all duration-300 group-hover:-translate-y-1 h-full"
                 style={{
-                  backgroundColor: "#1A1A1A",
+                  backgroundColor: "hsl(var(--bg-surface))",
                   border: "1px solid rgba(128, 0, 0, 0.5)",
                 }}
               >
@@ -118,7 +118,7 @@ const CoreFunctionsSection = () => {
                 {/* Title */}
                 <h3
                   className="text-lg sm:text-xl font-semibold mb-3"
-                  style={{ color: "#FFFFFF" }}
+                  style={{ color: "hsl(var(--text-main))" }}
                 >
                   {func.title}
                 </h3>
@@ -126,7 +126,7 @@ const CoreFunctionsSection = () => {
                 {/* Description */}
                 <p
                   className="text-sm sm:text-base leading-relaxed"
-                  style={{ color: "#CCCCCC" }}
+                  style={{ color: "hsl(var(--text-muted))" }}
                 >
                   {func.description}
                 </p>

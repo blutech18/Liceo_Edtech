@@ -348,7 +348,7 @@ const ActivitiesSection = () => {
                     <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
                       Trainings Conducted
                     </h3>
-                    <p className="text-xs sm:text-sm text-rose-200/80 font-medium">
+                    <p className="text-xs sm:text-sm text-rose-100 font-medium">
                       {conductedTrainings.length} completed • Click to{" "}
                       {showConducted ? "hide" : "view"}
                     </p>
@@ -474,7 +474,7 @@ const ActivitiesSection = () => {
                             </div>
                           </div>
 
-                          <h3 className="text-center font-bold text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 text-white/90 group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
+                          <h3 className="text-center font-bold text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 text-white group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
                             {training.title}
                           </h3>
                         </div>
@@ -494,7 +494,7 @@ const ActivitiesSection = () => {
                       >
                         <ChevronLeft className="w-5 h-5" />
                       </button>
-                      <span className="text-sm text-white/70">
+                      <span className="text-sm text-white/90">
                         Page {conductedPage + 1} of{" "}
                         {Math.ceil(conductedTrainings.length / 8)}
                       </span>

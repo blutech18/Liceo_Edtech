@@ -23,7 +23,7 @@ const ServicesRolesSection = () => {
     <section
       id="services-roles"
       className="py-20 sm:py-28"
-      style={{ backgroundColor: "#0F0F0F" }}
+      style={{ backgroundColor: "hsl(var(--bg-main))" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
@@ -36,11 +36,14 @@ const ServicesRolesSection = () => {
           </p>
           <h2
             className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 title-glow"
-            style={{ color: "#FFFFFF" }}
+            style={{ color: "hsl(var(--text-main))" }}
           >
             Services & Key Roles
           </h2>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: "#CCCCCC" }}>
+          <p
+            className="text-lg max-w-2xl mx-auto"
+            style={{ color: "hsl(var(--text-muted))" }}
+          >
             Comprehensive technology services delivered by our dedicated team of
             experts.
           </p>
@@ -52,13 +55,13 @@ const ServicesRolesSection = () => {
           <div
             className="p-8 sm:p-10 rounded-2xl animate-fade-up"
             style={{
-              backgroundColor: "#1A1A1A",
+              backgroundColor: "hsl(var(--bg-surface))",
               border: "1px solid #800000",
             }}
           >
             <h3
               className="text-2xl font-bold mb-8 flex items-center gap-3"
-              style={{ color: "#FFFFFF" }}
+              style={{ color: "hsl(var(--text-main))" }}
             >
               <span
                 className="w-2 h-8 rounded-full"
@@ -78,7 +81,9 @@ const ServicesRolesSection = () => {
                     className="w-2 h-2 rounded-full flex-shrink-0"
                     style={{ backgroundColor: "#A01010" }}
                   />
-                  <span style={{ color: "#CCCCCC" }}>{service}</span>
+                  <span style={{ color: "hsl(var(--text-muted))" }}>
+                    {service}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -88,14 +93,14 @@ const ServicesRolesSection = () => {
           <div
             className="p-8 sm:p-10 rounded-2xl animate-fade-up"
             style={{
-              backgroundColor: "#1A1A1A",
+              backgroundColor: "hsl(var(--bg-surface))",
               border: "1px solid #800000",
               animationDelay: "0.1s",
             }}
           >
             <h3
               className="text-2xl font-bold mb-8 flex items-center gap-3"
-              style={{ color: "#FFFFFF" }}
+              style={{ color: "hsl(var(--text-main))" }}
             >
               <span
                 className="w-2 h-8 rounded-full"
@@ -115,7 +120,9 @@ const ServicesRolesSection = () => {
                     className="w-5 h-5 flex-shrink-0"
                     style={{ color: "#A01010" }}
                   />
-                  <span style={{ color: "#CCCCCC" }}>{role}</span>
+                  <span style={{ color: "hsl(var(--text-muted))" }}>
+                    {role}
+                  </span>
                 </li>
               ))}
             </ul>

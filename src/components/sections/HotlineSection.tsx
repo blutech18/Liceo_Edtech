@@ -109,24 +109,27 @@ const HotlineSection = () => {
     <section
       id="hotline"
       className="py-16 sm:py-20 scroll-mt-16"
-      style={{ backgroundColor: "#0F0F0F" }}
+      style={{ backgroundColor: "hsl(var(--bg-main))" }}
     >
       <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="text-center mb-12 animate-fade-up">
           <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <h2
               className="text-2xl sm:text-3xl md:text-4xl font-bold"
-              style={{ color: "#FFFFFF" }}
+              style={{ color: "hsl(var(--text-main))" }}
             >
               {sectionContent.title}
             </h2>
             <span
               className="hidden sm:block text-2xl"
-              style={{ color: "rgba(255,255,255,0.3)" }}
+              style={{ color: "hsl(var(--text-muted))" }}
             >
               |
             </span>
-            <p className="text-base sm:text-lg" style={{ color: "#CCCCCC" }}>
+            <p
+              className="text-base sm:text-lg"
+              style={{ color: "hsl(var(--text-muted))" }}
+            >
               {sectionContent.subtitle}
             </p>
           </div>
@@ -145,7 +148,7 @@ const HotlineSection = () => {
             {sortedCategories.length === 0 ? (
               <div
                 className="text-center py-12"
-                style={{ color: "rgba(255,255,255,0.8)" }}
+                style={{ color: "hsl(var(--text-muted))" }}
               >
                 <p>No hotline categories available at the moment.</p>
               </div>
@@ -161,7 +164,7 @@ const HotlineSection = () => {
                       key={category.id}
                       className="rounded-xl overflow-hidden animate-fade-up transition-all duration-300 hover:-translate-y-1"
                       style={{
-                        backgroundColor: "#1A1A1A",
+                        backgroundColor: "hsl(var(--bg-surface))",
                         border: "1px solid #800000",
                         animationDelay: `${index * 0.1}s`,
                       }}
@@ -251,14 +254,14 @@ const HotlineSection = () => {
                             >
                               <h4
                                 className="font-semibold"
-                                style={{ color: "#FFFFFF" }}
+                                style={{ color: "hsl(var(--text-main))" }}
                               >
                                 {contact.name}
                               </h4>
                               {contact.campus && (
                                 <p
                                   className="text-sm mt-0.5 flex items-center gap-1"
-                                  style={{ color: "#CCCCCC" }}
+                                  style={{ color: "hsl(var(--text-muted))" }}
                                 >
                                   <MapPin className="w-3 h-3" />
                                   {contact.campus}
@@ -288,7 +291,7 @@ const HotlineSection = () => {
               <div
                 className="mt-12 rounded-xl overflow-hidden animate-fade-up"
                 style={{
-                  backgroundColor: "#1A1A1A",
+                  backgroundColor: "hsl(var(--bg-surface))",
                   border: "1px solid #800000",
                   animationDelay: "0.4s",
                 }}
@@ -299,7 +302,7 @@ const HotlineSection = () => {
                 >
                   <h3
                     className="font-bold flex items-center gap-3"
-                    style={{ color: "#FFFFFF" }}
+                    style={{ color: "hsl(var(--text-main))" }}
                   >
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center"
@@ -315,13 +318,13 @@ const HotlineSection = () => {
                     <div>
                       <h4
                         className="font-semibold"
-                        style={{ color: "#FFFFFF" }}
+                        style={{ color: "hsl(var(--text-main))" }}
                       >
                         {coordinator.name}
                       </h4>
                       <p
                         className="text-sm mt-0.5"
-                        style={{ color: "#CCCCCC" }}
+                        style={{ color: "hsl(var(--text-muted))" }}
                       >
                         {coordinator.title}
                       </p>

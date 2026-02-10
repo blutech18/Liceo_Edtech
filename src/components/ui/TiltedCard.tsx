@@ -20,8 +20,8 @@ interface TiltedCardProps {
 }
 
 const springValues: SpringOptions = {
-  damping: 30,
-  stiffness: 100,
+  damping: 40,
+  stiffness: 60,
   mass: 2,
 };
 
@@ -34,7 +34,7 @@ export default function TiltedCard({
   imageHeight = "300px",
   imageWidth = "300px",
   scaleOnHover = 1.05,
-  rotateAmplitude = 12,
+  rotateAmplitude = 6,
   showMobileWarning = false,
   showTooltip = false,
   overlayContent = null,

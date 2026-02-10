@@ -96,9 +96,69 @@
   }
 
   .dark {
-    /* Dark mode uses same values - this theme is already dark */
     --background: var(--bg-main);
     --foreground: var(--text-main);
+  }
+
+  .light {
+    --bg-main: 0 0% 98%; /* #FAFAFA */
+    --bg-surface: 0 0% 100%; /* #FFFFFF */
+    --text-main: 0 0% 10%; /* #1A1A1A */
+    --text-muted: 0 0% 40%; /* #666666 */
+
+    --background: var(--bg-main);
+    --foreground: var(--text-main);
+
+    --card: var(--bg-surface);
+    --card-foreground: var(--text-main);
+
+    --popover: var(--bg-surface);
+    --popover-foreground: var(--text-main);
+
+    --primary: 0 82% 34%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 0 72% 45%;
+    --primary-dark: 0 100% 25%;
+
+    --secondary: 0 0% 93%;
+    --secondary-foreground: 0 0% 10%;
+
+    --muted: 0 0% 93%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 0 82% 34%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 85%;
+    --input: 0 0% 90%;
+    --ring: 0 82% 34%;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md:
+      0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg:
+      0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    --shadow-xl:
+      0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
+    --shadow-primary: 0 4px 14px 0 hsla(0, 82%, 34%, 0.2);
+    --shadow-hover: 0 10px 40px -10px rgba(160, 16, 16, 0.25);
+    --glow-action: 0 0 15px rgba(160, 16, 16, 0.2);
+    --glow-title:
+      0 0 30px rgba(160, 16, 16, 0.3), 0 0 60px rgba(160, 16, 16, 0.15);
+
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(0 82% 34%) 0%,
+      hsl(0 100% 25%) 100%
+    );
+    --gradient-card: linear-gradient(
+      145deg,
+      hsl(0 0% 100%) 0%,
+      hsl(0 0% 97%) 100%
+    );
   }
 }
 
@@ -185,8 +245,8 @@
 
   .card-glass {
     @apply backdrop-blur-sm rounded-xl;
-    background-color: hsla(0, 0%, 10%, 0.8);
-    border: 1px solid hsla(0, 100%, 25%, 0.3);
+    background-color: hsl(var(--bg-surface) / 0.8);
+    border: 1px solid hsl(var(--border));
     box-shadow: var(--shadow-lg);
   }
 
@@ -359,17 +419,26 @@
   @media (prefers-reduced-motion: no-preference) {
     .animate-fade-up {
       animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-play-state: paused;
       opacity: 0;
     }
 
     .animate-fade-in {
       animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-play-state: paused;
       opacity: 0;
     }
 
     .animate-scale-in {
       animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-play-state: paused;
       opacity: 0;
+    }
+
+    .animate-fade-up.is-visible,
+    .animate-fade-in.is-visible,
+    .animate-scale-in.is-visible {
+      animation-play-state: running;
     }
   }
 

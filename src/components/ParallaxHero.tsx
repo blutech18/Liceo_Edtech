@@ -1,7 +1,7 @@
 import { ExternalLink } from "lucide-react";
-import { useEffect, useRef, useState, useCallback } from "react";
-import { getHeroSliderImages, type SliderImage } from "@/lib/api";
-import TiltedCard from "@/components/ui/TiltedCard";
+import { useEffect, useRef, useState } from "react";
+import { getHeroImage } from "@/lib/api";
+import { useTheme } from "@/contexts/ThemeContext";
 
 import teamCoordinator from "@/assets/team-coordinator.jpg";
 import teamDirector from "@/assets/team-director.jpg";
@@ -25,6 +25,13 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
     "Empowering education through innovative technology solutions";
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [heroImage, setHeroImage] = useState<string | null>(null);
+  const { theme } = useTheme();
+
+  // Fetch hero split image from section_content
+  useEffect(() => {
+    getHeroImage().then(setHeroImage);
+  }, []);
 
   // Control video playback based on visibility
   useEffect(() => {
@@ -60,10 +67,8 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
         charIndex++;
       } else {
         clearInterval(typeTimer);
-        // Keep cursor blinking for a moment, then restart
         setTimeout(() => {
           setShowCursor(false);
-          // Wait a bit then restart the typewriter
           setTimeout(() => {
             setDisplayedText("");
             setShowCursor(true);
@@ -84,86 +89,6 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
     return () => clearInterval(blinkTimer);
   }, [showCursor]);
 
-  // Carousel state
-  const [carouselImages, setCarouselImages] = useState<SliderImage[]>([]);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
-  const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  // Fetch carousel images (only hero-flagged ones)
-  useEffect(() => {
-    async function fetchImages() {
-      const images = await getHeroSliderImages();
-      setCarouselImages(images);
-    }
-    fetchImages();
-  }, []);
-
-  // Auto-advance carousel
-  const startAutoplay = useCallback(() => {
-    if (autoplayRef.current) clearInterval(autoplayRef.current);
-    autoplayRef.current = setInterval(() => {
-      if (carouselImages.length > 0) {
-        setIsTransitioning(true);
-        setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
-      }
-    }, 4000);
-  }, [carouselImages.length]);
-
-  useEffect(() => {
-    if (carouselImages.length > 1) {
-      startAutoplay();
-    }
-    return () => {
-      if (autoplayRef.current) clearInterval(autoplayRef.current);
-    };
-  }, [carouselImages.length, startAutoplay]);
-
-  // Clear transitioning flag
-  useEffect(() => {
-    if (isTransitioning) {
-      const timer = setTimeout(() => setIsTransitioning(false), 600);
-      return () => clearTimeout(timer);
-    }
-  }, [isTransitioning, currentSlide]);
-
-  const goToSlide = (index: number) => {
-    setIsTransitioning(true);
-    setCurrentSlide(index);
-    startAutoplay(); // Reset autoplay timer
-  };
-
-  const nextSlide = () => {
-    if (carouselImages.length === 0) return;
-    goToSlide((currentSlide + 1) % carouselImages.length);
-  };
-
-  const prevSlide = () => {
-    if (carouselImages.length === 0) return;
-    goToSlide(
-      (currentSlide - 1 + carouselImages.length) % carouselImages.length,
-    );
-  };
-
-  // Swipe handlers
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    const diff = touchStartX.current - touchEndX.current;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) nextSlide();
-      else prevSlide();
-    }
-  };
-
   const handleTrainingsClick = () => {
     const trainingsSection = document.getElementById("trainings");
     if (trainingsSection) {
@@ -180,44 +105,97 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
       ref={sectionRef}
       id="home"
       className="relative min-h-screen w-full overflow-hidden"
-      style={{ backgroundColor: "#0F0F0F" }}
+      style={{ backgroundColor: theme === "dark" ? "#0F0F0F" : "#FFFFFF" }}
     >
-      {/* Video Background */}
+      {/* Background layers */}
       <div className="absolute inset-0" style={{ zIndex: 0 }}>
+        {/* Video background — maroon on black (dark), maroon on white (light via CSS invert) */}
         <video
           ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          preload="metadata"
-          poster="/edtech_logo.png"
-          className="w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
           style={{
-            transform: "translateZ(0)",
-            backfaceVisibility: "hidden",
+            filter:
+              theme === "dark"
+                ? "none"
+                : "invert(1) hue-rotate(180deg) saturate(3) brightness(0.6)",
           }}
         >
           <source src="/faulty-terminal-maroon.webm" type="video/webm" />
         </video>
-        {/* Dark overlay for text readability */}
+        {/* Heavy dark overlay so text is readable */}
         <div
           className="absolute inset-0"
           style={{
-            background:
-              "linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.5) 100%)",
+            background: heroImage
+              ? theme === "dark"
+                ? "linear-gradient(to right, rgba(15,15,15,0.85) 0%, rgba(15,15,15,0.75) 45%, rgba(15,15,15,0.4) 55%, transparent 65%)"
+                : "linear-gradient(to right, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.75) 45%, rgba(255,255,255,0.4) 55%, transparent 65%)"
+              : theme === "dark"
+                ? "linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.2) 100%)"
+                : "linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.2) 100%)",
           }}
         />
       </div>
 
-      {/* Main content - split layout */}
-      <div className="relative z-20 flex min-h-screen w-full items-center px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-16">
+      {/* Right-side hero image — diagonal slant edge */}
+      {heroImage && (
         <div
-          className={`max-w-7xl mx-auto w-full grid grid-cols-1 ${carouselImages.length > 0 ? "lg:grid-cols-2" : ""} gap-10 lg:gap-16 items-center`}
+          className="absolute top-0 right-0 bottom-0 hidden lg:block"
+          style={{
+            width: "42%",
+            zIndex: 1,
+            clipPath: "polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          }}
         >
-          {/* LEFT COLUMN - Content */}
+          <img
+            src={heroImage}
+            alt="Liceo EdTech"
+            className="w-full h-full object-cover"
+            loading="eager"
+          />
+          {/* Subtle gradient along the diagonal edge */}
           <div
-            className={`flex flex-col gap-6 sm:gap-7 order-1 ${carouselImages.length > 0 ? "text-center lg:text-left" : "text-center max-w-3xl mx-auto"}`}
+            className="absolute inset-0"
+            style={{
+              background:
+                theme === "dark"
+                  ? "linear-gradient(to right, rgba(15,15,15,0.6) 0%, rgba(15,15,15,0.15) 25%, transparent 45%)"
+                  : "linear-gradient(to right, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.15) 25%, transparent 45%)",
+            }}
+          />
+        </div>
+      )}
+
+      {/* Mobile hero image — shown below content */}
+      {heroImage && (
+        <div className="absolute inset-0 lg:hidden" style={{ zIndex: 1 }}>
+          <img
+            src={heroImage}
+            alt="Liceo EdTech"
+            className="w-full h-full object-cover"
+            loading="eager"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                theme === "dark"
+                  ? "linear-gradient(180deg, rgba(15,15,15,0.9) 0%, rgba(15,15,15,0.7) 40%, rgba(15,15,15,0.85) 100%)"
+                  : "linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.75) 40%, rgba(255,255,255,0.88) 100%)",
+            }}
+          />
+        </div>
+      )}
+
+      {/* Main content — left-aligned text */}
+      <div className="relative z-20 flex min-h-screen w-full items-center px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-16">
+        <div className="max-w-7xl mx-auto w-full">
+          <div
+            className={`flex flex-col gap-6 sm:gap-7 ${heroImage ? "text-center lg:text-left max-w-2xl mx-auto lg:mx-0 lg:max-w-[45%]" : "text-center max-w-3xl mx-auto"}`}
           >
             {/* Main Title */}
             <div className="space-y-2">
@@ -225,7 +203,11 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.15]"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
-                <span style={{ color: "#FFFFFF" }}>Liceo</span>{" "}
+                <span
+                  style={{ color: theme === "dark" ? "#FFFFFF" : "#1A1A1A" }}
+                >
+                  Liceo
+                </span>{" "}
                 <span
                   style={{
                     background:
@@ -249,14 +231,23 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                 >
                   Technology
                 </span>{" "}
-                <span style={{ color: "#FFFFFF" }}>Center</span>
+                <span
+                  style={{ color: theme === "dark" ? "#FFFFFF" : "#1A1A1A" }}
+                >
+                  Center
+                </span>
               </h1>
             </div>
 
             {/* Subtitle — Typewriter */}
             <p
-              className={`text-base sm:text-lg md:text-xl max-w-xl mx-auto leading-relaxed font-light min-h-[1.75em] ${carouselImages.length > 0 ? "lg:mx-0" : ""}`}
-              style={{ color: "rgba(255, 255, 255, 0.65)" }}
+              className={`text-base sm:text-lg md:text-xl max-w-xl leading-relaxed font-light min-h-[1.75em] ${heroImage ? "mx-auto lg:mx-0" : "mx-auto"}`}
+              style={{
+                color:
+                  theme === "dark"
+                    ? "rgba(255, 255, 255, 0.65)"
+                    : "rgba(0, 0, 0, 0.6)",
+              }}
             >
               {displayedText}
               <span
@@ -271,7 +262,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
 
             {/* CTA Buttons */}
             <div
-              className={`grid grid-cols-2 sm:flex sm:flex-row items-center gap-3 sm:gap-4 ${carouselImages.length > 0 ? "lg:items-start" : "justify-center"}`}
+              className={`grid grid-cols-2 sm:flex sm:flex-row items-center gap-3 sm:gap-4 ${heroImage ? "lg:items-start" : "justify-center"}`}
             >
               <button
                 onClick={handleTrainingsClick}
@@ -289,9 +280,15 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                 onClick={handleAccessFormClick}
                 className="px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl font-semibold text-sm sm:text-base flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 hover:border-[rgba(160,16,16,0.6)]"
                 style={{
-                  backgroundColor: "rgba(255, 255, 255, 0.04)",
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
-                  color: "#FFFFFF",
+                  backgroundColor:
+                    theme === "dark"
+                      ? "rgba(255, 255, 255, 0.04)"
+                      : "rgba(0, 0, 0, 0.04)",
+                  border:
+                    theme === "dark"
+                      ? "1px solid rgba(255, 255, 255, 0.12)"
+                      : "1px solid rgba(0, 0, 0, 0.15)",
+                  color: theme === "dark" ? "#FFFFFF" : "#1A1A1A",
                   backdropFilter: "blur(8px)",
                 }}
               >
@@ -299,9 +296,9 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
               </button>
             </div>
 
-            {/* Social Proof - visible on desktop only (inside left column) */}
+            {/* Social Proof */}
             <div
-              className={`hidden lg:flex flex-col sm:flex-row items-center gap-4 ${carouselImages.length > 0 ? "lg:items-start lg:justify-start" : "justify-center"}`}
+              className={`flex flex-col sm:flex-row items-center gap-4 ${heroImage ? "lg:items-start lg:justify-start" : "justify-center"}`}
             >
               <div className="flex -space-x-3">
                 {avatars.map((src, i) => (
@@ -309,7 +306,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                     key={i}
                     className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2"
                     style={{
-                      borderColor: "#0F0F0F",
+                      borderColor: theme === "dark" ? "#0F0F0F" : "#FFFFFF",
                       boxShadow: "0 0 0 1px rgba(160, 16, 16, 0.3)",
                     }}
                   >
@@ -324,7 +321,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                 <div
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs font-semibold border-2"
                   style={{
-                    borderColor: "#0F0F0F",
+                    borderColor: theme === "dark" ? "#0F0F0F" : "#FFFFFF",
                     backgroundColor: "rgba(160, 16, 16, 0.25)",
                     color: "#FF6B6B",
                     boxShadow: "0 0 0 1px rgba(160, 16, 16, 0.3)",
@@ -336,141 +333,27 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
               <div className="flex flex-col">
                 <span
                   className="text-sm font-semibold"
-                  style={{ color: "rgba(255,255,255,0.9)" }}
+                  style={{
+                    color:
+                      theme === "dark"
+                        ? "rgba(255,255,255,0.9)"
+                        : "rgba(0,0,0,0.85)",
+                  }}
                 >
                   Trusted by Educators
                 </span>
                 <span
                   className="text-xs"
-                  style={{ color: "rgba(255,255,255,0.45)" }}
+                  style={{
+                    color:
+                      theme === "dark"
+                        ? "rgba(255,255,255,0.45)"
+                        : "rgba(0,0,0,0.5)",
+                  }}
                 >
                   Serving Liceo faculty & staff
                 </span>
               </div>
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN / MOBILE: Image Carousel Card (only when hero images exist) */}
-          {carouselImages.length > 0 && (
-            <div className="relative order-2 flex justify-center lg:justify-end">
-              {/* TiltedCard carousel wrapper — matches button width on mobile */}
-              <div
-                className="relative w-full lg:max-w-[860px]"
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-              >
-                {/* Desktop carousel */}
-                <div className="hidden lg:block">
-                  <TiltedCard
-                    imageSrc={carouselImages[currentSlide]?.src}
-                    altText={
-                      carouselImages[currentSlide]?.alt || "EdTech Center"
-                    }
-                    containerHeight="480px"
-                    containerWidth="100%"
-                    imageHeight="480px"
-                    imageWidth="100%"
-                    rotateAmplitude={10}
-                    scaleOnHover={1.04}
-                    showMobileWarning={false}
-                    showTooltip={false}
-                    borderRadius="1.25rem"
-                    captionText=""
-                  />
-                </div>
-                {/* Mobile / Tablet carousel (reduced size, matches button width) */}
-                <div className="block lg:hidden">
-                  <TiltedCard
-                    imageSrc={carouselImages[currentSlide]?.src}
-                    altText={
-                      carouselImages[currentSlide]?.alt || "EdTech Center"
-                    }
-                    containerHeight="180px"
-                    containerWidth="100%"
-                    imageHeight="180px"
-                    imageWidth="100%"
-                    rotateAmplitude={8}
-                    scaleOnHover={1.02}
-                    showMobileWarning={false}
-                    showTooltip={false}
-                    borderRadius="1rem"
-                    captionText=""
-                  />
-                </div>
-
-                {/* Dot indicators */}
-                {carouselImages.length > 1 && (
-                  <div className="flex items-center justify-center gap-2 mt-4">
-                    {carouselImages.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => goToSlide(index)}
-                        className="transition-all duration-300 rounded-full"
-                        style={{
-                          width: index === currentSlide ? "24px" : "8px",
-                          height: "8px",
-                          backgroundColor:
-                            index === currentSlide
-                              ? "#FFFFFF"
-                              : "rgba(255,255,255,0.4)",
-                        }}
-                        aria-label={`Go to slide ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Social Proof - visible on mobile only (below carousel) */}
-          <div
-            className={`flex lg:hidden flex-col sm:flex-row items-center gap-4 justify-center order-3`}
-          >
-            <div className="flex -space-x-3">
-              {avatars.map((src, i) => (
-                <div
-                  key={i}
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2"
-                  style={{
-                    borderColor: "#0F0F0F",
-                    boxShadow: "0 0 0 1px rgba(160, 16, 16, 0.3)",
-                  }}
-                >
-                  <img
-                    src={src}
-                    alt="Team member"
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
-              <div
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs font-semibold border-2"
-                style={{
-                  borderColor: "#0F0F0F",
-                  backgroundColor: "rgba(160, 16, 16, 0.25)",
-                  color: "#FF6B6B",
-                  boxShadow: "0 0 0 1px rgba(160, 16, 16, 0.3)",
-                }}
-              >
-                +10
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <span
-                className="text-sm font-semibold"
-                style={{ color: "rgba(255,255,255,0.9)" }}
-              >
-                Trusted by Educators
-              </span>
-              <span
-                className="text-xs"
-                style={{ color: "rgba(255,255,255,0.45)" }}
-              >
-                Serving Liceo faculty & staff
-              </span>
             </div>
           </div>
         </div>

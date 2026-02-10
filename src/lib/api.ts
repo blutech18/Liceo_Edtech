@@ -472,6 +472,19 @@ export async function getSliderImages(): Promise<SliderImage[]> {
   return data || [];
 }
 
+export async function getHeroImage(): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("section_content")
+    .select("image_url")
+    .eq("section_key", "hero")
+    .single();
+
+  if (error || !data?.image_url) {
+    return null;
+  }
+  return data.image_url;
+}
+
 export async function getHeroSliderImages(): Promise<SliderImage[]> {
   const { data, error } = await supabase
     .from("slider_images")

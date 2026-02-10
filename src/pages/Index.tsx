@@ -15,7 +15,6 @@ import AboutUsSection from "@/components/sections/AboutUsSection";
 import FormsSection from "@/components/sections/FormsSection";
 import Footer from "@/components/Footer";
 import { getSectionContent, SectionContent, getSliderImages } from "@/lib/api";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
 
 const defaultHeroContent: SectionContent = {
@@ -62,34 +61,41 @@ const Index = () => {
   return (
     <div
       className="min-h-screen flex flex-col"
-      style={{ backgroundColor: "#0F0F0F" }}
+      style={{ backgroundColor: "hsl(var(--bg-main))" }}
     >
       <Header />
       <main className="flex-1">
         {/* Home Section with Beams Background */}
-        <ScrollReveal>
-          <ParallaxHero
-            title={heroContent.title}
-            subtitle={heroContent.subtitle}
-          />
-        </ScrollReveal>
+        <ParallaxHero
+          title={heroContent.title}
+          subtitle={heroContent.subtitle}
+        />
 
         {/* About & Goals Section */}
-        <ScrollReveal delay={0.05} variant="fade-up">
-          <AboutGoalsSection />
-        </ScrollReveal>
+        <AboutGoalsSection />
 
         {/* Core Functions Section */}
-        <ScrollReveal delay={0.08} variant="fade-up">
-          <CoreFunctionsSection />
-        </ScrollReveal>
+        <CoreFunctionsSection />
 
         {/* Services & Roles Section */}
-        <ScrollReveal delay={0.1} variant="scale-in">
-          <ServicesRolesSection />
-        </ScrollReveal>
+        <ServicesRolesSection />
 
-        {/* Infinite Photo Sliders - below Services & Roles */}
+        {/* Trainings Section - card carousel + conducted trainings */}
+        <ActivitiesSection />
+
+        {/* Google Classroom Section */}
+        <GoogleClassroomSection />
+
+        <VideosSection />
+
+        {/* Resources Section Group */}
+        <ResourcesSection />
+        <FormsSection />
+
+        {/* About Us Section Group */}
+        <AboutUsSection />
+
+        {/* Infinite Photo Sliders - above EdTech Team */}
         {isLoadingSlider ? (
           <div className="py-4 md:py-8 space-y-4 md:space-y-6">
             {[0, 1].map((i) => (
@@ -104,7 +110,7 @@ const Index = () => {
                     style={{
                       width: "clamp(220px, 32vw, 350px)",
                       height: "clamp(160px, 24vw, 260px)",
-                      backgroundColor: "#1A1A1A",
+                      backgroundColor: "hsl(var(--bg-surface))",
                       border: "1px solid rgba(128, 0, 0, 0.3)",
                     }}
                   />
@@ -113,59 +119,28 @@ const Index = () => {
             ))}
           </div>
         ) : sliderPhotos.length > 0 ? (
-          <ScrollReveal variant="fade-in">
-            <div className="section-dark py-4 md:py-8 relative z-10 space-y-4 md:space-y-6">
-              {/* First slider - moves left */}
-              <InfiniteSlider
-                images={parallaxImages}
-                speed={40}
-                direction="left"
-              />
-              {/* Second slider - moves right (opposite direction) */}
-              <InfiniteSlider
-                images={sliderImages2}
-                speed={35}
-                direction="right"
-              />
-            </div>
-          </ScrollReveal>
+          <div
+            className="py-4 md:py-8 relative z-10 space-y-4 md:space-y-6"
+            style={{ backgroundColor: "hsl(var(--bg-surface))" }}
+          >
+            {/* First slider - moves left */}
+            <InfiniteSlider
+              images={parallaxImages}
+              speed={40}
+              direction="left"
+            />
+            {/* Second slider - moves right (opposite direction) */}
+            <InfiniteSlider
+              images={sliderImages2}
+              speed={35}
+              direction="right"
+            />
+          </div>
         ) : null}
 
-        {/* Trainings Section - card carousel + conducted trainings */}
-        <ScrollReveal delay={0.05} variant="fade-up">
-          <ActivitiesSection />
-        </ScrollReveal>
-
-        {/* Google Classroom Section */}
-        <ScrollReveal delay={0.05} variant="fade-up">
-          <GoogleClassroomSection />
-        </ScrollReveal>
-
-        <ScrollReveal delay={0.05} variant="fade-up">
-          <VideosSection />
-        </ScrollReveal>
-
-        {/* Resources Section Group */}
-        <ScrollReveal delay={0.05} variant="fade-up">
-          <ResourcesSection />
-        </ScrollReveal>
-        <ScrollReveal delay={0.05} variant="scale-in">
-          <FormsSection />
-        </ScrollReveal>
-
-        {/* About Us Section Group */}
-        <ScrollReveal delay={0.05} variant="fade-up">
-          <AboutUsSection />
-        </ScrollReveal>
-        <ScrollReveal delay={0.05} variant="fade-up">
-          <EdTechTeamSection />
-        </ScrollReveal>
-        <ScrollReveal delay={0.05} variant="scale-in">
-          <HotlineSection />
-        </ScrollReveal>
-        <ScrollReveal delay={0.05} variant="fade-up">
-          <FeedbackSection />
-        </ScrollReveal>
+        <EdTechTeamSection />
+        <HotlineSection />
+        <FeedbackSection />
       </main>
       <Footer />
     </div>

@@ -69,7 +69,9 @@ const EdTechTeamSection = () => {
             <h2 className="section-title text-3xl sm:text-4xl font-bold">
               {sectionContent.title}
             </h2>
-            <span className="hidden sm:block text-2xl text-white/30">|</span>
+            <span className="hidden sm:block text-2xl text-muted-foreground/30">
+              |
+            </span>
             <p className="section-subtitle text-base sm:text-lg">
               {sectionContent.subtitle}
             </p>
@@ -78,7 +80,7 @@ const EdTechTeamSection = () => {
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-white" />
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : teamMembers.length > 0 ? (
           <div className="space-y-16">
@@ -101,7 +103,7 @@ const EdTechTeamSection = () => {
             {specialists.length > 0 && (
               <div>
                 <div className="text-center mb-8">
-                  <h3 className="text-white text-xl sm:text-2xl font-bold animate-fade-up">
+                  <h3 className="text-foreground text-xl sm:text-2xl font-bold animate-fade-up">
                     E-Learning Specialists
                   </h3>
                   <div className="w-16 h-0.5 bg-primary mx-auto mt-3" />
@@ -130,7 +132,7 @@ const EdTechTeamSection = () => {
             {(coordinator || technicalStaff.length > 0) && (
               <div>
                 <div className="text-center mb-8">
-                  <h3 className="text-white text-xl sm:text-2xl font-bold animate-fade-up">
+                  <h3 className="text-foreground text-xl sm:text-2xl font-bold animate-fade-up">
                     E-Learning Technical Staff
                   </h3>
                   <div className="w-16 h-0.5 bg-primary mx-auto mt-3" />
@@ -183,7 +185,7 @@ const EdTechTeamSection = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-white/70">
+            <p className="text-muted-foreground">
               No team members available at the moment.
             </p>
           </div>
