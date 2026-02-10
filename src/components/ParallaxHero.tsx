@@ -119,24 +119,26 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
           className="absolute inset-0 w-full h-full object-cover"
           style={{
             filter:
-              theme === "dark"
-                ? "none"
-                : "invert(1) hue-rotate(180deg) saturate(3) brightness(0.6)",
+              "saturate(1.6) hue-rotate(-8deg) brightness(0.85) contrast(1.15)",
           }}
         >
           <source src="/faulty-terminal-maroon.webm" type="video/webm" />
         </video>
+        {/* Maroon color wash to keep tiles maroon in both themes */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundColor: "rgba(128, 0, 20, 0.22)",
+            mixBlendMode: "multiply",
+          }}
+        />
         {/* Heavy dark overlay so text is readable */}
         <div
           className="absolute inset-0"
           style={{
             background: heroImage
-              ? theme === "dark"
-                ? "linear-gradient(to right, rgba(15,15,15,0.85) 0%, rgba(15,15,15,0.75) 45%, rgba(15,15,15,0.4) 55%, transparent 65%)"
-                : "linear-gradient(to right, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.75) 45%, rgba(255,255,255,0.4) 55%, transparent 65%)"
-              : theme === "dark"
-                ? "linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.2) 100%)"
-                : "linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.2) 100%)",
+              ? "linear-gradient(to right, rgba(15,15,15,0.85) 0%, rgba(15,15,15,0.75) 45%, rgba(15,15,15,0.4) 55%, transparent 65%)"
+              : "linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.2) 100%)",
           }}
         />
       </div>
@@ -162,9 +164,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
             className="absolute inset-0"
             style={{
               background:
-                theme === "dark"
-                  ? "linear-gradient(to right, rgba(15,15,15,0.6) 0%, rgba(15,15,15,0.15) 25%, transparent 45%)"
-                  : "linear-gradient(to right, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.15) 25%, transparent 45%)",
+                "linear-gradient(to right, rgba(15,15,15,0.6) 0%, rgba(15,15,15,0.15) 25%, transparent 45%)",
             }}
           />
         </div>
@@ -183,9 +183,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
             className="absolute inset-0"
             style={{
               background:
-                theme === "dark"
-                  ? "linear-gradient(180deg, rgba(15,15,15,0.9) 0%, rgba(15,15,15,0.7) 40%, rgba(15,15,15,0.85) 100%)"
-                  : "linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.75) 40%, rgba(255,255,255,0.88) 100%)",
+                "linear-gradient(180deg, rgba(15,15,15,0.9) 0%, rgba(15,15,15,0.7) 40%, rgba(15,15,15,0.85) 100%)",
             }}
           />
         </div>
@@ -203,11 +201,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.15]"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
-                <span
-                  style={{ color: theme === "dark" ? "#FFFFFF" : "#1A1A1A" }}
-                >
-                  Liceo
-                </span>{" "}
+                <span style={{ color: "#FFFFFF" }}>Liceo</span>{" "}
                 <span
                   style={{
                     background:
@@ -231,11 +225,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                 >
                   Technology
                 </span>{" "}
-                <span
-                  style={{ color: theme === "dark" ? "#FFFFFF" : "#1A1A1A" }}
-                >
-                  Center
-                </span>
+                <span style={{ color: "#FFFFFF" }}>Center</span>
               </h1>
             </div>
 
@@ -243,10 +233,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
             <p
               className={`text-base sm:text-lg md:text-xl max-w-xl leading-relaxed font-light min-h-[1.75em] ${heroImage ? "mx-auto lg:mx-0" : "mx-auto"}`}
               style={{
-                color:
-                  theme === "dark"
-                    ? "rgba(255, 255, 255, 0.65)"
-                    : "rgba(0, 0, 0, 0.6)",
+                color: "rgba(255, 255, 255, 0.65)",
               }}
             >
               {displayedText}
@@ -280,15 +267,9 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                 onClick={handleAccessFormClick}
                 className="px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl font-semibold text-sm sm:text-base flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 hover:border-[rgba(160,16,16,0.6)]"
                 style={{
-                  backgroundColor:
-                    theme === "dark"
-                      ? "rgba(255, 255, 255, 0.04)"
-                      : "rgba(0, 0, 0, 0.04)",
-                  border:
-                    theme === "dark"
-                      ? "1px solid rgba(255, 255, 255, 0.12)"
-                      : "1px solid rgba(0, 0, 0, 0.15)",
-                  color: theme === "dark" ? "#FFFFFF" : "#1A1A1A",
+                  backgroundColor: "rgba(255, 255, 255, 0.04)",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  color: "#FFFFFF",
                   backdropFilter: "blur(8px)",
                 }}
               >
@@ -306,7 +287,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                     key={i}
                     className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2"
                     style={{
-                      borderColor: theme === "dark" ? "#0F0F0F" : "#FFFFFF",
+                      borderColor: "#0F0F0F",
                       boxShadow: "0 0 0 1px rgba(160, 16, 16, 0.3)",
                     }}
                   >
@@ -321,7 +302,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                 <div
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs font-semibold border-2"
                   style={{
-                    borderColor: theme === "dark" ? "#0F0F0F" : "#FFFFFF",
+                    borderColor: "#0F0F0F",
                     backgroundColor: "rgba(160, 16, 16, 0.25)",
                     color: "#FF6B6B",
                     boxShadow: "0 0 0 1px rgba(160, 16, 16, 0.3)",
@@ -334,10 +315,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                 <span
                   className="text-sm font-semibold"
                   style={{
-                    color:
-                      theme === "dark"
-                        ? "rgba(255,255,255,0.9)"
-                        : "rgba(0,0,0,0.85)",
+                    color: "rgba(255,255,255,0.9)",
                   }}
                 >
                   Trusted by Educators
@@ -345,10 +323,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
                 <span
                   className="text-xs"
                   style={{
-                    color:
-                      theme === "dark"
-                        ? "rgba(255,255,255,0.45)"
-                        : "rgba(0,0,0,0.5)",
+                    color: "rgba(255,255,255,0.45)",
                   }}
                 >
                   Serving Liceo faculty & staff

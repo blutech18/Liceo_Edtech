@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   Calendar,
   Clock,
@@ -26,6 +27,7 @@ const defaultContent: SectionContent = {
 };
 
 const TrainingsSection = () => {
+  const { theme } = useTheme();
   const [upcomingTrainings, setUpcomingTrainings] = useState<Training[]>([]);
   const [conductedTrainings, setConductedTrainings] = useState<Training[]>([]);
   const [loading, setLoading] = useState(true);
@@ -111,28 +113,43 @@ const TrainingsSection = () => {
                   className="relative flex items-center justify-between px-6 py-4 rounded-2xl border-2 transition-all duration-300 group-hover:shadow-lg group-active:scale-[0.99]"
                   style={{
                     background:
-                      "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
-                    borderColor: "rgba(99, 102, 241, 0.4)",
+                      theme === "dark"
+                        ? "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)"
+                        : "linear-gradient(135deg, #A01010 0%, #800000 100%)",
+                    borderColor:
+                      theme === "dark"
+                        ? "rgba(99, 102, 241, 0.4)"
+                        : "rgba(128, 0, 0, 0.3)",
                     boxShadow:
-                      "0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+                      theme === "dark"
+                        ? "0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)"
+                        : "0 4px 20px rgba(128, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor =
-                      "rgba(99, 102, 241, 0.7)";
+                      theme === "dark"
+                        ? "rgba(99, 102, 241, 0.7)"
+                        : "rgba(160, 16, 16, 0.8)";
                     e.currentTarget.style.boxShadow =
-                      "0 8px 30px rgba(99, 102, 241, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)";
+                      theme === "dark"
+                        ? "0 8px 30px rgba(99, 102, 241, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)"
+                        : "0 8px 30px rgba(128, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor =
-                      "rgba(99, 102, 241, 0.4)";
+                      theme === "dark"
+                        ? "rgba(99, 102, 241, 0.4)"
+                        : "rgba(128, 0, 0, 0.3)";
                     e.currentTarget.style.boxShadow =
-                      "0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)";
+                      theme === "dark"
+                        ? "0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)"
+                        : "0 4px 20px rgba(128, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1)";
                   }}
                 >
                   {/* Left side - Icon and Text */}
                   <div className="flex items-center gap-4">
                     {/* Icon container */}
-                    <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
+                    <div className={`flex items-center justify-center w-12 h-12 rounded-xl shadow-lg ${theme === "dark" ? "bg-gradient-to-br from-indigo-500 to-purple-600" : "bg-white/10 checkbox-border"}`}>
                       <svg
                         className="w-6 h-6 text-white"
                         fill="none"
@@ -150,10 +167,10 @@ const TrainingsSection = () => {
 
                     {/* Text content */}
                     <div className="text-left">
-                      <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                      <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
                         Trainings Conducted
                       </h3>
-                      <p className="text-sm text-indigo-300/80 font-medium">
+                      <p className={`text-sm font-medium ${theme === "dark" ? "text-indigo-300/80" : "text-white/80"}`}>
                         Click to {showConducted ? "collapse" : "expand"} •{" "}
                         {conductedTrainings.length} total
                       </p>
@@ -163,7 +180,7 @@ const TrainingsSection = () => {
                   {/* Right side - Count and Chevron */}
                   <div className="flex items-center gap-4">
                     {/* Count badge */}
-                    <div className="hidden sm:flex items-center justify-center min-w-[3rem] h-10 px-4 rounded-xl bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-400/30">
+                    <div className={`hidden sm:flex items-center justify-center min-w-[3rem] h-10 px-4 rounded-xl border ${theme === "dark" ? "bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border-indigo-400/30" : "bg-white/10 border-white/20"}`}>
                       <span className="text-lg font-bold text-white">
                         {conductedTrainings.length}
                       </span>
@@ -171,7 +188,7 @@ const TrainingsSection = () => {
 
                     {/* Chevron */}
                     <div
-                      className={`flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 transition-all duration-300 group-hover:bg-white/20 ${showConducted ? "rotate-180" : "rotate-0"}`}
+                      className={`flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 ${showConducted ? "rotate-180" : "rotate-0"} ${theme === "dark" ? "bg-white/10 group-hover:bg-white/20" : "bg-white/10 group-hover:bg-white/20"}`}
                     >
                       <svg
                         className="w-6 h-6 text-white"

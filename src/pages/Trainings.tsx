@@ -152,7 +152,7 @@ const Trainings = () => {
                           )}
                         </div>
                         <div className="flex-1 flex flex-col justify-center">
-                          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                          <h3 className="font-semibold text-primary dark:text-foreground group-hover:text-primary transition-colors">
                             {training.title}
                           </h3>
                           <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
