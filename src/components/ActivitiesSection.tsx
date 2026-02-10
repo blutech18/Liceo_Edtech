@@ -12,6 +12,7 @@ import {
   Monitor,
   ExternalLink,
   ChevronDown,
+  ImageOff,
 } from "lucide-react";
 import {
   getUpcomingTrainings,
@@ -406,9 +407,10 @@ const ActivitiesSection = () => {
                                 }}
                               />
                             ) : (
-                              <div className="w-full h-full bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center">
-                                <span className="text-white/50 text-6xl font-bold">
-                                  {training.title.charAt(0)}
+                              <div className="w-full h-full bg-gradient-to-br from-white/10 to-white/5 flex flex-col items-center justify-center gap-2">
+                                <ImageOff className="w-10 h-10 text-white/30" />
+                                <span className="text-white/30 text-xs font-medium">
+                                  No Image
                                 </span>
                               </div>
                             )}

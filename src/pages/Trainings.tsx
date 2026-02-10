@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
-import { Calendar, Clock, ArrowRight, Loader2 } from "lucide-react";
+import { Calendar, Clock, ArrowRight, Loader2, ImageOff } from "lucide-react";
 import {
   getUpcomingTrainings,
   getConductedTrainings,
@@ -135,15 +135,22 @@ const Trainings = () => {
                         className="card-enhanced p-5 flex flex-col sm:flex-row gap-5 group animate-fade-up"
                         style={{ animationDelay: `${index * 0.05}s` }}
                       >
-                        {training.image && (
-                          <div className="w-full sm:w-40 h-28 flex-shrink-0 overflow-hidden rounded-xl">
+                        <div className="w-full sm:w-40 h-28 flex-shrink-0 overflow-hidden rounded-xl">
+                          {training.image ? (
                             <img
                               src={training.image}
                               alt={training.title}
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
-                          </div>
-                        )}
+                          ) : (
+                            <div className="w-full h-full bg-muted/50 border border-border rounded-xl flex flex-col items-center justify-center gap-1.5">
+                              <ImageOff className="w-8 h-8 text-muted-foreground/40" />
+                              <span className="text-xs text-muted-foreground/40 font-medium">
+                                No Image
+                              </span>
+                            </div>
+                          )}
+                        </div>
                         <div className="flex-1 flex flex-col justify-center">
                           <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                             {training.title}

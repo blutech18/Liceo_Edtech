@@ -30,9 +30,9 @@ const Footer = () => {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
           {/* Brand */}
-          <div className="sm:col-span-2 lg:col-span-1">
+          <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <img
                 src="/edtech_logo.png"
@@ -120,10 +120,16 @@ const Footer = () => {
         {/* Divider */}
         <div className="border-t border-primary-foreground/10 mt-10 pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-primary-foreground/60 text-sm text-center sm:text-left">
-              © {new Date().getFullYear()} Liceo Educational Technology Center.
-              All rights reserved.
-            </p>
+            <div className="flex flex-col gap-2">
+              <p className="text-primary-foreground/60 text-sm text-center sm:text-left">
+                © {new Date().getFullYear()} Liceo Educational Technology
+                Center. All rights reserved.
+              </p>
+              <p className="text-primary-foreground/40 text-xs text-center sm:text-left">
+                Developed by Cristan Jade Jumawan, Harley Busa, Marsh Ivan H.
+                Quintila
+              </p>
+            </div>
             <p className="text-primary-foreground/40 text-xs">
               Empowering Education Through Technology
             </p>

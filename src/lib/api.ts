@@ -451,6 +451,8 @@ export interface SliderImage {
   alt?: string;
   display_order: number;
   status: "active" | "inactive";
+  show_in_hero: boolean;
+  show_in_slider: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -460,10 +462,26 @@ export async function getSliderImages(): Promise<SliderImage[]> {
     .from("slider_images")
     .select("*")
     .eq("status", "active")
+    .eq("show_in_slider", true)
     .order("display_order", { ascending: true });
 
   if (error) {
     console.error("Error fetching slider images:", error);
+    return [];
+  }
+  return data || [];
+}
+
+export async function getHeroSliderImages(): Promise<SliderImage[]> {
+  const { data, error } = await supabase
+    .from("slider_images")
+    .select("*")
+    .eq("status", "active")
+    .eq("show_in_hero", true)
+    .order("display_order", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching hero slider images:", error);
     return [];
   }
   return data || [];
