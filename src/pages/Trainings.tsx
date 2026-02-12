@@ -143,9 +143,9 @@ const Trainings = () => {
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
                           ) : (
-                            <div className="w-full h-full bg-muted/50 border border-border rounded-xl flex flex-col items-center justify-center gap-1.5">
-                              <ImageOff className="w-8 h-8 text-muted-foreground/40" />
-                              <span className="text-xs text-muted-foreground/40 font-medium">
+                            <div className="w-full h-full bg-[#800000] dark:bg-muted/50 border border-border rounded-xl flex flex-col items-center justify-center gap-1.5">
+                              <ImageOff className="w-8 h-8 text-white/80 dark:text-muted-foreground" />
+                              <span className="text-xs text-white/80 dark:text-muted-foreground font-medium">
                                 No Image
                               </span>
                             </div>

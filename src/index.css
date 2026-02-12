@@ -503,6 +503,145 @@
     border-color: hsl(var(--highlight-action));
   }
 
+  /* Light mode: use regular maroon background */
+  .light .section-maroon {
+    background: linear-gradient(135deg, #800000 0%, #600000 100%);
+    color: #ffffff;
+  }
+
+  .light .section-maroon .section-title,
+  .light .section-maroon h2,
+  .light .section-maroon h3,
+  .light .section-maroon h4,
+  .light .section-maroon .text-foreground {
+    color: #ffffff;
+  }
+
+  .light .section-maroon .section-subtitle,
+  .light .section-maroon .text-muted-foreground,
+  .light .section-maroon p {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Conducted trainings card - dark mode: maroon bg, white text */
+  .conducted-card {
+    background: linear-gradient(135deg, #800000 0%, #600000 100%);
+    border-color: rgba(160, 16, 16, 0.6);
+    box-shadow: 0 4px 20px rgba(128, 0, 0, 0.3);
+  }
+
+  /* Conducted trainings card - light mode: white bg, maroon text */
+  .light .conducted-card {
+    background: #ffffff !important;
+    border-color: rgba(128, 0, 0, 0.3) !important;
+    box-shadow: 0 4px 20px rgba(128, 0, 0, 0.1) !important;
+  }
+
+  .light .section-maroon .conducted-card,
+  .light .section-maroon .conducted-card h3,
+  .light .section-maroon .conducted-card h4,
+  .light .section-maroon .conducted-card p,
+  .light .section-maroon .conducted-card span,
+  .light .section-maroon .conducted-card .text-foreground {
+    color: #800000;
+  }
+
+  .light .section-maroon .conducted-card .text-muted-foreground {
+    color: rgba(128, 0, 0, 0.6);
+  }
+
+  /* Light mode: override white-based utility classes inside conducted card */
+  .light .conducted-card .bg-white\/10 {
+    background-color: rgba(128, 0, 0, 0.1);
+  }
+  .light .conducted-card .bg-white\/5 {
+    background-color: rgba(128, 0, 0, 0.05);
+  }
+  .light .conducted-card .bg-white\/20 {
+    background-color: rgba(128, 0, 0, 0.15);
+  }
+  .light .conducted-card .border-white\/10 {
+    border-color: rgba(128, 0, 0, 0.15);
+  }
+  .light .conducted-card .border-white\/30 {
+    border-color: rgba(128, 0, 0, 0.3);
+  }
+  .light .conducted-card .bg-white\/10 {
+    background-color: rgba(128, 0, 0, 0.08);
+  }
+  .light .conducted-card .text-white {
+    color: #800000;
+  }
+  .light .conducted-card .text-white\/60 {
+    color: rgba(128, 0, 0, 0.6);
+  }
+  .light .conducted-card .text-white\/90 {
+    color: rgba(128, 0, 0, 0.85);
+  }
+  .light .conducted-card .text-white\/30 {
+    color: rgba(128, 0, 0, 0.3);
+  }
+  .light .conducted-card .hover\:bg-white\/5:hover {
+    background-color: rgba(128, 0, 0, 0.05);
+  }
+  .light .conducted-card .from-\[\#800000\] {
+    --tw-gradient-from: #b30000;
+  }
+  .light .conducted-card .to-\[\#600000\] {
+    --tw-gradient-to: #900000;
+  }
+  .light .conducted-card .shadow-md {
+    box-shadow: 0 4px 12px rgba(128, 0, 0, 0.3);
+  }
+  /* Keep the checkmark icon white in light mode (inside the maroon badge) */
+  .light .conducted-card .bg-gradient-to-br .text-white {
+    color: #ffffff !important;
+  }
+  .light .conducted-card .hover\:bg-white\/20:hover {
+    background-color: rgba(128, 0, 0, 0.15);
+  }
+  .light .conducted-card .group-hover\:bg-white\/20:is(:where(.group):hover *) {
+    background-color: rgba(128, 0, 0, 0.15);
+  }
+  .light
+    .conducted-card
+    .group-hover\:text-white\/90:is(:where(.group):hover *) {
+    color: rgba(128, 0, 0, 0.85);
+  }
+  .light .conducted-card .hover\:border-white\/30:hover {
+    border-color: rgba(128, 0, 0, 0.3);
+  }
+  .light .conducted-card .bg-gradient-to-br.from-white\/10 {
+    --tw-gradient-from: rgba(128, 0, 0, 0.1);
+  }
+  .light .conducted-card .bg-gradient-to-br.to-white\/5 {
+    --tw-gradient-to: rgba(128, 0, 0, 0.05);
+  }
+
+  /* Resources cards: white bg with maroon text */
+  .light .section-maroon .card-enhanced {
+    background-color: #ffffff;
+    border-color: rgba(128, 0, 0, 0.2);
+  }
+
+  .light .section-maroon .card-enhanced:hover {
+    border-color: rgba(128, 0, 0, 0.4);
+  }
+
+  .light .section-maroon .card-enhanced h3,
+  .light .section-maroon .card-enhanced .text-foreground {
+    color: #800000;
+  }
+
+  .light .section-maroon .card-enhanced p,
+  .light .section-maroon .card-enhanced .text-muted-foreground {
+    color: rgba(128, 0, 0, 0.6);
+  }
+
+  .light .section-maroon .card-enhanced .text-primary {
+    color: #a01010;
+  }
+
   .section-maroon .card-glass {
     background-color: hsla(0, 0%, 6%, 0.8);
     border-color: hsla(0, 100%, 25%, 0.3);

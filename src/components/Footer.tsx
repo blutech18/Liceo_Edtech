@@ -16,7 +16,7 @@ const aboutLinks = [
 
 const Footer = () => {
   return (
-    <footer className="relative bg-gradient-to-br from-primary-dark via-primary to-primary overflow-hidden">
+    <footer className="relative bg-gradient-to-br from-[#800000] via-[#700000] to-[#800000] overflow-hidden">
       {/* Decorative Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div

@@ -14,8 +14,7 @@ import FeedbackSection from "@/components/sections/FeedbackSection";
 import AboutUsSection from "@/components/sections/AboutUsSection";
 import FormsSection from "@/components/sections/FormsSection";
 import Footer from "@/components/Footer";
-import { getSectionContent, SectionContent, getSliderImages } from "@/lib/api";
-import { InfiniteSlider } from "@/components/ui/infinite-slider";
+import { getSectionContent, SectionContent } from "@/lib/api";
 
 const defaultHeroContent: SectionContent = {
   id: "",
@@ -27,10 +26,6 @@ const defaultHeroContent: SectionContent = {
 const Index = () => {
   const [heroContent, setHeroContent] =
     useState<SectionContent>(defaultHeroContent);
-  const [sliderPhotos, setSliderPhotos] = useState<
-    { src: string; alt: string }[]
-  >([]);
-  const [isLoadingSlider, setIsLoadingSlider] = useState(true);
 
   useEffect(() => {
     async function fetchHeroContent() {
@@ -40,23 +35,7 @@ const Index = () => {
       }
     }
     fetchHeroContent();
-
-    async function fetchSliderImages() {
-      setIsLoadingSlider(true);
-      const images = await getSliderImages();
-      setSliderPhotos(
-        images.map((img) => ({ src: img.src, alt: img.alt || "Slider image" })),
-      );
-      setIsLoadingSlider(false);
-    }
-    fetchSliderImages();
   }, []);
-
-  // First slider - use slider photos directly
-  const parallaxImages = sliderPhotos;
-
-  // Second slider - reversed order
-  const sliderImages2 = [...sliderPhotos].reverse();
 
   return (
     <div
@@ -74,12 +53,6 @@ const Index = () => {
         {/* About & Goals Section */}
         <AboutGoalsSection />
 
-        {/* Core Functions Section */}
-        <CoreFunctionsSection />
-
-        {/* Services & Roles Section */}
-        <ServicesRolesSection />
-
         {/* Trainings Section - card carousel + conducted trainings */}
         <ActivitiesSection />
 
@@ -95,48 +68,11 @@ const Index = () => {
         {/* About Us Section Group */}
         <AboutUsSection />
 
-        {/* Infinite Photo Sliders - above EdTech Team */}
-        {isLoadingSlider ? (
-          <div className="py-4 md:py-8 space-y-4 md:space-y-6">
-            {[0, 1].map((i) => (
-              <div
-                key={i}
-                className="flex gap-4 sm:gap-5 md:gap-6 overflow-hidden px-4"
-              >
-                {Array.from({ length: 5 }).map((_, j) => (
-                  <div
-                    key={j}
-                    className="flex-shrink-0 rounded-xl sm:rounded-2xl animate-pulse"
-                    style={{
-                      width: "clamp(220px, 32vw, 350px)",
-                      height: "clamp(160px, 24vw, 260px)",
-                      backgroundColor: "hsl(var(--bg-surface))",
-                      border: "1px solid rgba(128, 0, 0, 0.3)",
-                    }}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-        ) : sliderPhotos.length > 0 ? (
-          <div
-            className="py-4 md:py-8 relative z-10 space-y-4 md:space-y-6"
-            style={{ backgroundColor: "hsl(var(--bg-surface))" }}
-          >
-            {/* First slider - moves left */}
-            <InfiniteSlider
-              images={parallaxImages}
-              speed={40}
-              direction="left"
-            />
-            {/* Second slider - moves right (opposite direction) */}
-            <InfiniteSlider
-              images={sliderImages2}
-              speed={35}
-              direction="right"
-            />
-          </div>
-        ) : null}
+        {/* Core Functions Section */}
+        <CoreFunctionsSection />
+
+        {/* Services & Roles Section */}
+        <ServicesRolesSection />
 
         <EdTechTeamSection />
         <HotlineSection />

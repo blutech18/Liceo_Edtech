@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useTheme } from "@/contexts/ThemeContext";
 import {
   Loader2,
   ArrowRight,
@@ -48,7 +47,6 @@ interface ActivityDisplay {
 }
 
 const ActivitiesSection = () => {
-  const { theme } = useTheme();
   const [activities, setActivities] = useState<ActivityDisplay[]>([]);
   const [conductedTrainings, setConductedTrainings] = useState<Training[]>([]);
   const [loading, setLoading] = useState(true);
@@ -300,7 +298,7 @@ const ActivitiesSection = () => {
                     </div>
                   </div>
 
-                  <h3 className="text-center font-bold text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 text-foreground group-hover:text-white transition-colors duration-300 uppercase tracking-wide">
+                  <h3 className="text-center font-bold text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 text-white group-hover:text-white/90 transition-colors duration-300 uppercase tracking-wide">
                     {activity.title}
                   </h3>
                 </div>
@@ -313,29 +311,16 @@ const ActivitiesSection = () => {
         {!loading && conductedTrainings.length > 0 && (
           <div className="mt-16">
             {/* Unified Container with Maroon Gradient */}
-            <div
-              className="rounded-xl border-2 overflow-hidden transition-all duration-500"
-              style={{
-                background: theme === "dark"
-                  ? "linear-gradient(135deg, #4a0f0f 0%, #2d0808 100%)"
-                  : "linear-gradient(135deg, #fdf2f2 0%, #fce8e8 100%)",
-                borderColor: theme === "dark"
-                  ? "rgba(160, 16, 16, 0.6)"
-                  : "rgba(128, 0, 0, 0.25)",
-                boxShadow: theme === "dark"
-                  ? "0 4px 20px rgba(128, 0, 0, 0.3)"
-                  : "0 4px 20px rgba(128, 0, 0, 0.08)",
-              }}
-            >
+            <div className="conducted-card rounded-xl border-2 overflow-hidden transition-all duration-500">
               {/* Clickable Header */}
               <button
                 onClick={() => setShowConducted(!showConducted)}
-                className={`w-full flex items-center justify-between px-5 sm:px-6 py-4 group cursor-pointer transition-all duration-300 ${theme === "dark" ? "hover:bg-white/5" : "hover:bg-[#800000]/5"}`}
+                className={`w-full flex items-center justify-between px-5 sm:px-6 py-4 group cursor-pointer transition-all duration-300 hover:bg-white/5`}
               >
                 {/* Left side - Icon and Text */}
                 <div className="flex items-center gap-3 sm:gap-4">
                   {/* Icon container */}
-                  <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-[#A01010] to-[#800000] shadow-md">
+                  <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg shadow-md bg-gradient-to-br from-[#800000] to-[#600000]">
                     <svg
                       className="w-5 h-5 sm:w-6 sm:h-6 text-white"
                       fill="none"
@@ -353,10 +338,10 @@ const ActivitiesSection = () => {
 
                   {/* Text content */}
                   <div className="text-left">
-                    <h3 className={`text-base sm:text-lg font-bold tracking-tight ${theme === "dark" ? "text-white" : "text-[#4a0f0f]"}`}>
+                    <h3 className="text-base sm:text-lg font-bold tracking-tight text-white">
                       Trainings Conducted
                     </h3>
-                    <p className={`text-xs sm:text-sm font-medium ${theme === "dark" ? "text-rose-100" : "text-[#800000]/60"}`}>
+                    <p className="text-xs sm:text-sm font-medium text-white/60">
                       {conductedTrainings.length} completed • Click to{" "}
                       {showConducted ? "hide" : "view"}
                     </p>
@@ -366,17 +351,17 @@ const ActivitiesSection = () => {
                 {/* Right side - Count badge and Chevron */}
                 <div className="flex items-center gap-2 sm:gap-3">
                   {/* Count badge */}
-                  <div className={`flex items-center justify-center min-w-[2.5rem] h-8 sm:h-10 px-3 rounded-lg border ${theme === "dark" ? "bg-[#A01010]/30 border-[#A01010]/50" : "bg-[#800000]/10 border-[#800000]/20"}`}>
-                    <span className={`text-sm sm:text-lg font-bold ${theme === "dark" ? "text-white" : "text-[#800000]"}`}>
+                  <div className="flex items-center justify-center min-w-[2.5rem] h-8 sm:h-10 px-3 rounded-lg border bg-white/10 border-white/30">
+                    <span className="text-sm sm:text-lg font-bold text-white">
                       {conductedTrainings.length}
                     </span>
                   </div>
 
                   {/* Chevron */}
                   <div
-                    className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg transition-all duration-300 ${showConducted ? "rotate-180" : "rotate-0"} ${theme === "dark" ? "bg-white/10 group-hover:bg-white/20" : "bg-[#800000]/10 group-hover:bg-[#800000]/20"}`}
+                    className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg transition-all duration-300 bg-white/10 group-hover:bg-white/20 ${showConducted ? "rotate-180" : "rotate-0"}`}
                   >
-                    <ChevronDown className={`w-5 h-5 sm:w-6 sm:h-6 ${theme === "dark" ? "text-white" : "text-[#800000]"}`} />
+                    <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                 </div>
               </button>
@@ -386,7 +371,7 @@ const ActivitiesSection = () => {
                 className={`transition-all duration-500 ease-in-out overflow-hidden ${showConducted ? "max-h-[3000px] opacity-100" : "max-h-0 opacity-0"}`}
               >
                 {/* Divider line */}
-                <div className={`mx-5 sm:mx-6 h-px ${theme === "dark" ? "bg-white/10" : "bg-[#800000]/15"}`} />
+                <div className="mx-5 sm:mx-6 h-px bg-white/10" />
 
                 {/* Cards Grid */}
                 <div className="p-5 sm:p-6 animate-fade-up">
@@ -400,7 +385,7 @@ const ActivitiesSection = () => {
                           style={{ animationDelay: `${index * 0.05}s` }}
                         >
                           <div
-                            className={`relative overflow-hidden rounded-2xl border transition-all duration-300 ${theme === "dark" ? "border-white/10 hover:border-white/30" : "border-[#800000]/15 hover:border-[#800000]/30"}`}
+                            className="relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-300"
                             style={{ aspectRatio: "3/4" }}
                           >
                             {training.image ? (
@@ -415,9 +400,9 @@ const ActivitiesSection = () => {
                                 }}
                               />
                             ) : (
-                              <div className="w-full h-full bg-gradient-to-br from-white/10 to-white/5 flex flex-col items-center justify-center gap-2">
+                              <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-white/10 to-white/5">
                                 <ImageOff className="w-10 h-10 text-white/30" />
-                                <span className="text-white/30 text-xs font-medium">
+                                <span className="text-xs font-medium text-white/30">
                                   No Image
                                 </span>
                               </div>
@@ -482,7 +467,7 @@ const ActivitiesSection = () => {
                             </div>
                           </div>
 
-                          <h3 className={`text-center font-bold text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 transition-colors duration-300 uppercase tracking-wide ${theme === "dark" ? "text-white group-hover:text-white" : "text-[#4a0f0f] group-hover:text-[#800000]"}`}>
+                          <h3 className="text-center font-bold text-xs sm:text-sm md:text-base mt-2 sm:mt-3 md:mt-4 transition-colors duration-300 uppercase tracking-wide text-white group-hover:text-white/90">
                             {training.title}
                           </h3>
                         </div>
@@ -497,12 +482,12 @@ const ActivitiesSection = () => {
                           setConductedPage(Math.max(0, conductedPage - 1))
                         }
                         disabled={conductedPage === 0}
-                        className={`p-2 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${theme === "dark" ? "bg-white/10 text-white hover:bg-white/20" : "bg-[#800000]/10 text-[#800000] hover:bg-[#800000]/20"}`}
+                        className={`p-2 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-white/10 text-white hover:bg-white/20`}
                         aria-label="Previous page"
                       >
                         <ChevronLeft className="w-5 h-5" />
                       </button>
-                      <span className={`text-sm ${theme === "dark" ? "text-white/90" : "text-[#4a0f0f]"}`}>
+                      <span className="text-sm text-white/90">
                         Page {conductedPage + 1} of{" "}
                         {Math.ceil(conductedTrainings.length / 8)}
                       </span>
@@ -519,7 +504,7 @@ const ActivitiesSection = () => {
                           conductedPage >=
                           Math.ceil(conductedTrainings.length / 8) - 1
                         }
-                        className={`p-2 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${theme === "dark" ? "bg-white/10 text-white hover:bg-white/20" : "bg-[#800000]/10 text-[#800000] hover:bg-[#800000]/20"}`}
+                        className={`p-2 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-white/10 text-white hover:bg-white/20`}
                         aria-label="Next page"
                       >
                         <ChevronRight className="w-5 h-5" />
