@@ -122,6 +122,37 @@ const ResourcesSection = () => {
                       ({resources.filter((r) => r.category === category).length}{" "}
                       resources)
                     </span>
+                    {/* Thumbnail previews when closed */}
+                    {openCategory !== category && (() => {
+                      const categoryResources = resources.filter(
+                        (r) => r.category === category && r.image
+                      );
+                      if (categoryResources.length === 0) return null;
+                      const shown = categoryResources.slice(0, 5);
+                      const remaining = categoryResources.length - shown.length;
+                      return (
+                        <div className="flex items-center gap-1.5 ml-auto mr-2">
+                          {shown.map((r) => (
+                            <div
+                              key={r.id}
+                              className="w-8 h-8 rounded-md overflow-hidden border border-border/50 flex-shrink-0"
+                            >
+                              <img
+                                src={r.image}
+                                alt={r.title}
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                              />
+                            </div>
+                          ))}
+                          {remaining > 0 && (
+                            <span className="text-xs text-muted-foreground ml-1">
+                              +{remaining}
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="px-6 pb-6">

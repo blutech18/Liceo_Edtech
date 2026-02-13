@@ -1,5 +1,5 @@
 import { ExternalLink } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getHeroImage } from "@/lib/api";
 import { useTheme } from "@/contexts/ThemeContext";
 
@@ -27,6 +27,33 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [heroImage, setHeroImage] = useState<string | null>(null);
   const { theme } = useTheme();
+  const bgLayerRef = useRef<HTMLDivElement>(null);
+  const [parallaxY, setParallaxY] = useState(0);
+
+  // Parallax scroll effect for background
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          if (sectionRef.current) {
+            const rect = sectionRef.current.getBoundingClientRect();
+            const sectionHeight = sectionRef.current.offsetHeight;
+            // Only compute when section is in view
+            if (rect.bottom > 0 && rect.top < window.innerHeight) {
+              const scrolled = -rect.top;
+              setParallaxY(scrolled * 0.4);
+            }
+          }
+          ticking = false;
+        });
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Fetch hero split image from section_content
   useEffect(() => {
@@ -108,7 +135,18 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
       style={{ backgroundColor: theme === "dark" ? "#0F0F0F" : "#FFFFFF" }}
     >
       {/* Background layers */}
-      <div className="absolute inset-0" style={{ zIndex: 0 }}>
+      <div
+        ref={bgLayerRef}
+        className="absolute inset-0"
+        style={{
+          zIndex: 0,
+          top: "-15%",
+          bottom: "-15%",
+          height: "130%",
+          transform: `translateY(${parallaxY}px)`,
+          willChange: "transform",
+        }}
+      >
         {/* Video background — maroon on black (dark), maroon on white (light via CSS invert) */}
         <video
           ref={videoRef}
@@ -146,11 +184,16 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
       {/* Right-side hero image — diagonal slant edge */}
       {heroImage && (
         <div
-          className="absolute top-0 right-0 bottom-0 hidden lg:block"
+          className="absolute right-0 hidden lg:block"
           style={{
             width: "42%",
             zIndex: 1,
+            top: "-15%",
+            bottom: "-15%",
+            height: "130%",
             clipPath: "polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            transform: `translateY(${parallaxY}px)`,
+            willChange: "transform",
           }}
         >
           <img
@@ -172,7 +215,19 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
 
       {/* Mobile hero image — shown below content */}
       {heroImage && (
-        <div className="absolute inset-0 lg:hidden" style={{ zIndex: 1 }}>
+        <div
+          className="absolute lg:hidden"
+          style={{
+            zIndex: 1,
+            top: "-15%",
+            left: 0,
+            right: 0,
+            bottom: "-15%",
+            height: "130%",
+            transform: `translateY(${parallaxY}px)`,
+            willChange: "transform",
+          }}
+        >
           <img
             src={heroImage}
             alt="Liceo EdTech"
@@ -234,6 +289,7 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
               className={`text-base sm:text-lg md:text-xl max-w-xl leading-relaxed font-light min-h-[1.75em] ${heroImage ? "mx-auto lg:mx-0" : "mx-auto"}`}
               style={{
                 color: "rgba(255, 255, 255, 0.65)",
+                whiteSpace: "nowrap",
               }}
             >
               {displayedText}
