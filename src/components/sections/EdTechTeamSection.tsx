@@ -108,11 +108,11 @@ const EdTechTeamSection = () => {
                   </h3>
                   <div className="w-16 h-0.5 bg-primary mx-auto mt-3" />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
+                <div className="flex flex-wrap justify-center gap-6 lg:gap-8 max-w-4xl xl:max-w-5xl mx-auto">
                   {specialists.map((specialist, index) => (
                     <div
                       key={specialist.id}
-                      className="animate-fade-up w-full max-w-[320px] mx-auto sm:max-w-none"
+                      className="animate-fade-up w-[calc(50%-10px)] sm:w-[250px]"
                       style={{ animationDelay: `${0.1 + index * 0.1}s` }}
                     >
                       <TeamMemberCard
@@ -142,7 +142,7 @@ const EdTechTeamSection = () => {
                 {coordinator && (
                   <div className="flex justify-center mb-10">
                     <div
-                      className="w-full max-w-[320px] animate-fade-up"
+                      className="w-full max-w-[280px] animate-fade-up"
                       style={{ animationDelay: "0.1s" }}
                     >
                       <TeamMemberCard
@@ -153,7 +153,7 @@ const EdTechTeamSection = () => {
                         position={coordinator.position}
                         email={coordinator.email}
                         themeColor="0 68% 42%"
-                        size="lg"
+                        size="md"
                       />
                     </div>
                   </div>
@@ -161,11 +161,11 @@ const EdTechTeamSection = () => {
 
                 {/* Technical Staff */}
                 {technicalStaff.length > 0 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
+                  <div className="flex flex-wrap justify-center gap-6 lg:gap-8 max-w-4xl xl:max-w-5xl mx-auto">
                     {technicalStaff.map((staff, index) => (
                       <div
                         key={staff.id}
-                        className="animate-fade-up w-full max-w-[320px] mx-auto sm:max-w-none"
+                        className="animate-fade-up w-[calc(50%-10px)] sm:w-[250px]"
                         style={{ animationDelay: `${0.2 + index * 0.1}s` }}
                       >
                         <TeamMemberCard

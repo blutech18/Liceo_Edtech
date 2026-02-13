@@ -169,6 +169,38 @@ export async function getSectionContent(): Promise<
   return contentMap;
 }
 
+// Section Order
+export async function getSectionOrder(): Promise<string[] | null> {
+  const { data, error } = await supabase
+    .from("section_content")
+    .select("content")
+    .eq("section_key", "section_order")
+    .single();
+
+  if (error || !data?.content) return null;
+  try {
+    return JSON.parse(data.content);
+  } catch {
+    return null;
+  }
+}
+
+// About Us Sub-Section Order
+export async function getAboutUsSubSectionOrder(): Promise<string[] | null> {
+  const { data, error } = await supabase
+    .from("section_content")
+    .select("content")
+    .eq("section_key", "about_us_subsection_order")
+    .single();
+
+  if (error || !data?.content) return null;
+  try {
+    return JSON.parse(data.content);
+  } catch {
+    return null;
+  }
+}
+
 // Hotline Categories
 export interface HotlineCategory {
   id: string;
