@@ -1,57 +1,53 @@
+import { useState, useEffect } from "react";
+import { Loader2, Settings } from "lucide-react";
+import { GlowingEffect } from "@/components/ui/glowing-effect";
 import {
-  Megaphone,
-  Network,
-  Users,
-  GraduationCap,
-  Monitor,
-  Globe,
-} from "lucide-react";
+  getSectionContent,
+  getAboutUsContent,
+  SectionContent,
+  AboutUsContent,
+} from "@/lib/api";
 
-const functions = [
-  {
-    icon: Network,
-    title: "Strategic Initiatives",
-    description:
-      "Spearhead the development and implementation of innovative ICT strategies aligned with the university's vision.",
-  },
-  {
-    icon: Megaphone,
-    title: "Communication Bridge",
-    description:
-      "Facilitate seamless communication between departments, faculty, and students through digital platforms.",
-  },
-  {
-    icon: Users,
-    title: "Tech Inclusion",
-    description:
-      "Ensure equitable access to technology resources for all members of the academic community.",
-  },
-  {
-    icon: GraduationCap,
-    title: "Personalized Learning",
-    description:
-      "Support adaptive learning environments tailored to individual student needs and learning styles.",
-  },
-  {
-    icon: Monitor,
-    title: "Digital Competency",
-    description:
-      "Build and enhance digital skills among faculty and students through comprehensive training programs.",
-  },
-  {
-    icon: Globe,
-    title: "Virtual Learning",
-    description:
-      "Enable remote and hybrid learning experiences through robust virtual classroom infrastructure.",
-  },
-];
+const defaultSectionContent: SectionContent = {
+  id: "",
+  section_key: "core_functions",
+  title: "Core Functions",
+  subtitle:
+    "Driving educational excellence through strategic technology integration and comprehensive support services.",
+};
 
 const CoreFunctionsSection = () => {
+  const [loading, setLoading] = useState(true);
+  const [sectionContent, setSectionContent] = useState<SectionContent>(
+    defaultSectionContent,
+  );
+  const [functions, setFunctions] = useState<AboutUsContent[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      const [contentData, aboutData] = await Promise.all([
+        getSectionContent(),
+        getAboutUsContent(),
+      ]);
+      if (contentData.core_functions) {
+        setSectionContent(contentData.core_functions);
+      }
+      setFunctions(
+        aboutData
+          .filter((c) => c.section_type === "functions")
+          .sort((a, b) => a.display_order - b.display_order),
+      );
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
+
   return (
     <section
       id="core-functions"
       className="py-20 sm:py-28"
-      style={{ backgroundColor: "#1A1A1A" }}
+      style={{ backgroundColor: "hsl(var(--bg-surface))" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
@@ -63,64 +59,81 @@ const CoreFunctionsSection = () => {
             What We Do
           </p>
           <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 title-glow"
-            style={{ color: "#FFFFFF" }}
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 title-glow"
+            style={{ color: "hsl(var(--text-main))" }}
           >
-            Core Functions
+            {sectionContent.title}
           </h2>
           <p
-            className="text-lg max-w-2xl mx-auto"
-            style={{ color: "#CCCCCC" }}
+            className="text-base sm:text-lg max-w-2xl mx-auto"
+            style={{ color: "hsl(var(--text-muted))" }}
           >
-            Driving educational excellence through strategic technology
-            integration and comprehensive support services.
+            {sectionContent.subtitle}
           </p>
         </div>
 
-        {/* 3-Column Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {functions.map((func, index) => (
-            <div
-              key={index}
-              className="group p-6 sm:p-8 rounded-xl transition-all duration-300 hover:-translate-y-2 animate-fade-up"
-              style={{
-                backgroundColor: "#1A1A1A",
-                border: "1px solid #800000",
-                animationDelay: `${0.1 * index}s`,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow =
-                  "0 0 15px rgba(160, 16, 16, 0.4)";
-                e.currentTarget.style.borderColor = "#A01010";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "none";
-                e.currentTarget.style.borderColor = "#800000";
-              }}
-            >
-              {/* Icon */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2
+              className="w-8 h-8 animate-spin"
+              style={{ color: "#A01010" }}
+            />
+          </div>
+        ) : functions.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+            {functions.map((func, index) => (
               <div
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110"
-                style={{ backgroundColor: "rgba(160, 16, 16, 0.15)" }}
+                key={func.id}
+                className="relative group rounded-xl animate-fade-up"
+                style={{ animationDelay: `${0.1 * index}s` }}
               >
-                <func.icon className="w-7 h-7" style={{ color: "#A01010" }} />
+                <GlowingEffect
+                  spread={40}
+                  glow={true}
+                  disabled={
+                    typeof window !== "undefined" && "ontouchstart" in window
+                  }
+                  proximity={64}
+                  inactiveZone={0.01}
+                  borderWidth={2}
+                  variant="maroon"
+                />
+
+                <div
+                  className="relative p-6 sm:p-8 rounded-xl transition-all duration-300 group-hover:-translate-y-1 h-full"
+                  style={{
+                    backgroundColor: "hsl(var(--bg-surface))",
+                    border: "1px solid rgba(128, 0, 0, 0.5)",
+                  }}
+                >
+                  <div
+                    className="w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-[1.05] md:group-hover:scale-110"
+                    style={{ backgroundColor: "rgba(160, 16, 16, 0.15)" }}
+                  >
+                    <Settings
+                      className="w-7 h-7"
+                      style={{ color: "#A01010" }}
+                    />
+                  </div>
+
+                  <p
+                    className="text-sm sm:text-base leading-relaxed"
+                    style={{ color: "hsl(var(--text-muted))" }}
+                  >
+                    {func.content}
+                  </p>
+                </div>
               </div>
-
-              {/* Title */}
-              <h3
-                className="text-xl font-semibold mb-3"
-                style={{ color: "#FFFFFF" }}
-              >
-                {func.title}
-              </h3>
-
-              {/* Description */}
-              <p className="leading-relaxed" style={{ color: "#CCCCCC" }}>
-                {func.description}
-              </p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p
+            className="text-center"
+            style={{ color: "hsl(var(--text-muted))" }}
+          >
+            No core functions available.
+          </p>
+        )}
       </div>
     </section>
   );

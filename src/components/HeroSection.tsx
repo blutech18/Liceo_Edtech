@@ -8,7 +8,7 @@ const HeroSection = () => {
         <img
           src={heroImage}
           alt="Liceo EdTech Center Staff"
-          className="w-full h-full object-cover object-center scale-105 animate-[pulse-soft_8s_ease-in-out_infinite]"
+          className="w-full h-full object-cover object-center"
         />
         {/* Multi-layer Gradient Overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
@@ -30,12 +30,12 @@ const HeroSection = () => {
 
         {/* Content */}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground text-center tracking-tight animate-fade-up">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground text-center tracking-tight">
             LICEO EDUCATIONAL TECHNOLOGY CENTER
           </h1>
 
           {/* Decorative Line */}
-          <div className="flex justify-center mt-6 animate-fade-up" style={{ animationDelay: '0.3s' }}>
+          <div className="flex justify-center mt-6">
             <div className="w-24 h-1 bg-primary-foreground/40 rounded-full" />
           </div>
         </div>

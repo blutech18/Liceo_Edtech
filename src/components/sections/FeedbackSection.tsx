@@ -1,30 +1,43 @@
 import { useState, useEffect } from "react";
 import { ExternalLink, Loader2 } from "lucide-react";
-import { getFeedbackConfig, getSectionContent, getHelpDeskConfig, FeedbackConfig, SectionContent, HelpDeskConfig } from "@/lib/api";
+import {
+  getFeedbackConfig,
+  getSectionContent,
+  getHelpDeskConfig,
+  FeedbackConfig,
+  SectionContent,
+  HelpDeskConfig,
+} from "@/lib/api";
 
 const defaultContent: SectionContent = {
-  id: '', section_key: 'feedback',
-  title: 'Feedback',
-  subtitle: 'We value your input to improve our services'
+  id: "",
+  section_key: "feedback",
+  title: "Feedback",
+  subtitle: "We value your input to improve our services",
 };
 
 const defaultFeedbackConfig: FeedbackConfig = {
-  id: '',
-  form_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeOQn-UU4U-TuWT9ngJVB2bpqrTYKBp-JmVHKsrcjRBVDHDcA/viewform',
-  button_text: 'Open form in new window'
+  id: "",
+  form_url:
+    "https://docs.google.com/forms/d/e/1FAIpQLSeOQn-UU4U-TuWT9ngJVB2bpqrTYKBp-JmVHKsrcjRBVDHDcA/viewform",
+  button_text: "Open form in new window",
 };
 
 const defaultHelpDesk: HelpDeskConfig = {
-  id: '',
-  title: 'EdTech Help Desk Monitoring Form',
-  url: 'https://forms.gle/ZGLkmgAMvva55YoB8'
+  id: "",
+  title: "EdTech Help Desk Monitoring Form",
+  url: "https://forms.gle/ZGLkmgAMvva55YoB8",
 };
 
 const FeedbackSection = () => {
   const [loading, setLoading] = useState(true);
-  const [sectionContent, setSectionContent] = useState<SectionContent>(defaultContent);
-  const [feedbackConfig, setFeedbackConfig] = useState<FeedbackConfig>(defaultFeedbackConfig);
-  const [helpDeskConfig, setHelpDeskConfig] = useState<HelpDeskConfig>(defaultHelpDesk);
+  const [sectionContent, setSectionContent] =
+    useState<SectionContent>(defaultContent);
+  const [feedbackConfig, setFeedbackConfig] = useState<FeedbackConfig>(
+    defaultFeedbackConfig,
+  );
+  const [helpDeskConfig, setHelpDeskConfig] =
+    useState<HelpDeskConfig>(defaultHelpDesk);
 
   useEffect(() => {
     async function fetchData() {
@@ -32,7 +45,7 @@ const FeedbackSection = () => {
       const [contentData, configData, helpDeskData] = await Promise.all([
         getSectionContent(),
         getFeedbackConfig(),
-        getHelpDeskConfig()
+        getHelpDeskConfig(),
       ]);
       if (contentData.feedback) {
         setSectionContent(contentData.feedback);
@@ -48,20 +61,31 @@ const FeedbackSection = () => {
     fetchData();
   }, []);
 
-  const embedUrl = feedbackConfig.form_url.includes('?') 
-    ? `${feedbackConfig.form_url}&embedded=true`
-    : `${feedbackConfig.form_url}?embedded=true`;
-
   return (
-    <section id="feedback" className="py-16 sm:py-20 scroll-mt-16" style={{ backgroundColor: "#1A1A1A" }}>
+    <section
+      id="feedback"
+      className="py-16 sm:py-20 scroll-mt-16"
+      style={{ backgroundColor: "hsl(var(--bg-surface))" }}
+    >
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12 animate-fade-up">
           <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: "#FFFFFF" }}>
+            <h2
+              className="text-3xl sm:text-4xl font-bold"
+              style={{ color: "hsl(var(--text-main))" }}
+            >
               {sectionContent.title}
             </h2>
-            <span className="hidden sm:block text-2xl" style={{ color: "rgba(255,255,255,0.3)" }}>|</span>
-            <p className="text-base sm:text-lg" style={{ color: "#CCCCCC" }}>
+            <span
+              className="hidden sm:block text-2xl"
+              style={{ color: "hsl(var(--text-muted))" }}
+            >
+              |
+            </span>
+            <p
+              className="text-base sm:text-lg"
+              style={{ color: "hsl(var(--text-muted))" }}
+            >
               {sectionContent.subtitle}
             </p>
           </div>
@@ -69,73 +93,88 @@ const FeedbackSection = () => {
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin" style={{ color: "#A01010" }} />
+            <Loader2
+              className="w-8 h-8 animate-spin"
+              style={{ color: "#A01010" }}
+            />
           </div>
         ) : (
           <>
-            {/* Embedded Form */}
-            <div 
-              className="rounded-xl overflow-hidden animate-fade-up"
-              style={{ 
-                backgroundColor: "#0F0F0F",
+            {/* Feedback Form Link Button */}
+            <div
+              className="rounded-xl p-8 sm:p-12 text-center animate-fade-up"
+              style={{
+                backgroundColor: "hsl(var(--bg-main))",
                 border: "1px solid #800000",
-                animationDelay: '0.1s'
+                animationDelay: "0.1s",
               }}
             >
-              <div className="w-full" style={{ height: '800px' }}>
-                <iframe
-                  src={embedUrl}
-                  className="w-full h-full border-0"
-                  title="User Satisfaction Survey"
+              <div className="max-w-md mx-auto">
+                <h3
+                  className="text-xl sm:text-2xl font-bold mb-4"
+                  style={{ color: "hsl(var(--text-main))" }}
                 >
-                  Loading...
-                </iframe>
+                  User Satisfaction Survey
+                </h3>
+                <p
+                  className="text-sm sm:text-base mb-8"
+                  style={{ color: "hsl(var(--text-muted))" }}
+                >
+                  Help us improve our services by sharing your feedback. Your
+                  input is valuable to us!
+                </p>
+                <a
+                  href={feedbackConfig.form_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 px-8 py-4 font-semibold text-lg transition-all duration-300 rounded-xl"
+                  style={{
+                    backgroundColor: "#A01010",
+                    color: "#FFFFFF",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow =
+                      "0 0 20px rgba(160, 16, 16, 0.5)";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                >
+                  <ExternalLink className="w-5 h-5" />
+                  {feedbackConfig.button_text || "Open Feedback Form"}
+                </a>
               </div>
             </div>
 
-            <div className="mt-8 text-center animate-fade-up" style={{ animationDelay: '0.2s' }}>
-              <a
-                href={feedbackConfig.form_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 font-semibold transition-all duration-300 rounded"
-                style={{ 
-                  backgroundColor: "#A01010",
-                  color: "#FFFFFF"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = "0 0 15px rgba(160, 16, 16, 0.4)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-              >
-                <ExternalLink className="w-4 h-4" />
-                {feedbackConfig.button_text}
-              </a>
-            </div>
-
             {/* Help Desk Link */}
-            <div 
+            <div
               className="mt-12 rounded-xl p-8 text-center animate-fade-up"
-              style={{ 
-                backgroundColor: "#0F0F0F",
+              style={{
+                backgroundColor: "hsl(var(--bg-main))",
                 border: "1px solid #800000",
-                animationDelay: '0.35s'
+                animationDelay: "0.35s",
               }}
             >
-              <p className="font-semibold text-lg mb-3" style={{ color: "#FFFFFF" }}>{helpDeskConfig.title}</p>
+              <p
+                className="font-semibold text-lg mb-3"
+                style={{ color: "hsl(var(--text-main))" }}
+              >
+                {helpDeskConfig.title}
+              </p>
               <a
                 href={helpDeskConfig.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 font-semibold transition-all duration-300 rounded"
-                style={{ 
+                style={{
                   backgroundColor: "#A01010",
-                  color: "#FFFFFF"
+                  color: "#FFFFFF",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = "0 0 15px rgba(160, 16, 16, 0.4)";
+                  e.currentTarget.style.boxShadow =
+                    "0 0 15px rgba(160, 16, 16, 0.4)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.boxShadow = "none";
