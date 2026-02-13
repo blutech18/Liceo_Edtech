@@ -169,6 +169,38 @@ export async function getSectionContent(): Promise<
   return contentMap;
 }
 
+// Section Order
+export async function getSectionOrder(): Promise<string[] | null> {
+  const { data, error } = await supabase
+    .from("section_content")
+    .select("content")
+    .eq("section_key", "section_order")
+    .single();
+
+  if (error || !data?.content) return null;
+  try {
+    return JSON.parse(data.content);
+  } catch {
+    return null;
+  }
+}
+
+// About Us Sub-Section Order
+export async function getAboutUsSubSectionOrder(): Promise<string[] | null> {
+  const { data, error } = await supabase
+    .from("section_content")
+    .select("content")
+    .eq("section_key", "about_us_subsection_order")
+    .single();
+
+  if (error || !data?.content) return null;
+  try {
+    return JSON.parse(data.content);
+  } catch {
+    return null;
+  }
+}
+
 // Hotline Categories
 export interface HotlineCategory {
   id: string;
@@ -442,4 +474,60 @@ export async function getGoogleClassroomRoles(): Promise<
   });
 
   return rolesWithData;
+}
+
+// Slider Images
+export interface SliderImage {
+  id: string;
+  src: string;
+  alt?: string;
+  display_order: number;
+  status: "active" | "inactive";
+  show_in_hero: boolean;
+  show_in_slider: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function getSliderImages(): Promise<SliderImage[]> {
+  const { data, error } = await supabase
+    .from("slider_images")
+    .select("*")
+    .eq("status", "active")
+    .eq("show_in_slider", true)
+    .order("display_order", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching slider images:", error);
+    return [];
+  }
+  return data || [];
+}
+
+export async function getHeroImage(): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("section_content")
+    .select("image_url")
+    .eq("section_key", "hero")
+    .single();
+
+  if (error || !data?.image_url) {
+    return null;
+  }
+  return data.image_url;
+}
+
+export async function getHeroSliderImages(): Promise<SliderImage[]> {
+  const { data, error } = await supabase
+    .from("slider_images")
+    .select("*")
+    .eq("status", "active")
+    .eq("show_in_hero", true)
+    .order("display_order", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching hero slider images:", error);
+    return [];
+  }
+  return data || [];
 }

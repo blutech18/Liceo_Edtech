@@ -11,9 +11,14 @@ interface InfiniteSliderProps {
   direction?: "left" | "right";
 }
 
-export function InfiniteSlider({ images, speed = 30, direction = "left" }: InfiniteSliderProps) {
+export function InfiniteSlider({
+  images,
+  speed = 30,
+  direction = "left",
+}: InfiniteSliderProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [hasAppeared, setHasAppeared] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
 
   // Calculate animation duration based on number of images
@@ -31,13 +36,16 @@ export function InfiniteSlider({ images, speed = 30, direction = "left" }: Infin
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
+        if (entry.isIntersecting && !hasAppeared) {
+          setHasAppeared(true);
+        }
       },
-      { threshold: 0.1 }
+      { threshold: 0.15 },
     );
 
     observer.observe(wrapper);
     return () => observer.disconnect();
-  }, []);
+  }, [hasAppeared]);
 
   const animationStyle = useMemo(() => {
     const animationName = direction === "left" ? "scroll-left" : "scroll-right";
@@ -48,16 +56,17 @@ export function InfiniteSlider({ images, speed = 30, direction = "left" }: Infin
   }, [direction, duration, isVisible, isPaused]);
 
   return (
-    <div 
-      ref={wrapperRef} 
-      className="relative w-full py-4 md:py-6 overflow-hidden"
+    <div
+      ref={wrapperRef}
+      className="relative w-full py-4 md:py-6 overflow-hidden transition-opacity duration-700 ease-out"
+      style={{ opacity: hasAppeared ? 1 : 0 }}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* Gradient overlays for fade effect */}
       <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 md:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 md:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-      
+
       {/* CSS Keyframes */}
       <style>{`
         @keyframes scroll-left {
@@ -96,7 +105,7 @@ export function InfiniteSlider({ images, speed = 30, direction = "left" }: Infin
               alt={alt || `Slider image ${(index % images.length) + 1}`}
               className="h-full w-full object-cover"
               draggable={false}
-              loading="lazy"
+              loading="eager"
             />
           </div>
         ))}

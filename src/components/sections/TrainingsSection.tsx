@@ -15,7 +15,6 @@ const TrainingsSection = () => {
   const [loading, setLoading] = useState(true);
   const [sectionContent, setSectionContent] = useState<SectionContent>(defaultContent);
   const [showAllConducted, setShowAllConducted] = useState(false);
-  const [showConducted, setShowConducted] = useState(true);
 
   useEffect(() => {
     async function fetchTrainings() {
@@ -76,68 +75,90 @@ const TrainingsSection = () => {
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : (
-          <>            {/* Conducted Trainings */}
-            <div>
-              {/* Clickable Dropdown Header - Card Style */}
-              <button
-                onClick={() => setShowConducted(!showConducted)}
-                className="w-full mb-8 group cursor-pointer"
-              >
-                <div
-                  className="relative flex items-center justify-between px-6 py-4 rounded-2xl border-2 transition-all duration-300 group-hover:shadow-lg group-active:scale-[0.99]"
-                  style={{
-                    background: "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
-                    borderColor: "rgba(99, 102, 241, 0.4)",
-                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(99, 102, 241, 0.7)";
-                    e.currentTarget.style.boxShadow = "0 8px 30px rgba(99, 102, 241, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(99, 102, 241, 0.4)";
-                    e.currentTarget.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05)";
-                  }}
-                >
-                  {/* Left side - Icon and Text */}
-                  <div className="flex items-center gap-4">
-                    {/* Icon container */}
-                    <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+          <>
+            {/* Upcoming Trainings */}
+            <div className="mb-16">
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="flex-1 h-px bg-border" />
+                <span className="px-4 py-1.5 rounded-full text-sm font-medium border bg-primary/10 text-primary border-primary/20">
+                  Upcoming Trainings
+                </span>
+                <div className="flex-1 h-px bg-border" />
+              </div>
+              {upcomingTrainings.length === 0 ? (
+                <p className="text-center text-muted-foreground">No upcoming trainings at the moment. Check back soon!</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  {upcomingTrainings.map((training, index) => (
+                    <div
+                      key={training.id}
+                      className="card-enhanced overflow-hidden group animate-fade-up"
+                      style={{ animationDelay: `${index * 0.1}s` }}
+                    >
+                      {training.image && (
+                        <div className="aspect-[4/3] overflow-hidden relative">
+                          <img
+                            src={training.image}
+                            alt={training.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                          <div className="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                            <span className="inline-flex items-center gap-2 text-white text-sm font-medium">
+                              <ArrowRight className="w-4 h-4" />
+                              Register Now
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                      <div className="p-6">
+                        <h4 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors">
+                          {training.title}
+                        </h4>
+                        <p className="text-muted-foreground mt-2">{training.description}</p>
+                        <div className="flex flex-wrap items-center gap-2 mt-4 text-sm">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium">
+                            <Calendar className="w-3.5 h-3.5" />
+                            {formatDate(training.date)}
+                          </span>
+                          {training.start_time && training.end_time && (
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium">
+                              <Clock className="w-3.5 h-3.5" />
+                              {formatTime(training.start_time)} - {formatTime(training.end_time)}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex flex-col gap-2 mt-2 text-sm">
+                          {training.training_type && (
+                            <span className="inline-flex items-center gap-1.5 text-muted-foreground">
+                              {training.training_type === 'online' ? <Monitor className="w-3.5 h-3.5" /> : <MapPin className="w-3.5 h-3.5" />}
+                              <span className="capitalize">{training.training_type}</span>
+                            </span>
+                          )}
+                          {training.venue && (
+                            <span className="inline-flex items-center gap-1.5 text-muted-foreground">
+                              <MapPin className="w-3.5 h-3.5" />
+                              {training.venue}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    
-                    {/* Text content */}
-                    <div className="text-left">
-                      <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
-                        Trainings Conducted
-                      </h3>
-                      <p className="text-sm text-indigo-300/80 font-medium">
-                        Click to {showConducted ? 'collapse' : 'expand'} • {conductedTrainings.length} total
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {/* Right side - Count and Chevron */}
-                  <div className="flex items-center gap-4">
-                    {/* Count badge */}
-                    <div className="hidden sm:flex items-center justify-center min-w-[3rem] h-10 px-4 rounded-xl bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-400/30">
-                      <span className="text-lg font-bold text-white">{conductedTrainings.length}</span>
-                    </div>
-                    
-                    {/* Chevron */}
-                    <div className={`flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 transition-all duration-300 group-hover:bg-white/20 ${showConducted ? 'rotate-180' : 'rotate-0'}`}>
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              </button>
-              
-              {/* Collapsible Content */}
-              <div className={`transition-all duration-500 ease-in-out overflow-hidden ${showConducted ? 'max-h-[5000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+              )}
+            </div>
+
+
+            {/* Conducted Trainings */}
+            <div>
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="flex-1 h-px bg-border" />
+                <span className="px-4 py-1.5 rounded-full text-sm font-medium border bg-primary/10 text-primary border-primary/20">
+                  Trainings Conducted
+                </span>
+                <div className="flex-1 h-px bg-border" />
+              </div>
               {conductedTrainings.length === 0 ? (
                 <p className="text-center text-muted-foreground">No trainings conducted yet.</p>
               ) : (
@@ -154,7 +175,7 @@ const TrainingsSection = () => {
                             <img
                               src={training.image}
                               alt={training.title}
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02] md:group-hover:scale-105"
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
                           </div>
                         )}
@@ -240,47 +261,27 @@ const TrainingsSection = () => {
 
                   {/* Show More/Less Button */}
                   {conductedTrainings.length > 4 && (
-                    <div className="flex justify-center mt-8">
+                    <div className="flex justify-center mt-6">
                       <button
                         onClick={() => setShowAllConducted(!showAllConducted)}
-                        className="group relative inline-flex items-center justify-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full font-semibold text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5 w-full sm:w-auto overflow-hidden"
-                        style={{
-                          background: "linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #2dd4bf 100%)",
-                          boxShadow: "0 4px 20px rgba(13, 148, 136, 0.35)",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.boxShadow = "0 8px 30px rgba(13, 148, 136, 0.5)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.boxShadow = "0 4px 20px rgba(13, 148, 136, 0.35)";
-                        }}
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-lg transition-colors duration-200"
                       >
-                        {/* Shimmer effect on hover */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
-                        
-                        <span className="relative z-10 flex items-center gap-3 text-sm sm:text-base">
-                          {showAllConducted ? (
-                            <>
-                              <svg className="w-5 h-5 transition-transform duration-300 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                              </svg>
-                              Show Less
-                            </>
-                          ) : (
-                            <>
-                              <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                              </svg>
-                              View All {conductedTrainings.length - 4} More Trainings
-                            </>
-                          )}
-                        </span>
+                        {showAllConducted ? (
+                          <>
+                            Show Less
+                            <ArrowRight className="w-4 h-4 rotate-90" />
+                          </>
+                        ) : (
+                          <>
+                            Show More ({conductedTrainings.length - 4} more)
+                            <ArrowRight className="w-4 h-4 -rotate-90" />
+                          </>
+                        )}
                       </button>
                     </div>
                   )}
                 </>
               )}
-              </div> {/* End of Collapsible Content */}
             </div>
           </>
         )}

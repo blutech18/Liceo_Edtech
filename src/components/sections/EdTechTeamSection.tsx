@@ -69,7 +69,9 @@ const EdTechTeamSection = () => {
             <h2 className="section-title text-3xl sm:text-4xl font-bold">
               {sectionContent.title}
             </h2>
-            <span className="hidden sm:block text-2xl text-white/30">|</span>
+            <span className="hidden sm:block text-2xl text-muted-foreground/30">
+              |
+            </span>
             <p className="section-subtitle text-base sm:text-lg">
               {sectionContent.subtitle}
             </p>
@@ -78,7 +80,7 @@ const EdTechTeamSection = () => {
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-white" />
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : teamMembers.length > 0 ? (
           <div className="space-y-16">
@@ -101,16 +103,16 @@ const EdTechTeamSection = () => {
             {specialists.length > 0 && (
               <div>
                 <div className="text-center mb-8">
-                  <h3 className="text-white text-xl sm:text-2xl font-bold animate-fade-up">
+                  <h3 className="text-foreground text-xl sm:text-2xl font-bold animate-fade-up">
                     E-Learning Specialists
                   </h3>
                   <div className="w-16 h-0.5 bg-primary mx-auto mt-3" />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
+                <div className="flex flex-wrap justify-center gap-6 lg:gap-8 max-w-4xl xl:max-w-5xl mx-auto">
                   {specialists.map((specialist, index) => (
                     <div
                       key={specialist.id}
-                      className="animate-fade-up w-full max-w-[320px] mx-auto sm:max-w-none"
+                      className="animate-fade-up w-[calc(50%-10px)] sm:w-[250px]"
                       style={{ animationDelay: `${0.1 + index * 0.1}s` }}
                     >
                       <TeamMemberCard
@@ -130,7 +132,7 @@ const EdTechTeamSection = () => {
             {(coordinator || technicalStaff.length > 0) && (
               <div>
                 <div className="text-center mb-8">
-                  <h3 className="text-white text-xl sm:text-2xl font-bold animate-fade-up">
+                  <h3 className="text-foreground text-xl sm:text-2xl font-bold animate-fade-up">
                     E-Learning Technical Staff
                   </h3>
                   <div className="w-16 h-0.5 bg-primary mx-auto mt-3" />
@@ -140,7 +142,7 @@ const EdTechTeamSection = () => {
                 {coordinator && (
                   <div className="flex justify-center mb-10">
                     <div
-                      className="w-full max-w-[320px] animate-fade-up"
+                      className="w-full max-w-[280px] animate-fade-up"
                       style={{ animationDelay: "0.1s" }}
                     >
                       <TeamMemberCard
@@ -151,7 +153,7 @@ const EdTechTeamSection = () => {
                         position={coordinator.position}
                         email={coordinator.email}
                         themeColor="0 68% 42%"
-                        size="lg"
+                        size="md"
                       />
                     </div>
                   </div>
@@ -159,11 +161,11 @@ const EdTechTeamSection = () => {
 
                 {/* Technical Staff */}
                 {technicalStaff.length > 0 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
+                  <div className="flex flex-wrap justify-center gap-6 lg:gap-8 max-w-4xl xl:max-w-5xl mx-auto">
                     {technicalStaff.map((staff, index) => (
                       <div
                         key={staff.id}
-                        className="animate-fade-up w-full max-w-[320px] mx-auto sm:max-w-none"
+                        className="animate-fade-up w-[calc(50%-10px)] sm:w-[250px]"
                         style={{ animationDelay: `${0.2 + index * 0.1}s` }}
                       >
                         <TeamMemberCard
@@ -183,7 +185,7 @@ const EdTechTeamSection = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-white/70">
+            <p className="text-muted-foreground">
               No team members available at the moment.
             </p>
           </div>

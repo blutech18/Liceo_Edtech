@@ -3,11 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import { Calendar, Clock, ArrowRight, Loader2 } from "lucide-react";
-import {
-  getUpcomingTrainings,
-  getConductedTrainings,
-  Training,
-} from "@/lib/api";
+import { getUpcomingTrainings, getConductedTrainings, Training } from "@/lib/api";
 import { format } from "date-fns";
 
 const Trainings = () => {
@@ -40,8 +36,8 @@ const Trainings = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <PageHero
-          title="Training Programs"
+        <PageHero 
+          title="Training Programs" 
           subtitle="Professional development for educators"
         />
 
@@ -58,21 +54,17 @@ const Trainings = () => {
             <section className="py-16 sm:py-20 bg-background">
               <div className="max-w-6xl mx-auto px-4 sm:px-6">
                 <div className="text-center mb-12">
-                  <h2 className="section-title text-3xl mb-4 animate-fade-up">
-                    Upcoming Trainings
-                  </h2>
+                  <h2 className="section-title text-3xl mb-4 animate-fade-up">Upcoming Trainings</h2>
                   <div className="section-divider" />
                 </div>
-
+                
                 {upcomingTrainings.length === 0 ? (
-                  <p className="text-center text-muted-foreground">
-                    No upcoming trainings at the moment. Check back soon!
-                  </p>
+                  <p className="text-center text-muted-foreground">No upcoming trainings at the moment. Check back soon!</p>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     {upcomingTrainings.map((training, index) => (
-                      <div
-                        key={training.id}
+                      <div 
+                        key={training.id} 
                         className="card-enhanced overflow-hidden group animate-fade-up"
                         style={{ animationDelay: `${index * 0.1}s` }}
                       >
@@ -96,9 +88,7 @@ const Trainings = () => {
                           <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors">
                             {training.title}
                           </h3>
-                          <p className="text-muted-foreground mt-2">
-                            {training.description}
-                          </p>
+                          <p className="text-muted-foreground mt-2">{training.description}</p>
                           <div className="flex items-center gap-2 mt-4 text-sm">
                             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium">
                               <Calendar className="w-3.5 h-3.5" />
@@ -117,16 +107,12 @@ const Trainings = () => {
             <section className="py-16 sm:py-20 bg-section-bg">
               <div className="max-w-6xl mx-auto px-4 sm:px-6">
                 <div className="text-center mb-12">
-                  <h2 className="section-title text-3xl mb-4 animate-fade-up">
-                    Trainings Conducted
-                  </h2>
+                  <h2 className="section-title text-3xl mb-4 animate-fade-up">Trainings Conducted</h2>
                   <div className="section-divider" />
                 </div>
-
+                
                 {conductedTrainings.length === 0 ? (
-                  <p className="text-center text-muted-foreground">
-                    No trainings conducted yet.
-                  </p>
+                  <p className="text-center text-muted-foreground">No trainings conducted yet.</p>
                 ) : (
                   <div className="space-y-4">
                     {conductedTrainings.map((training, index) => (

@@ -1,6 +1,7 @@
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/contexts/ThemeContext";
 
 // Navigation structure - flat links (no Home, logo clicks to home)
 const navLinks = [
@@ -10,11 +11,14 @@ const navLinks = [
 ];
 
 const Header = () => {
+  const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [navHidden, setNavHidden] = useState(false);
   const rafRef = useRef<number>();
   const lastScrollY = useRef(0);
+  const prevScrollY = useRef(0);
 
   const scrollToSection = (href: string) => {
     const sectionId = href.replace("#", "");
@@ -44,6 +48,18 @@ const Header = () => {
       if (Math.abs(currentScrollY - lastScrollY.current) > 3) {
         setScrolled(currentScrollY > 20);
 
+        // Hide navbar on scroll down, show on scroll up
+        if (currentScrollY > 80) {
+          if (currentScrollY > prevScrollY.current + 5) {
+            setNavHidden(true);
+          } else if (currentScrollY < prevScrollY.current - 5) {
+            setNavHidden(false);
+          }
+        } else {
+          setNavHidden(false);
+        }
+        prevScrollY.current = currentScrollY;
+
         // Scroll spy - optimized with early exit
         if (currentScrollY < 100) {
           setActiveSection("home");
@@ -56,7 +72,7 @@ const Header = () => {
           // Use viewport-based thresholds for more responsive scroll spy
           const viewportHeight = window.innerHeight;
           const activeThreshold = viewportHeight * 0.4; // Section is active when top is in upper 40%
-          
+
           let foundActive = false;
           for (let i = sections.length - 1; i >= 0; i--) {
             const section = sections[i];
@@ -71,7 +87,7 @@ const Header = () => {
               }
             }
           }
-          
+
           // Fallback: if no section found in the upper viewport, use the last scrolled-past section
           if (!foundActive) {
             for (let i = sections.length - 1; i >= 0; i--) {
@@ -86,7 +102,7 @@ const Header = () => {
               }
             }
           }
-          
+
           // If still no section found, we're at the top
           if (!foundActive) {
             setActiveSection("home");
@@ -111,28 +127,46 @@ const Header = () => {
   }, [handleScroll]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4">
+    <header
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 transition-all duration-200"
+      style={{
+        opacity: navHidden ? 0 : 1,
+        pointerEvents: navHidden ? "none" : "auto",
+      }}
+    >
       <div
         className={cn(
           "w-full max-w-4xl transition-all duration-300 rounded-full backdrop-blur-xl backdrop-saturate-150",
         )}
         style={{
-          backgroundColor: scrolled
-            ? "rgba(15, 15, 15, 0.85)"
-            : "rgba(15, 15, 15, 0.6)",
-          border: scrolled
-            ? "1px solid rgba(128, 0, 0, 0.3)"
-            : "1px solid rgba(255, 255, 255, 0.1)",
+          backgroundColor:
+            theme === "dark"
+              ? scrolled
+                ? "rgba(15, 15, 15, 0.85)"
+                : "rgba(15, 15, 15, 0.6)"
+              : scrolled
+                ? "rgba(255, 255, 255, 0.9)"
+                : "rgba(255, 255, 255, 0.7)",
+          border:
+            theme === "dark"
+              ? scrolled
+                ? "1px solid rgba(128, 0, 0, 0.3)"
+                : "1px solid rgba(255, 255, 255, 0.1)"
+              : scrolled
+                ? "1px solid rgba(0, 0, 0, 0.1)"
+                : "1px solid rgba(0, 0, 0, 0.05)",
           boxShadow: scrolled
-            ? "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)"
+            ? theme === "dark"
+              ? "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)"
+              : "0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5)"
             : "none",
         }}
       >
-        <div className="flex items-center justify-between h-14 px-4 sm:px-6">
+        <div className="relative flex items-center justify-between h-14 px-4 sm:px-6">
           {/* Logo - clicks to scroll to home */}
           <button
             onClick={scrollToHome}
-            className="flex items-center group cursor-pointer"
+            className="flex items-center group cursor-pointer relative z-10"
           >
             <img
               src="/edtech_logo.png"
@@ -146,8 +180,8 @@ const Header = () => {
             />
           </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          {/* Desktop Navigation — centered absolutely */}
+          <nav className="hidden md:flex items-center gap-1 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             {navLinks.map((link) => (
               <button
                 key={link.label}
@@ -157,7 +191,9 @@ const Header = () => {
                   color:
                     activeSection === link.href.replace("#", "")
                       ? "#A01010"
-                      : "#CCCCCC",
+                      : theme === "dark"
+                        ? "#CCCCCC"
+                        : "#444444",
                   backgroundColor:
                     activeSection === link.href.replace("#", "")
                       ? "rgba(160, 16, 16, 0.15)"
@@ -174,7 +210,8 @@ const Header = () => {
                 }}
                 onMouseLeave={(e) => {
                   if (activeSection !== link.href.replace("#", "")) {
-                    e.currentTarget.style.color = "#CCCCCC";
+                    e.currentTarget.style.color =
+                      theme === "dark" ? "#CCCCCC" : "#444444";
                     e.currentTarget.style.backgroundColor = "transparent";
                   }
                 }}
@@ -184,20 +221,71 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Mobile Menu Button */}
+          {/* Desktop: Theme Toggle (right side) */}
           <button
-            className="md:hidden p-2 rounded-full transition-all duration-200"
-            style={{ color: "#FFFFFF" }}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={toggleTheme}
+            className="hidden md:flex p-2 rounded-full transition-all duration-300 hover:scale-110 relative z-10"
+            style={{
+              color: theme === "dark" ? "#CCCCCC" : "#666666",
+              backgroundColor:
+                theme === "dark"
+                  ? "rgba(255,255,255,0.06)"
+                  : "rgba(0,0,0,0.05)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "#A01010";
+              e.currentTarget.style.backgroundColor = "rgba(160,16,16,0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color =
+                theme === "dark" ? "#CCCCCC" : "#666666";
+              e.currentTarget.style.backgroundColor =
+                theme === "dark"
+                  ? "rgba(255,255,255,0.06)"
+                  : "rgba(0,0,0,0.05)";
+            }}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
-            {mobileMenuOpen ? (
-              <X className="w-5 h-5" />
+            {theme === "dark" ? (
+              <Sun className="w-4 h-4" />
             ) : (
-              <Menu className="w-5 h-5" />
+              <Moon className="w-4 h-4" />
             )}
           </button>
-        </div>
 
+          {/* Mobile: Theme Toggle + Menu Button */}
+          <div className="md:hidden flex items-center gap-1">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full transition-all duration-300"
+              style={{
+                color: theme === "dark" ? "#CCCCCC" : "#666666",
+                backgroundColor:
+                  theme === "dark"
+                    ? "rgba(255,255,255,0.06)"
+                    : "rgba(0,0,0,0.05)",
+              }}
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            >
+              {theme === "dark" ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              )}
+            </button>
+            <button
+              className="p-2 rounded-full transition-all duration-200"
+              style={{ color: theme === "dark" ? "#FFFFFF" : "#1A1A1A" }}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Mobile Navigation Dropdown - Separate from main navbar */}
@@ -209,7 +297,9 @@ const Header = () => {
             : "max-h-0 opacity-0 -translate-y-2 pointer-events-none",
         )}
       >
-        <div className="bg-[#0F0F0F]/95 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden max-w-4xl mx-auto">
+        <div
+          className={`${theme === "dark" ? "bg-[#0F0F0F]/95 border-white/10" : "bg-white/95 border-black/10"} backdrop-blur-xl rounded-2xl border shadow-2xl overflow-hidden max-w-4xl mx-auto`}
+        >
           <nav className="p-2">
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
@@ -221,7 +311,9 @@ const Header = () => {
                     color:
                       activeSection === link.href.replace("#", "")
                         ? "#A01010"
-                        : "#CCCCCC",
+                        : theme === "dark"
+                          ? "#CCCCCC"
+                          : "#444444",
                     backgroundColor:
                       activeSection === link.href.replace("#", "")
                         ? "rgba(160, 16, 16, 0.15)"

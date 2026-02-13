@@ -10,6 +10,49 @@ const defaultContent: SectionContent = {
     "Stay updated with the latest Google Workspace features and tutorials",
 };
 
+const LazyYouTube = ({
+  videoId,
+  title,
+}: {
+  videoId: string;
+  title: string;
+}) => {
+  const [loaded, setLoaded] = useState(false);
+  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+  if (loaded) {
+    return (
+      <iframe
+        src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        className="w-full h-full"
+      />
+    );
+  }
+
+  return (
+    <button
+      onClick={() => setLoaded(true)}
+      className="relative w-full h-full group/play cursor-pointer bg-black"
+      aria-label={`Play ${title}`}
+    >
+      <img
+        src={thumbnailUrl}
+        alt={title}
+        loading="lazy"
+        className="w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover/play:bg-black/40 transition-colors">
+        <div className="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center shadow-lg group-hover/play:scale-110 transition-transform">
+          <Play className="w-6 h-6 text-white ml-1" fill="white" />
+        </div>
+      </div>
+    </button>
+  );
+};
+
 const VideosSection = () => {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,13 +110,7 @@ const VideosSection = () => {
                 style={{ animationDelay: `${0.1 + index * 0.1}s` }}
               >
                 <div className="video-container relative">
-                  <iframe
-                    src={`https://www.youtube.com/embed/${video.youtube_id}`}
-                    title={video.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
-                  />
+                  <LazyYouTube videoId={video.youtube_id} title={video.title} />
                 </div>
                 <div className="p-5">
                   <h3 className="font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors duration-300">

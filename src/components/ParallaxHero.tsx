@@ -1,26 +1,45 @@
 import { ExternalLink } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { getHeroImage } from "@/lib/api";
+import { useTheme } from "@/contexts/ThemeContext";
+
+import teamCoordinator from "@/assets/team-coordinator.jpg";
+import teamDirector from "@/assets/team-director.jpg";
+import teamSpecialist1 from "@/assets/team-specialist-1.jpg";
+import teamSpecialist2 from "@/assets/team-specialist-2.jpg";
 
 interface ParallaxHeroProps {
   title?: string;
   subtitle?: string;
 }
 
+const avatars = [
+  teamCoordinator,
+  teamDirector,
+  teamSpecialist1,
+  teamSpecialist2,
+];
+
 const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
   const tagline =
     "Empowering education through innovative technology solutions";
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [heroImage, setHeroImage] = useState<string | null>(null);
+  const { theme } = useTheme();
 
+  // Fetch hero split image from section_content
+  useEffect(() => {
+    getHeroImage().then(setHeroImage);
+  }, []);
+
+  // Control video playback based on visibility
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Control video playback based on visibility
         if (videoRef.current) {
           if (entry.isIntersecting) {
-            videoRef.current.play().catch(() => {
-              // Autoplay was prevented
-            });
+            videoRef.current.play().catch(() => {});
           } else {
             videoRef.current.pause();
           }
@@ -28,18 +47,47 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
       },
       { threshold: 0.3 },
     );
-
     const currentSection = sectionRef.current;
-    if (currentSection) {
-      observer.observe(currentSection);
-    }
-
+    if (currentSection) observer.observe(currentSection);
     return () => {
-      if (currentSection) {
-        observer.unobserve(currentSection);
-      }
+      if (currentSection) observer.unobserve(currentSection);
     };
   }, []);
+
+  // Typewriter effect
+  const [displayedText, setDisplayedText] = useState("");
+  const [showCursor, setShowCursor] = useState(true);
+  const [typewriterKey, setTypewriterKey] = useState(0);
+
+  useEffect(() => {
+    let charIndex = 0;
+    const typeTimer = setInterval(() => {
+      if (charIndex < tagline.length) {
+        setDisplayedText(tagline.slice(0, charIndex + 1));
+        charIndex++;
+      } else {
+        clearInterval(typeTimer);
+        setTimeout(() => {
+          setShowCursor(false);
+          setTimeout(() => {
+            setDisplayedText("");
+            setShowCursor(true);
+            setTypewriterKey((prev) => prev + 1);
+          }, 3000);
+        }, 2000);
+      }
+    }, 45);
+    return () => clearInterval(typeTimer);
+  }, [typewriterKey]);
+
+  // Cursor blink
+  useEffect(() => {
+    if (!showCursor) return;
+    const blinkTimer = setInterval(() => {
+      setShowCursor((prev) => !prev);
+    }, 530);
+    return () => clearInterval(blinkTimer);
+  }, [showCursor]);
 
   const handleTrainingsClick = () => {
     const trainingsSection = document.getElementById("trainings");
@@ -57,97 +105,231 @@ const ParallaxHero = ({ subtitle }: ParallaxHeroProps) => {
       ref={sectionRef}
       id="home"
       className="relative min-h-screen w-full overflow-hidden"
-      style={{ backgroundColor: "#0F0F0F" }}
+      style={{ backgroundColor: theme === "dark" ? "#0F0F0F" : "#FFFFFF" }}
     >
-      {/* Video Background */}
+      {/* Background layers */}
       <div className="absolute inset-0" style={{ zIndex: 0 }}>
+        {/* Video background — maroon on black (dark), maroon on white (light via CSS invert) */}
         <video
           ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          preload="auto"
-          className="w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
           style={{
-            transform: "translateZ(0)",
-            backfaceVisibility: "hidden",
+            filter:
+              "saturate(1.6) hue-rotate(-8deg) brightness(0.85) contrast(1.15)",
           }}
         >
-          <source
-            src="/faulty-terminal-maroon.webm"
-            type="video/webm"
-          />
+          <source src="/faulty-terminal-maroon.webm" type="video/webm" />
         </video>
+        {/* Maroon color wash to keep tiles maroon in both themes */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundColor: "rgba(128, 0, 20, 0.22)",
+            mixBlendMode: "multiply",
+          }}
+        />
+        {/* Heavy dark overlay so text is readable */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: heroImage
+              ? "linear-gradient(to right, rgba(15,15,15,0.85) 0%, rgba(15,15,15,0.75) 45%, rgba(15,15,15,0.4) 55%, transparent 65%)"
+              : "linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.2) 100%)",
+          }}
+        />
       </div>
-      
-      <div className="relative z-20 flex min-h-screen w-full items-center justify-center px-4 py-16 sm:py-20">
-        <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 text-center max-w-4xl mx-auto">
-          {/* Trust Badge */}
-          <div className="mb-2">
-            <div
-              className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm"
-              style={{
-                backgroundColor: "rgba(160, 16, 16, 0.2)",
-                border: "1px solid rgba(160, 16, 16, 0.4)",
-                color: "#CCCCCC",
-              }}
-            >
-              🎓 Liceo Educational Technology Center
-            </div>
-          </div>
 
-          {/* Main Title */}
-          <h1
-            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight font-serif"
+      {/* Right-side hero image — diagonal slant edge */}
+      {heroImage && (
+        <div
+          className="absolute top-0 right-0 bottom-0 hidden lg:block"
+          style={{
+            width: "42%",
+            zIndex: 1,
+            clipPath: "polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          }}
+        >
+          <img
+            src={heroImage}
+            alt="Liceo EdTech"
+            className="w-full h-full object-cover"
+            loading="eager"
+          />
+          {/* Subtle gradient along the diagonal edge */}
+          <div
+            className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(135deg, #FF6B6B 0%, #A01010 50%, #800000 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              fontFamily: "'Playfair Display', 'Georgia', serif",
+                "linear-gradient(to right, rgba(15,15,15,0.6) 0%, rgba(15,15,15,0.15) 25%, transparent 45%)",
             }}
+          />
+        </div>
+      )}
+
+      {/* Mobile hero image — shown below content */}
+      {heroImage && (
+        <div className="absolute inset-0 lg:hidden" style={{ zIndex: 1 }}>
+          <img
+            src={heroImage}
+            alt="Liceo EdTech"
+            className="w-full h-full object-cover"
+            loading="eager"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(15,15,15,0.9) 0%, rgba(15,15,15,0.7) 40%, rgba(15,15,15,0.85) 100%)",
+            }}
+          />
+        </div>
+      )}
+
+      {/* Main content — left-aligned text */}
+      <div className="relative z-20 flex min-h-screen w-full items-center px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-16">
+        <div className="max-w-7xl mx-auto w-full">
+          <div
+            className={`flex flex-col gap-6 sm:gap-7 ${heroImage ? "text-center lg:text-left max-w-2xl mx-auto lg:mx-0 lg:max-w-[45%]" : "text-center max-w-3xl mx-auto"}`}
           >
-            EdTech
-          </h1>
+            {/* Main Title */}
+            <div className="space-y-2">
+              <h1
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.15]"
+                style={{ fontFamily: "'Inter', sans-serif" }}
+              >
+                <span style={{ color: "#FFFFFF" }}>Liceo</span>{" "}
+                <span
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #FF6B6B 0%, #A01010 50%, #800000 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  Educational
+                </span>
+                <br />
+                <span
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #A01010 0%, #800000 60%, #FF6B6B 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  Technology
+                </span>{" "}
+                <span style={{ color: "#FFFFFF" }}>Center</span>
+              </h1>
+            </div>
 
-          {/* Subtitle - Static text for performance */}
-          <div className="text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl flex items-center justify-center px-2">
+            {/* Subtitle — Typewriter */}
             <p
-              className="font-light leading-relaxed"
+              className={`text-base sm:text-lg md:text-xl max-w-xl leading-relaxed font-light min-h-[1.75em] ${heroImage ? "mx-auto lg:mx-0" : "mx-auto"}`}
               style={{
-                color: "rgba(255, 255, 255, 0.8)",
+                color: "rgba(255, 255, 255, 0.65)",
               }}
             >
-              {tagline}
+              {displayedText}
+              <span
+                className="inline-block w-[2px] h-[1em] ml-0.5 align-text-bottom"
+                style={{
+                  backgroundColor: "rgba(160, 16, 16, 0.8)",
+                  opacity: showCursor ? 1 : 0,
+                  transition: "opacity 0.1s",
+                }}
+              />
             </p>
-          </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
-            <button
-              onClick={handleTrainingsClick}
-              className="w-full sm:w-auto px-6 sm:px-7 py-3 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base"
-              style={{
-                background: "linear-gradient(135deg, #A01010 0%, #800000 100%)",
-                color: "#FFFFFF",
-                boxShadow: "0 4px 20px rgba(160, 16, 16, 0.3)",
-              }}
+            {/* CTA Buttons */}
+            <div
+              className={`grid grid-cols-2 sm:flex sm:flex-row items-center gap-3 sm:gap-4 ${heroImage ? "lg:items-start" : "justify-center"}`}
             >
-              Trainings
-            </button>
-            <button
-              onClick={handleAccessFormClick}
-              className="w-full sm:w-auto px-5 sm:px-6 py-3 rounded-lg font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
-              style={{
-                backgroundColor: "rgba(160, 16, 16, 0.15)",
-                border: "1px solid rgba(160, 16, 16, 0.4)",
-                color: "#FFFFFF",
-              }}
+              <button
+                onClick={handleTrainingsClick}
+                className="px-5 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-sm sm:text-base transition-all duration-300 hover:-translate-y-0.5"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #A01010 0%, #800000 100%)",
+                  color: "#FFFFFF",
+                  boxShadow: "0 4px 24px rgba(160, 16, 16, 0.35)",
+                }}
+              >
+                Explore Trainings
+              </button>
+              <button
+                onClick={handleAccessFormClick}
+                className="px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl font-semibold text-sm sm:text-base flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 hover:border-[rgba(160,16,16,0.6)]"
+                style={{
+                  backgroundColor: "rgba(255, 255, 255, 0.04)",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  color: "#FFFFFF",
+                  backdropFilter: "blur(8px)",
+                }}
+              >
+                Access Form <ExternalLink className="w-4 h-4 opacity-70" />
+              </button>
+            </div>
+
+            {/* Social Proof */}
+            <div
+              className={`flex flex-col sm:flex-row items-center gap-4 ${heroImage ? "lg:items-start lg:justify-start" : "justify-center"}`}
             >
-              Access Form <ExternalLink className="w-4 h-4" />
-            </button>
+              <div className="flex -space-x-3">
+                {avatars.map((src, i) => (
+                  <div
+                    key={i}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2"
+                    style={{
+                      borderColor: "#0F0F0F",
+                      boxShadow: "0 0 0 1px rgba(160, 16, 16, 0.3)",
+                    }}
+                  >
+                    <img
+                      src={src}
+                      alt="Team member"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+                <div
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs font-semibold border-2"
+                  style={{
+                    borderColor: "#0F0F0F",
+                    backgroundColor: "rgba(160, 16, 16, 0.25)",
+                    color: "#FF6B6B",
+                    boxShadow: "0 0 0 1px rgba(160, 16, 16, 0.3)",
+                  }}
+                >
+                  +10
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <span
+                  className="text-sm font-semibold"
+                  style={{
+                    color: "rgba(255,255,255,0.9)",
+                  }}
+                >
+                  Trusted by Educators
+                </span>
+                <span
+                  className="text-xs"
+                  style={{
+                    color: "rgba(255,255,255,0.45)",
+                  }}
+                >
+                  Serving Liceo faculty & staff
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

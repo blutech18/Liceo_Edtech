@@ -22,6 +22,8 @@ export interface FaultyTerminalProps extends React.HTMLAttributes<HTMLDivElement
   dpr?: number;
   pageLoadAnimation?: boolean;
   brightness?: number;
+  backgroundColor?: string;
+  invert?: boolean;
 }
 
 const vertexShader = `
@@ -59,6 +61,8 @@ uniform float uUseMouse;
 uniform float uPageLoadProgress;
 uniform float uUsePageLoadAnimation;
 uniform float uBrightness;
+uniform float uInvert;
+uniform vec3  uBgColor;
 
 float time;
 
@@ -221,6 +225,10 @@ void main() {
     col *= uTint;
     col *= uBrightness;
 
+    if(uInvert > 0.5){
+      col = uBgColor - col;
+    }
+
     if(uDither > 0.0){
       float rnd = hash21(gl_FragCoord.xy);
       col += (rnd - 0.5) * (uDither * 0.003922);
@@ -264,6 +272,8 @@ export default function FaultyTerminal({
   dpr = Math.min(window.devicePixelRatio || 1, 2),
   pageLoadAnimation = true,
   brightness = 1,
+  backgroundColor = "#000000",
+  invert = false,
   className,
   style,
   ...rest
@@ -279,6 +289,7 @@ export default function FaultyTerminal({
   const timeOffsetRef = useRef<number>(Math.random() * 100);
 
   const tintVec = useMemo(() => hexToRgb(tint), [tint]);
+  const bgVec = useMemo(() => hexToRgb(backgroundColor), [backgroundColor]);
 
   const ditherValue = useMemo(
     () => (typeof dither === "boolean" ? (dither ? 1 : 0) : dither),
@@ -301,7 +312,7 @@ export default function FaultyTerminal({
     const renderer = new Renderer({ dpr });
     rendererRef.current = renderer;
     const gl = renderer.gl;
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(bgVec[0], bgVec[1], bgVec[2], 1);
 
     const geometry = new Triangle(gl);
 
@@ -340,6 +351,8 @@ export default function FaultyTerminal({
         uPageLoadProgress: { value: pageLoadAnimation ? 0 : 1 },
         uUsePageLoadAnimation: { value: pageLoadAnimation ? 1 : 0 },
         uBrightness: { value: brightness },
+        uInvert: { value: invert ? 1 : 0 },
+        uBgColor: { value: new Color(bgVec[0], bgVec[1], bgVec[2]) },
       },
     });
     programRef.current = program;
@@ -430,6 +443,8 @@ export default function FaultyTerminal({
     mouseStrength,
     pageLoadAnimation,
     brightness,
+    invert,
+    bgVec,
     handleMouseMove,
   ]);
 
